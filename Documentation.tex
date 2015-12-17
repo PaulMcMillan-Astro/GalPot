@@ -1,0 +1,106 @@
+\documentclass{article}
+\usepackage{natbib,fleqn}
+%\usepackage{harvard}
+
+\def\genf{generating function }
+\def\be{\begin{equation}}
+\def\ee{\end{equation}}
+
+\begin{document}
+
+\begin{center}
+{\huge falPot (Galaxy potential nicked from Dehnen's falcON)}
+\end{center}
+
+
+This documentation is just here to explain how to compile and use 
+falPot. See Section 2.3 of \citet{DB98} for a fuller explanation of how it works.
+Or read the source code. How to compile the library should be clear from the
+instructions in the makefile ``make.falPot''. The command ``make falPot'' makes
+the libraries, and ``make testfalPot'' makes the example executable. 
+
+ {\bf N.B.} In all cases here, the
+length unit is kpc, the time unit is Myr, and the mass unit is
+M$_\odot$. For reference, $G=4.49866\times
+10^{-12}$kpc$^3$Myr$^{-2}$M$_\odot^{-1}$. A velocity of 1 kpc Myr$^{-1}
+  = 977.77$km s$^{-1}$ (See Units.h for further).
+
+\section{Input} 
+The file that is given as the input file for the potential must be of
+the following form:
+
+\begin{tabular}{lllllll}
+3      &     &      &     &    &     &\# No. Disks ($0\leq{\rm No.disks}\leq3$) \\
+8.90e7 & 1.8 & 0.04 & 0   & 0  &     &\# Param. for each of the three disks.\\
+3.50e7 & 1.2 & -0.15& 0   & 0  &     &\# {\bf N.B} {\it essential} to
+give 5 param.\\  
+1.30e7 & 1.1 & 0.25 & 0   & 0  &     &\# No. lines of param. = No. disks\\
+2      &     &      &     &    &     &\# No. Spheroids ($0\leq{\rm
+  No. sph.}\leq2$) \\
+4.0e7   & 0.8 & -0.5 & 1.4 & 10 & 50 &\# \\
+2.0e7   & 0.2 & -1.5 & 3.4 & 10 & 50 &\# {\it essential} to give 6 parameters\\
+\vspace{5mm}
+\end{tabular}
+
+\subsection{Disk}
+
+The disk parameters, as given in that file are (in order) $\Sigma_0$,
+$R_d$, $z_d$, $R_0$, $\epsilon$. 
+
+$\Sigma_0$ is the disk's central surface density (in M$_\odot$kpc$^{-2}$
+and the absence of a cutoff), $R_d$ is the disk
+scale radius, $z_d$ its scale height (though note there is a
+difference between negative and positive values), and $R_0$ is an inner
+cutoff radius (all in kpc). The term $\epsilon$ is a funny little parameter that I don't
+really understand. In numerical terms (cylindrical polars), these
+give a surface density
+\begin{equation}
+\Sigma(R)=\Sigma_0\;\textrm{exp}\left(-\frac{R_0}{R}-\frac{R}{R_d}+
+  \epsilon\textrm{cos}\left(\frac{R}{R_d}\right)\right),
+\end{equation}
+i.e. a standard exponential disk with optional hole in the middle and/or
+weird $\epsilon$ term modulation.
+
+The vertical structure of the density is either an exponential in
+$|z|$ (if $z_d>0$), or isothermal (if $z_d<0$), i.e.
+\begin{equation}
+\rho_d(R,z)=\left\{\begin{array}{lc}\frac{\Sigma(R)}{2z_d}\,\textrm{exp}\left(\frac{-\mid
+        z\mid}{z_d}\right) & \textrm{for }z_d > 0 \\
+\frac{\Sigma(R)}{4(-z_d)}\,\textrm{sech}^2\left(\frac{z}{2\,z_d}\right)
+& \textrm{for } z_d
+< 0.\\\end{array}\right. 
+\end{equation}
+{\bf N.B.} There is a factor of two in the denominator of the sech$^2$
+profile. That is so that they tend to the same thing as
+$z\rightarrow\infty$.
+
+\subsection{Spheroids}
+
+The spheroid parameters are (in order) $\rho_0$, $q$, $\gamma$,
+$\beta$, $r_0$, $r_{cut}$.
+
+$\rho_0$ is a scale density (in M$_\odot$kpc$^{-3}$; $q$ is the axis ratio ($q<1$ is flatter
+than a sphere, $q>1$ is prolate); $\gamma$ is the inner density slope,
+$\beta$ the outer density slope; $r_0$ is a scale radius and $r_{cut}$
+is a cutoff radius (both in kpc). This corresponds to a density profile
+\begin{equation}
+\rho_s=\frac{\rho_0}{(r^\prime/r_0)^\gamma(1+r^\prime/r_0)^{\beta-\gamma}}\; 
+\textrm{exp}\left[-\left(r^\prime/r_{cut}\right)^2\right],
+\end{equation}
+where, in cylindrical coordinates
+\begin{equation}
+r^\prime = \sqrt{R^2 + (z/q)^2}
+\end{equation}
+
+
+
+\begin{thebibliography}{36}
+ 
+
+\bibitem[\protect\citeauthoryear{Dehnen \& Binney}{1998}]{DB98}
+{Dehnen} W., {Binney} J., 1998, MNRAS, 294, 429
+ 
+\end{thebibliography}
+ 
+\end{document}
+

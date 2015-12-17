@@ -1,0 +1,53 @@
+###############################################################################
+#   Makefile for the falPot library, cut away from all extraneous everything  #
+#                                                                             #
+#  Copyright Walter Dehnen, 1996-2005                                         #
+#  address:  Department of Physics and Astronomy, University of Leicester     #
+#           University Road, Leicester LE1 7RH, United Kingdom                #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+all: testfalPot
+
+
+CPP		= g++
+LIBPOT		= obj/libPot.a
+
+CFLAGS        = -c -o $@.o -O3 -ffast-math -Isrc/
+
+CMPFLAGS        = -c -o $@.o -O3 -ffast-math -fopenmp -Isrc/
+
+LDFLAGS      = -o $@ -Lobj/ -lPot  -lm
+
+# commands to put file into library
+AR            = ar r
+RL            = ranlib
+
+ARPOT     = $(AR) $(LIBPOT) $@.o; $(RL) $(LIBPOT); touch $@
+AWAY	  = rm $@.o
+
+AUXIL_H		   = src/Pi.h src/Inline.h src/FreeMemory.h src/Vector.h \
+		     src/Matrix.h src/Numerics.templates src/Numerics.h \
+		     src/Pspline.h 
+
+falPot_h	   = src/falPot.h src/Potential.h
+
+obj/Numerics:		src/Numerics.cc $(AUXIL_H)
+			$(CPP) $(CFLAGS) src/Numerics.cc;$(ARPOT);$(AWAY)
+obj/WDMath:		src/WDMath.cc $(AUXIL_H)
+			$(CPP) $(CFLAGS) src/WDMath.cc;$(ARPOT);$(AWAY)
+
+obj/falPot: 		src/falPot.cc $(falPot_h) $(AUXIL_H)
+	      		$(CPP) $(CFLAGS) src/falPot.cc;$(ARPOT);$(AWAY)
+
+falPot: 		obj/Numerics obj/WDMath obj/falPot
+
+
+obj/testfalPot:		testfalPot.cc falPot
+			$(CPP) $(CFLAGS) testfalPot.cc;  touch $@
+testfalPot:		obj/testfalPot falPot
+			$(CPP) obj/testfalPot.o $(LDFLAGS)
+
+clean:
+	rm -f obj/* testfalPot

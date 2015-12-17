@@ -1,0 +1,9 @@
+These are various parameters files to be used as input for a GalaxyPotential.
+
+DB98Modx.Tpot (where x lies between 1 & 4) correspond to Model x from Dehnen & Binney (1998, MNRAS, 294, 429)
+
+BT08.Tpot corresponds to Model I from Galactic Dynamics by Binney & Tremaine (second edition, Table 2.3)
+
+PJM11_best.Tpot and PJM11_convenient.Tpot correspond to the 'best' and 'convenient' models from McMillan (2011, MNRAS, 414, 2446)
+
+Piffl14.Tpot corresponds to the potential found by Piffl et al (2014, 445, 3133) 
