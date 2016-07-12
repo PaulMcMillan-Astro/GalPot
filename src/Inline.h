@@ -18,8 +18,6 @@
 #ifndef _Inline_def_
 #define _Inline_def_ 1
 
-#define SUNS 1
-
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -50,18 +48,9 @@ inline int Numerics_message(const char* msgs)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef C_AND_F
-
 #include <iostream>
 #include <fstream>
 #include <string>
-
-#else // C_AND_F
-// C & FORTRAN versions: don't use C++ I/O, but plain C I/O.
-
-#include <stdio>
-
-#endif // C_AND_F
 
 //using namespace std;
 
@@ -104,9 +93,6 @@ TM S    pow_int (const S x, const int i)
   return pow_uint(S(1)/x,-i);
 }
 
-TM void update_max(S&x, const S y) { if(y>x) x=y; }
-TM void update_min(S&x, const S y) { if(y<x) x=y; }
-
 #undef TM
 
 
@@ -144,18 +130,7 @@ inline const char* stndrdth(const int i)
 template<class S> inline S sqr(const S x)              { return square(x); }
 template<class S> inline S pow(const S x, const int i) { return pow_int(x,i); }
 
-////////////////////////////////////////////////////////////////////////////////
-inline bool is_integral(const float x)
-{
-  if(x<0) return is_integral(-x);
-  return (floor(x)==x)? 1 : 0; 
-}
 
-inline bool is_integral(const double x)
-{
-  if(x<0) return is_integral(-x);
-  return (floor(x)==x)? 1 : 0; 
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

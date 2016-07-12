@@ -3,13 +3,13 @@
 * WDMath.cc                                                                    *
 *                                                                              *
 * C++ code written by Walter Dehnen, 1994/95,                                  *
-* Oxford University, Department of Physics, Theoretical Physics.               *
+* Lund Observatory, Lund University.                                           *
 * address: 1Keble Road, Oxford, OX1 3NP, United Kingdom.                       *
 * e-mail:  dehnen@thphys.ox.ac.uk                                              *
 *                                                                              *
 ********************************************************************************
 *                                                                              *
-* some special mathematical functions, mostly from Press et al. (1992).        *
+* some special mathematical functions, adapted from Press.                     *
 *                                                                              *
 *******************************************************************************/
 
@@ -19,6 +19,15 @@ using std::complex;
 #include "Pi.h"
 #include "WDMath.h"
 #include "Inline.h"
+
+////////////////////////////////////////////////////////////////////////////////
+
+bool is_integral(const double x)
+{
+  if(x<0) return is_integral(-x);
+  return (floor(x)==x)? 1 : 0; 
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // 0. auxiliary constants etc.

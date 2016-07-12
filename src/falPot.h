@@ -68,7 +68,8 @@
 #include <iomanip>
 #include <iostream>
 #include <cmath>                                 // v0.4                        
-#include <cstdlib>                               // v0.4                        
+#include <cstdlib>                               // v0.4
+#include <string>
 #include "Units.h"
 #include "Vector.h"
 #include "Potential.h"
@@ -87,8 +88,8 @@ const int LMAX=80;		// maximum l for the multipole expansion
 //----------------------------------------------------------------------------
 
 const int    NRAD=201;	      // DEFAULT number of radial points in Multipole 
-const double RMIN=1.e-4*U.kpc,// DEFAULT min radius of logarithmic radial grid
-             RMAX=1.e3*U.kpc; // DEFAULT max radius of logarithmic radial grid
+const double RMIN=1.e-4*Units::kpc,// DEFAULT min radius of logarithmic radial grid
+             RMAX=1.e3*Units::kpc; // DEFAULT max radius of logarithmic radial grid
 //----------------------------------------------------------------------------
 // Include the definitions for all auxiliary functions. These contain a long  
 // tail of dependencies needed. It seems unavoidable to have them all visible 
@@ -157,17 +158,17 @@ inline DiskPar DiskAnsatz::parameter() const
 inline void DiskAnsatz::DescribePot(ostream& to) const
 {
     to<< "potential due to mass density:\n "
-      <<std::setprecision(3)<<S0<<U.mass_unit<<'/'<<U.length_unit<<"^2 Exp{-";
+      <<std::setprecision(3)<<S0<<Units::mass_unit<<'/'<<Units::length_unit<<"^2 Exp{-";
     if(hollow) 
-	to<<std::setprecision(3)<<R0<<U.length_unit<<"/R-";
-    to<<"R/"<<std::setprecision(3)<<Rd<<U.length_unit;
+	to<<std::setprecision(3)<<R0<<Units::length_unit<<"/R-";
+    to<<"R/"<<std::setprecision(3)<<Rd<<Units::length_unit;
     if(isothermal)
 	to<<"} sech^2{z/"
-	  <<std::setprecision(3)<<(2*zd)<<U.length_unit<<"}/"
-	  <<std::setprecision(3)<<(4*zd)<<U.length_unit;
+	  <<std::setprecision(3)<<(2*zd)<<Units::length_unit<<"}/"
+	  <<std::setprecision(3)<<(4*zd)<<Units::length_unit;
     else if(!thin)
-	to<<"-|z|/"<<std::setprecision(3)<<zd<<U.length_unit<<"}/"
-	  <<std::setprecision(3)<<(2*zd)<<U.length_unit;
+	to<<"-|z|/"<<std::setprecision(3)<<zd<<Units::length_unit<<"}/"
+	  <<std::setprecision(3)<<(2*zd)<<Units::length_unit;
     to<<'\n';
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -281,7 +282,7 @@ public:
 };
 inline double SpheroidDensity::Residual(const double r, const double st,
 					const double ct) const {
-  return U.fPiG * Density(r*st,r*ct);
+  return Units::fPiG * Density(r*st,r*ct);
 }
 inline SphrPar SpheroidDensity::parameter() const {
   SphrPar p;
@@ -426,6 +427,10 @@ public:
   // ifstream from("Model.pot"); 	// file `Model.pot' contains the data   
   // GalaxyPotenial Phi(from);	// read from file and construct object  
   // from.close();			// close file                           
+
+  //  GalaxyPotential(std::string&);
+  // constructor from file with name given in string.
+
   
   GalaxyPotential(const int, const DiskPar*,	// No & parameters of disks     
 		  const int, const SphrPar*,	// No & parameters of spheroids 

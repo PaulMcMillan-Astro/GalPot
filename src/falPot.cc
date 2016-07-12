@@ -94,7 +94,7 @@ void DiskAnsatz::setup(const DiskPar& p)
   zdoRd = zd/Rd;
   R0oRd = R0/Rd;
   Rd2   = Rd*Rd;
-  fac   = TPi*U.Grav*S0;
+  fac   = TPi*Units::Grav*S0;
 }
 
 double DiskAnsatz::SurfaceDensity(const double R) const

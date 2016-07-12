@@ -29,7 +29,7 @@ int main(int argc,char *argv[])
       cerr << "This test needs an input potential, e.g. pot/DB97Mod1.Tpot\n";
       exit(1);
     }
-
+    
     cout<< "Reading input potential described in file " << argv[1] << '\n'; 
     file.open(argv[1]);
     GalaxyPotential Phi(file);
