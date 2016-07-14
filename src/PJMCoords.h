@@ -514,6 +514,7 @@ inline vec6 OmniCoords::give(int n) {
 	for(int j=i;j>1;j--) Backward(j);
 	found = true;
       }
+    if(!found) Forward(1);
     Backward(0);
     return rv[n];
   }
