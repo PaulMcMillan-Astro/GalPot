@@ -105,7 +105,7 @@ const double RMIN=1.e-4*Units::kpc,// DEFAULT min radius of logarithmic radial g
 //		  profile is used, for h>0 an exponential one, and for h=0 the  
 //		  disk is infinitesimal thin.                                   
 // DiskPar[3]   is the inner cut-off radius R_m [kpc]                         
-// DiskPar[4]   is eps. A term eps*cos(R/R_d) is added to the exponent.       
+// DiskPar[4]   is eps. A term eps*cos(pi*R/R_d) is added to the exponent.       
 //                                                                            
 // SphrPar[0]   is the density normalization rho_0 [Msun/kpc^3]               
 // SphrPar[1]   is the axis ration q                                          
