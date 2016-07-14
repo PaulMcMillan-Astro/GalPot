@@ -10,7 +10,7 @@
 *******************************************************************************/
 
 
-#include "falPot.h"
+#include "GalPot.h"
 #include "PJMCoords.h"
 #include "OrbitIntegrator.h"
 

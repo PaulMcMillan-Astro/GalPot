@@ -10,7 +10,7 @@
 *******************************************************************************/
 
 
-#include "falPot.h"
+#include "GalPot.h"
 #include "OrbitIntegrator.h"
 
 #include <ctime>
@@ -24,41 +24,48 @@ int main(int argc,char *argv[])
   Potential *Phi;
  
 
+ // Read potential from file 
   file.open(potfile.c_str());
   if(!file){
     cerr << "Input file does not exist. Filename: " << potfile << "\n";
-    return 0;
+    return 1;
   }
   Phi = new GalaxyPotential(file);
   file.close();
   
   if(argc<3) {
     cerr << "Input: input_file output_file\n";
+    cerr << "input_file must contain columns: R z phi v_R v_z v_phi\n"
     cerr << "   (distance in kpc, angle in degrees, velocity in km/s\n";
-    return 0;
+    return 1;
   }
 
+  // Open file for input
   data.open(argv[1]);
   if(!file){
     cerr << "Input file does not exist. Filename: " << string(argv[1]) << "\n";
     return 0;
   }
 
+  // Open for output
   output.open(argv[2]);
 
+  // Write header 
   output << "#MinR MaxR Maxz Minr Maxr MeanR Energy AngMom\n" << std::flush;
-  
-  Vector <double,6> XV=5.;
 
+  // Setup class
+  Vector <double,6> XV=5.;
   OrbitIntegratorWithStats OI(XV, Phi, 10000.);
 
-
-  
+  int nline;
+  // read file
   while(getline(data,line)) {
+    // Skip commented lines (which start with #)
     if(line[0] != '#') {
       std::stringstream ss(line);
-      for(int i=0;i!=6;i++) ss >> XV[i];
       
+      for(int i=0;i!=6;i++) ss >> XV[i];
+       // Convert input to code coordinates
       XV[0] *= Units::kpc;
       XV[1] *= Units::kpc;
       XV[2] *= Units::degree;
@@ -67,18 +74,22 @@ int main(int argc,char *argv[])
       XV[5] *= Units::kms;
       
       OI.setup(XV);
+      // run integration
       if(OI.run() == 0) {
+      // Output results if successful
 	output << OI.MinR<< ' ' << OI.MaxR<< ' ' << OI.Maxz<< ' '
 	       << OI.Minr<< ' ' << OI.Maxr<< ' ' << OI.MeanR<< ' '
 	       << OI.Energy/(Units::kms*Units::kms)<< ' '
-	       << OI.Lz/(Units::kms*Units::kpc) << '\n';
+	       << OI.Lz/(Units::kms*Units::kpc) << '\n' << std::flush;
+      } else {
+	cerr << "Failure for line: " << line
+	     << "\nEnergy=" << OI.Energy/(Units::kms*Units::kms) << '\n';
       }
-      
     }
 
   }
 
 
-
+  return 0;
 
 }

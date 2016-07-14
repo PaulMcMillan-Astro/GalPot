@@ -6,21 +6,28 @@
 \def\be{\begin{equation}}
 \def\ee{\end{equation}}
 
+\setlength{\textwidth}{16cm}
+\setlength{\oddsidemargin}{0cm}
+
 \begin{document}
 
 \begin{center}
-{\huge falPot (Galaxy potential nicked from Dehnen's falcON)}
+{\huge GalPot (Galaxy potential following falcON)}
 \end{center}
 
 
 This documentation is just here to explain how to compile and use 
-falPot. See Section 2.3 of \citet{DB98} for a fuller explanation of how it works.
-Or read the source code. How to compile the library should be clear from the
-instructions in the makefile ``make.falPot''. The command ``make falPot'' makes
-the libraries, and ``make testfalPot'' makes the example executable. 
+GalPot. See Section 2.3 of \citet{DB98} for a fuller explanation of how it works.
+Or read the source code. 
 
- {\bf N.B.} In all cases here, the
-length unit is kpc, the time unit is Myr, and the mass unit is
+\section{Compilation}
+``make" makes the library and example executables.
+
+\noindent``make MyExecutable.exe" will compile a new executable written by the user and called ``MyExecutable.cc" 
+
+\noindent The command ``make GalPot'' just makes the GalPot libraries. 
+
+ {\bf N.B.} In all cases here, the length unit is kpc, the time unit is Myr, and the mass unit is
 M$_\odot$. For reference, $G=4.49866\times
 10^{-12}$kpc$^3$Myr$^{-2}$M$_\odot^{-1}$. A velocity of 1 kpc Myr$^{-1}
   = 977.77$km s$^{-1}$ (See Units.h for further).
@@ -28,6 +35,7 @@ M$_\odot$. For reference, $G=4.49866\times
 \section{Input} 
 The file that is given as the input file for the potential must be of
 the following form:
+\vspace{5mm}
 
 \begin{tabular}{lllllll}
 3      &     &      &     &    &     &\# No. Disks ($0\leq{\rm No.disks}\leq3$) \\
@@ -37,7 +45,7 @@ give 5 param.\\
 1.30e7 & 1.1 & 0.25 & 0   & 0  &     &\# No. lines of param. = No. disks\\
 2      &     &      &     &    &     &\# No. Spheroids ($0\leq{\rm
   No. sph.}\leq2$) \\
-4.0e7   & 0.8 & -0.5 & 1.4 & 10 & 50 &\# \\
+4.0e7   & 0.8 & -0.5 & 1.4 & 10 & 50 &\#  Param. for each spheroid. \\ 
 2.0e7   & 0.2 & -1.5 & 3.4 & 10 & 50 &\# {\it essential} to give 6 parameters\\
 \vspace{5mm}
 \end{tabular}
@@ -51,15 +59,14 @@ $\Sigma_0$ is the disk's central surface density (in M$_\odot$kpc$^{-2}$
 and the absence of a cutoff), $R_d$ is the disk
 scale radius, $z_d$ its scale height (though note there is a
 difference between negative and positive values), and $R_0$ is an inner
-cutoff radius (all in kpc). The term $\epsilon$ is a funny little parameter that I don't
-really understand. In numerical terms (cylindrical polars), these
+cutoff radius (all in kpc). The term $\epsilon$ perturbs the disc from a pure exponential, with a peak fractional change in surface density of $\sim\epsilon$ and a scale length of $2R_d$. In numerical terms (cylindrical polars), these
 give a surface density
 \begin{equation}
 \Sigma(R)=\Sigma_0\;\textrm{exp}\left(-\frac{R_0}{R}-\frac{R}{R_d}+
-  \epsilon\textrm{cos}\left(\frac{R}{R_d}\right)\right),
+  \epsilon\textrm{cos}\left(\frac{\pi R}{R_d}\right)\right),
 \end{equation}
 i.e. a standard exponential disk with optional hole in the middle and/or
-weird $\epsilon$ term modulation.
+$\epsilon$ term modulation.
 
 The vertical structure of the density is either an exponential in
 $|z|$ (if $z_d>0$), or isothermal (if $z_d<0$), i.e.
@@ -92,6 +99,8 @@ where, in cylindrical coordinates
 r^\prime = \sqrt{R^2 + (z/q)^2}
 \end{equation}
 
+\section{Use}
+The example executable testGalPot gives examples of the use of 
 
 
 \begin{thebibliography}{36}

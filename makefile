@@ -1,2 +1,2 @@
 
-include make.falPot
+include make.GalPot

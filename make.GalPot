@@ -1,5 +1,5 @@
 ###############################################################################
-#   Makefile for the falPot library, cut away from all extraneous everything  #
+#   Makefile for the GalPot library, cut away from all extraneous everything  #
 #                                                                             #
 #  Copyright Walter Dehnen, 1996-2005                                         #
 #  address:  Department of Physics and Astronomy, University of Leicester     #
@@ -8,7 +8,7 @@
 #                                                                             #
 ###############################################################################
 
-all: testfalPot obj/PJMCoords obj/OrbitIntegrator
+all: testGalPot obj/PJMCoords obj/OrbitIntegrator
 
 
 CPP		= g++
@@ -34,36 +34,36 @@ AUXIL_H		   = src/Pi.h src/Inline.h src/FreeMemory.h src/Vector.h \
 		     src/Matrix.h src/Numerics.templates src/Numerics.h \
 		     src/Pspline.h 
 
-falPot_h	   = src/falPot.h src/Potential.h
+GalPot_h	   = src/GalPot.h src/Potential.h
 
 obj/Numerics:		src/Numerics.cc $(AUXIL_H)
 			$(CPP) $(CFLAGS) src/Numerics.cc;$(ARPOT);$(AWAY)
 obj/WDMath:		src/WDMath.cc $(AUXIL_H)
 			$(CPP) $(CFLAGS) src/WDMath.cc;$(ARPOT);$(AWAY)
 
-obj/falPot: 		src/falPot.cc $(falPot_h) $(AUXIL_H)
-	      		$(CPP) $(CFLAGS) src/falPot.cc;$(ARPOT);$(AWAY)
+obj/GalPot: 		src/GalPot.cc $(GalPot_h) $(AUXIL_H)
+	      		$(CPP) $(CFLAGS) src/GalPot.cc;$(ARPOT);$(AWAY)
 
-falPot: 		obj/Numerics obj/WDMath obj/falPot
+GalPot: 		obj/Numerics obj/WDMath obj/GalPot
 
 
-obj/testfalPot:		testfalPot.cc falPot
-			$(CPP) $(CFLAGS) testfalPot.cc;  touch $@
-testfalPot:		obj/testfalPot falPot
-			$(CPP) obj/testfalPot.o $(LDFLAGS)
+obj/testGalPot:		testGalPot.cc GalPot
+			$(CPP) $(CFLAGS) testGalPot.cc;  touch $@
+testGalPot:		obj/testGalPot GalPot
+			$(CPP) obj/testGalPot.o $(LDFLAGS)
 
-obj/OrbitIntegrator: src/OrbitIntegrator.cc src/OrbitIntegrator.h $(falPot_h) $(AUXIL_H)
+obj/OrbitIntegrator: src/OrbitIntegrator.cc src/OrbitIntegrator.h $(GalPot_h) $(AUXIL_H)
 		     $(CPP) $(CFLAGS) src/OrbitIntegrator.cc
 
 obj/PJMCoords:	src/PJMCoords.cc src/PJMCoords.h src/Pi.h
 	$(CPP) $(CFLAGS) $<
 
-#findOrbitProperties:	findOrbitProperties.cc falPot obj/OrbitIntegrator
+#findOrbitProperties:	findOrbitProperties.cc GalPot obj/OrbitIntegrator
 #		$(CPP) $(MFLAGS) -o $@.exe $<  obj/OrbitIntegrator.o -Lobj -lPot -lm
 
 
-%.exe:	%.cc falPot obj/OrbitIntegrator obj/PJMCoords
+%.exe:	%.cc GalPot obj/OrbitIntegrator obj/PJMCoords
 	$(CPP) $(MFLAGS) -o $@ $<  obj/OrbitIntegrator.o obj/PJMCoords.o -Lobj -lPot -lm
 
 clean:
-	rm -f obj/* testfalPot
+	rm -f obj/* testGalPot
