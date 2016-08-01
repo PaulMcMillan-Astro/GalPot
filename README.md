@@ -19,3 +19,4 @@ Documentation.pdf provides an explanation of the input files used.
 
 Running any of the executables without any arguments should provide a description of how it is used.
 
+If you use this code, please cite whoever determined the potential (preferably McMillan 2016!), and Dehnen & Binney (1998).
