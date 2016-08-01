@@ -49,9 +49,9 @@ namespace GalactoConstants {
 
 
   const double 	
-    Rsun_in_kpc 	= 8.20,  // McMillan 2016
-    zsun_in_kpc 	= 0.014, // Binney, Gerhard & Spergel 1996
-    vcsun_in_kms	= -229.5 , // McMillan 2016: best fit model
+    Rsun_in_kpc 	= 8.21,  // McMillan 2016: best fit model
+    zsun_in_kpc 	= 0.014, // Binney, Gerhard & Spergel 1997
+    vcsun_in_kms	= -233.1 , // McMillan 2016: best fit model
     usun_in_kms 	= 11.1 ,   // Schonrich Binney Dehnen
     vsun_in_kms 	= 12.24,   //         ''
     wsun_in_kms 	= 7.25 ,   //         ''

@@ -1,6 +1,6 @@
 /*******************************************************************************
 *                                                                              *
-*  findOrbitProperties.cc                                                      *
+*  findManyOrbitPropertiesfromEquatorial.cc                                    *
 *                                                                              *
 *  C++ code written by Paul McMillan, 2007-                                    *
 *  Lund Observatory, Lund University.                                          *
@@ -11,6 +11,7 @@
 
 
 #include "GalPot.h"
+#include "PJMCoords.h"
 #include "OrbitIntegrator.h"
 
 #include <ctime>
@@ -22,7 +23,9 @@ int main(int argc,char *argv[])
   ofstream output;
   string potfile = "pot/PJM16_best.Tpot",line;
   Potential *Phi;
- 
+
+  OmniCoords OC;
+  
 
   file.open(potfile.c_str());
   if(!file){
@@ -34,7 +37,11 @@ int main(int argc,char *argv[])
   
   if(argc<3) {
     cerr << "Input: input_file output_file\n";
-    cerr << "   (distance in kpc, angle in degrees, velocity in km/s\n";
+    cerr << "Input is an ascii file giving position and motion in equatorial coordinates (J2000):\n"
+	 << "\tdistance RA DEC v_los mu_a* mu_d\n";
+    cerr << "\t(distance in kpc, angles in degrees, velocity in km/s, proper motion in mas/yr)\n";
+    cerr << " output is in kpc (distances), km^2/s^2 (energy), kpc km/s (angular momentum)\n";
+    //cerr << "   (distance in kpc, angle in degrees, velocity in km/s\n";
     return 0;
   }
 
@@ -50,21 +57,25 @@ int main(int argc,char *argv[])
   
   Vector <double,6> XV=5.;
 
+  Vector <double,6> EquatorialCoords;
+  
   OrbitIntegratorWithStats OI(XV, Phi, 10000.);
 
-
+  
   
   while(getline(data,line)) {
     if(line[0] != '#') {
       std::stringstream ss(line);
-      for(int i=0;i!=6;i++) ss >> XV[i];
+      for(int i=0;i!=6;i++) ss >> EquatorialCoords[i];
       
-      XV[0] *= Units::kpc;
-      XV[1] *= Units::kpc;
-      XV[2] *= Units::degree;
-      XV[3] *= Units::kms;
-      XV[4] *= Units::kms;
-      XV[5] *= Units::kms;
+      EquatorialCoords[0] *= Units::kpc;
+      EquatorialCoords[1] *= Units::degree;
+      EquatorialCoords[2] *= Units::degree;
+      EquatorialCoords[3] *= Units::kms;
+      EquatorialCoords[4] *= Units::masyr;
+      EquatorialCoords[5] *= Units::masyr;
+
+      XV = OC.GCYfromHEQ(EquatorialCoords);
       
       OI.setup(XV);
       if(OI.run() == 0) {

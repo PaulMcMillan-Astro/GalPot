@@ -623,7 +623,7 @@ inline double GalaxyPotential::vcsquare(const double R) const {
 
 inline double GalaxyPotential::RfromLc(const double L, double* dR) const
 {
-    return M.RfromLc(L,dR);
+  return M.RfromLc(fabs(L),dR);
 }
 
 inline double GalaxyPotential::LfromRc(const double R, double* dR) const

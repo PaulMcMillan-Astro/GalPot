@@ -3,17 +3,16 @@
 *  testGalPot.cc                                                               *
 *                                                                              *
 *  C++ code written by Walter Dehnen, 1995-96,                                 *
-*                      Paul McMillan, 2007-08,                                 *
-*  Oxford University, Department of Physics, Theoretical Physics.              *
-*  address: 1 Keble Road, Oxford OX1 34P, United Kingdom                       *
-*  e-mail:  p.mcmillan1@physics.ox.ac.uk                                       *
+*                      Paul McMillan, 2007-,                                   *
+*  Lund Observatory, Lund University.                                          *
+*  address: Box 43, SE-221 00 Lund, Sweden                                     *
+*  e-mail:  paul@astro.lu.se                                                   *
 *                                                                              *
 *******************************************************************************/
 
 #include <fstream>
 #include <iostream>
 #include "GalPot.h"
-#include <cmath>
 
 using std::cout;
 using std::cin;
@@ -24,9 +23,9 @@ int main(int argc,char *argv[])
     ifstream file;
     int    iso=1;
     Frequencies KNO;
-    double R=8.,z=0.007,r,dr,dz,G,ro,rho0,P,P1,P2,dPdR,dPdR2,dPdz,dPdz2,q;
+    double R=8.2,z=0.014,r,dr,dz,G,ro,rho0,P,P1,P2,dPdR,dPdR2,dPdz,dPdz2,q;
     if(argc !=2) {
-      cerr << "This test needs an input potential, e.g. pot/DB97Mod1.Tpot\n";
+      cerr << "This test needs an input potential, e.g. pot/PJM16_best.Tpot\n";
       exit(1);
     }
     
@@ -35,23 +34,44 @@ int main(int argc,char *argv[])
     GalaxyPotential Phi(file);
     file.close();
  
-    cout<<" Object Phi, of type `GalaxyPotential' constructed. Now testing.\n";
-    cout<<"\n We work at an (approximate) solar position, R=8.0, z=0.007\n";
-    cout<<" GalaxyPotential can return just the potential at that point\n";
+    cout<<"Object Phi, of type `GalaxyPotential' constructed. Now testing.\n";
+    cout<<"\nN.B. Everything here is in code units: kpc, Myr, M_sun\n";
+    
+    cout<<"\nWe work at an (approximate) solar position, R=8.2, z=0.014\n";
+    cout<<" GalaxyPotential can return just the potential at that point:\n";
     cout<<" P = Phi(R,z) = ";
     P=Phi(R,z);
-    cout<< P <<"\n";
-    cout<< "Or the potential and derivatives (not the forces), dP/dR & dP/dz\n";
+    cout<< P <<"\n\n";
+    
+    cout<< "Or the potential and derivatives (not the forces), dP/dR & dP/dz:\n";
     cout<<" P = Phi(R,z,dPdR,dPdz) = ";
     P=Phi(R,z,dPdR,dPdz);
-    cout<< P <<"\n dPdR = " << dPdR << "\n dPdz = " << dPdz << '\n';
-    cout<<"\n Other possible queries are\n rho = Phi.Density(R,z)\n";
-    cout<<" vc2 = vcsquare(R)\n M=Phi.Mass(R)\n ";
-    cout<<" Phi.OortConstants(R,A,B), where A & B";
-    cout<<" have their usual meanings in this context\n";
-    cout<<" R = Phi.RfromLc(Lz), ";
-    cout<<"the radius of a circular orbit with Ang Mom Lz\n";
-    cout<<" Lz = Phi.LfromRc(R), the inverse\n";
-    cout<<" Lap = Phi.Laplace(R,z), gives Laplace(Phi), tends towards 4 Pi G\n";
-    cout<<" KNO = Phi.KapNuOm(R), epicycle frequencies, radial, vertical & azimuthal\n"; 
+    cout<< P <<"\n dPdR = " << dPdR << "\n dPdz = " << dPdz << "\n\n";
+    
+    cout<<"\nOther possible queries are density:\n rho = Phi.Density(R,z) = ";
+    cout<< Phi.Density(R,z)  << "\n\n";
+    
+    cout<<"Circular velocity squared:\n vc2 = Phi.vcsquare(R) = ";
+    cout<< Phi.vcsquare(R) << "\n\n";
+
+    cout<<"Mass interior to radius:\n M = Phi.Mass(R) = ";
+    cout<< Phi.Mass(R) << "\n\n";
+
+    cout<<"Oort\'s constants:\n Phi.OortConstants(R,A,B)\n";
+    double A,B;
+    Phi.OortConstants(R,A,B);
+    cout<<" A = " << A << ";\t\tB = " << B << "\n\n";
+
+    cout<<"The radius of a circular orbit with Ang Mom Lz:\n R = Phi.RfromLc(Lz) = ";
+    cout << Phi.RfromLc(2.) << " (for Lz=2.)\n\n";
+
+    cout<<"And the inverse:\n Lz = Phi.LfromRc(R) = " << Phi.LfromRc(R) <<"\n\n";
+
+    //    cout<<"The Laplacian of Phi, which tends towards 4 Pi G rho:\n Lap = Phi.Laplace(R,z) = "
+    //	<< Phi.Laplace(R,z) << "\n\n";
+    //cout << 4*Pi*Units::G*Phi.Density(R,z)<< "\n\n";
+    
+    cout<< "And the epicyclic frequencies (radial, vertical & azimuthal):\n";
+    cout<<" KNO = Phi.KapNuOm(R) = "
+	<< Phi.KapNuOm(R) << '\n'; 
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
 *                                                                              *
-*  findManyOrbitProperties.cc                                                  *
+*  findManyOrbitPropertiesfromGalactic.cc                                      *
 *                                                                              *
 *  C++ code written by Paul McMillan, 2007-                                    *
 *  Lund Observatory, Lund University.                                          *
@@ -11,6 +11,7 @@
 
 
 #include "GalPot.h"
+#include "PJMCoords.h"
 #include "OrbitIntegrator.h"
 
 #include <ctime>
@@ -22,77 +23,76 @@ int main(int argc,char *argv[])
   ofstream output;
   string potfile = "pot/PJM16_best.Tpot",line;
   Potential *Phi;
- 
 
- // Read potential from file 
+  OmniCoords OC;
+  
+
   file.open(potfile.c_str());
   if(!file){
     cerr << "Input file does not exist. Filename: " << potfile << "\n";
-    return 1;
+    return 0;
   }
   Phi = new GalaxyPotential(file);
   file.close();
   
   if(argc<3) {
     cerr << "Input: input_file output_file\n";
-    cerr << "input_file must contain columns: R z v_R v_z v_phi\n";
-    cerr << "   (distance in kpc, velocity in km/s)\n";
+    cerr << "Input is an ascii file giving position and motion in galactic coordinates:\n"
+	 << "\tdistance l b v_los mu_l* mu_b\n";
+    cerr << "\t(distance in kpc, angles in degrees, velocity in km/s, proper motion in mas/yr)\n";
     cerr << " output is in kpc (distances), km^2/s^2 (energy), kpc km/s (angular momentum)\n";
-    return 1;
+    return 0;
   }
 
-  // Open file for input
   data.open(argv[1]);
   if(!file){
     cerr << "Input file does not exist. Filename: " << string(argv[1]) << "\n";
     return 0;
   }
 
-  // Open for output
   output.open(argv[2]);
 
-  // Write header 
   output << "#MinR MaxR Maxz Minr Maxr MeanR Energy AngMom\n" << std::flush;
+  
+  Vector <double,6> XV=5.;
 
-  // Setup class
-  Vector <double,6> XV=1.;
+  Vector <double,6> GalacticCoords;
+  
   OrbitIntegratorWithStats OI(XV, Phi, 10000.);
 
-  int nline;
-  // read file
+  
+  
   while(getline(data,line)) {
-    // Skip commented lines (which start with #)
     if(line[0] != '#') {
       std::stringstream ss(line);
-      
-      for(int i=0;i!=5;i++)
-	if(i<2) ss >> XV[i];
-	else ss >> XV[i+1];
-       // Convert input to code coordinates
-      XV[0] *= Units::kpc;
-      XV[1] *= Units::kpc;
-      //XV[2] *= Units::degree;
-      XV[3] *= Units::kms;
-      XV[4] *= Units::kms;
-      XV[5] *= Units::kms;
+      for(int i=0;i!=6;i++) ss >> GalacticCoords[i];
+
+      GalacticCoords[0] *= Units::kpc;
+      GalacticCoords[1] *= Units::degree;
+      GalacticCoords[2] *= Units::degree;
+      GalacticCoords[3] *= Units::kms;
+      GalacticCoords[4] *= Units::masyr;
+      GalacticCoords[5] *= Units::masyr;
+
+      XV = OC.GCYfromHGP(GalacticCoords);
+
+      // One could instead use:
+      // OC.takeHGP_units(GalacticCoords); // (without converting units)
+      // XV = OC.giveGCY();
       
       OI.setup(XV);
-      // run integration
       if(OI.run() == 0) {
-      // Output results if successful
-	output << OI.MinR<< ' ' << OI.MaxR<< ' ' << OI.Maxz<< ' '
-	       << OI.Minr<< ' ' << OI.Maxr<< ' ' << OI.MeanR<< ' '
+	output << OI.MinR << ' ' << OI.MaxR<< ' ' << OI.Maxz<< ' '
+	       << OI.Minr << ' ' << OI.Maxr<< ' ' << OI.MeanR<< ' '
 	       << OI.Energy/(Units::kms*Units::kms)<< ' '
-	       << OI.Lz/(Units::kms*Units::kpc) << '\n' << std::flush;
-      } else {
-	cerr << "Failure for line: " << line
-	     << "\nEnergy=" << OI.Energy/(Units::kms*Units::kms) << '\n';
+	       << OI.Lz/(Units::kms*Units::kpc) << '\n';
       }
+      
     }
 
   }
 
 
-  return 0;
+
 
 }

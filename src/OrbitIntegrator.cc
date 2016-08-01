@@ -123,11 +123,24 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint,
   Pot = PhiIn;
   Tmax = Ttot;
   XV_ini = StartPoint;
+  // Not set up for zero angular momentum orbits
+  if(XV_ini[5] == 0.) {
+    cerr << "WARNING: Code not suited to zero angular momentum orbits.\n"
+	 << "Adding small v_phi component\n";
+    double tmp_v2 = XV_ini[3]*XV_ini[3]+XV_ini[4]*XV_ini[4];
+    if(tmp_v2 != 0.) {
+      XV_ini[5] = 1.e-5*sqrt(tmp_v2);
+    } else {
+      XV_ini[5] = 1.e-5*sqrt((*Pot)(XV_ini[0],XV_ini[1]) - (*Pot)(0.,0.));
+    }
+  }
+  //To FIX: R,z = 0
+  
   Stepper.setup(XV_ini,Pot);
   //setup(StartPoint);
   Energy = Stepper.Energy();
   Lz = Stepper.AngularMomentum();
-  GuidingRadius = Pot->RfromLc(Lz);
+  GuidingRadius = Pot->RfromLc(fabs(Lz));
   setupDone = true;
 }
 
@@ -138,7 +151,7 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint) {
   
   Energy = Stepper.Energy();
   Lz = Stepper.AngularMomentum();
-  GuidingRadius = Pot->RfromLc(Lz);
+  GuidingRadius = Pot->RfromLc(fabs(Lz));
   setupDone =true;
 }
 
@@ -149,11 +162,11 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint) {
 int OrbitIntegratorWithStats::runGeneric(const string type,
 					 Vector <double,6> *output,
 					 double *tout, int N) {
-  int nout_run=0;
+  int nOutRun=0;
   double t=0.;
   double outputDelt, dt=1.e-2, t_tol=1.e-4;
   Vector <double,6> XVold=XV_ini,XV;
-  double tnext=0.;
+  double tbetween, tnext=0., maxStepIni = Stepper.maxstep();
 
   if(!setupDone) setup(XV_ini);
   
@@ -164,7 +177,14 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
   
   if(type=="NoOutput") tnext=Tmax;
   else if(type == "OutputNoTimes" || type == "OutputWithTimes") {
+    tbetween = Tmax/double(N-1);
+    if( tbetween < maxStepIni ) Stepper.set_maxstep(tbetween);
+    maxStepIni = Stepper.maxstep();        // Keep whichever
     
+    if( type == "OutputWithTimes" ) tout[nOutRun] = 0.; 
+    output[nOutRun] = XV_ini;
+    nOutRun++;
+       
   }
 
   
@@ -179,10 +199,12 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
 
   
   while(t<Tmax) {
+    //Stepper.set_maxstep(maxStepIni);
     if(Tmax-t<dt) {
       dt = Tmax-t;
       Stepper.set_maxstep(dt);
     }
+    
     Stepper.stepRK_by(dt);
     XV = Stepper.XV();
     double r2 = XV[0]*XV[0]+XV[1]*XV[1];
@@ -195,7 +217,18 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
     if(r2<Minr) Minr = r2;
     if(r2>Maxr) Maxr = r2;
 
+
     t += dt;
+    
+    if( (type == "OutputNoTimes" || type == "OutputWithTimes") && t>=tnext ) {
+      if(nOutRun < N) {
+	if( type == "OutputWithTimes" ) tout[nOutRun] = t; 
+	output[nOutRun] = XV;
+	nOutRun++;
+	tnext += tbetween;
+      }
+    }
+    
   }
 
   Maxr = sqrt(Maxr);
@@ -204,6 +237,18 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
   PseudoEccentricity = (Maxr-Minr)/(Maxr+Minr);
 
   setupDone=false;
+
+  // Just in case: pad output array if too small.
+  if( (type == "OutputNoTimes" || type == "OutputWithTimes") && nOutRun < N) {
+
+    cerr << "Debug check on number of outputs: " << nOutRun << ' ' << N << '\n';
+    for(;nOutRun<N;nOutRun++) {
+      if( type == "OutputWithTimes" ) tout[nOutRun] = t; 
+      output[nOutRun] = XV;
+      nOutRun++;
+    }
+  }
+  
   
   return 0; // success
 }

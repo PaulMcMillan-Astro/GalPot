@@ -6,4 +6,8 @@ BT08.Tpot corresponds to Model I from Galactic Dynamics by Binney & Tremaine (se
 
 PJM11_best.Tpot and PJM11_convenient.Tpot correspond to the 'best' and 'convenient' models from McMillan (2011, MNRAS, 414, 2446)
 
-Piffl14.Tpot corresponds to the potential found by Piffl et al (2014, MNRAS, 445, 3133) 
+Piffl14.Tpot corresponds to the potential found by Piffl et al (2014, MNRAS, 445, 3133)
+
+PJM16_best.Tpot is the best fitting potential (from the main models) from McMillan 2016 (submitted)
+
+The potentials in the subdirectory variants/ are also from McMillan (2016), and are the best fitting potentials from any of the alternative MCMC runs for which results are given in Table 6.
