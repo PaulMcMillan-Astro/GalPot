@@ -6,8 +6,10 @@
 \def\be{\begin{equation}}
 \def\ee{\end{equation}}
 
-\setlength{\textwidth}{16cm}
-\setlength{\oddsidemargin}{0cm}
+\setlength{\textwidth}{15.5cm}
+\setlength{\textheight}{23cm}
+\setlength{\oddsidemargin}{0.3cm}
+\setlength{\topmargin}{-1cm}
 
 \begin{document}
 
@@ -16,9 +18,9 @@
 \end{center}
 
 
-This documentation is just here to explain how to compile and use 
+This documentation is just here to explain how to compile and give parameters to
 GalPot. See Section 2.3 of \citet{DB98} for a fuller explanation of how it works.
-Or read the source code. 
+See testGalPot for examples of what the code can do.
 
 \section{Compilation}
 ``make" makes the library and example executables.
@@ -31,10 +33,10 @@ Or read the source code.
 M$_\odot$. For reference, $G=4.49866\times
 10^{-12}$kpc$^3$Myr$^{-2}$M$_\odot^{-1}$. A velocity of 1 kpc Myr$^{-1}
   = 977.77$km s$^{-1}$ (See Units.h for further).
-
+  
 \section{Input} 
 The file that is given as the input file for the potential must be of
-the following form:
+the following form (without the comment lines):
 \vspace{5mm}
 
 \begin{tabular}{lllllll}
@@ -47,8 +49,8 @@ give 5 param.\\
   No. sph.}\leq2$) \\
 4.0e7   & 0.8 & -0.5 & 1.4 & 10 & 50 &\#  Param. for each spheroid. \\ 
 2.0e7   & 0.2 & -1.5 & 3.4 & 10 & 50 &\# {\it essential} to give 6 parameters\\
-\vspace{5mm}
 \end{tabular}
+
 
 \subsection{Disk}
 
@@ -100,7 +102,7 @@ r^\prime = \sqrt{R^2 + (z/q)^2}
 \end{equation}
 
 \section{Use}
-The example executable testGalPot gives examples of the use of 
+The example executable testGalPot gives examples of the use of the GalaxyPotential class.
 
 
 \begin{thebibliography}{36}
