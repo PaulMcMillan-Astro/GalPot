@@ -49,6 +49,7 @@ int main(int argc,char *argv[])
   Potential *Phi;
 
   // Start some random number generators
+  // see Random.h, Random.cc
   time_t tm = time(NULL);
   Random3 R3(int(tm)+3), R3b(int(tm)+678);
   Gaussian GaussianRandom(&R3,&R3b);
