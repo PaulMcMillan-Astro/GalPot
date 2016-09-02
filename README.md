@@ -3,6 +3,8 @@ GalPot
 
 This is a stand-alone version of [Walter Dehnen's GalaxyPotential C++ code](http://ukads.nottingham.ac.uk/abs/1998MNRAS.294..429D). It is a version I took from the falcON code in the [NEMO Stellar Dynamics Toolbox](http://chara.astro.umd.edu/nemo/), and cut down to stand alone. It is a convenient way of finding the gravitational potential associated with axisymmetric density profiles.
 
+The package also includes code that performs transformations between commonly used coordinate systems for bot positions and velocities (the class OmniCoords), and that integrates orbits in the potentials.
+
 It should compile if you run make.
 
 The potentials provided in pot/ are primarily from McMillan (2016), but also from Piffl et al (2014), McMillan (2011) and Dehnen & Binney (1998).
