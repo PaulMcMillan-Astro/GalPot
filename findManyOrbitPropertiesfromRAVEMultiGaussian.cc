@@ -109,7 +109,10 @@ int main(int argc,char *argv[])
     int nMG;
     double MGpar[9];
     double dm;
-    
+    MinR.clear();   MaxR.clear();
+    Maxz.clear();   Minr.clear();
+    Maxr.clear();   MeanR.clear();
+    Energy.clear(); AngMom.clear();
     if(line[0] != '#') {
       std::stringstream ss(line);
       ss >> nMG;

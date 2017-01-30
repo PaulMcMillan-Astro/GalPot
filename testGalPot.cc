@@ -33,7 +33,7 @@ int main(int argc,char *argv[])
     file.open(argv[1]);
     GalaxyPotential Phi(file);
     file.close();
- 
+    
     cout<<"Object Phi, of type `GalaxyPotential' constructed. Now testing.\n";
     cout<<"\nN.B. Everything here is in code units: kpc, Myr, M_sun\n";
     

@@ -98,6 +98,10 @@ int main(int argc,char *argv[])
 
   
   while(getline(data,line)) {
+    MinR.clear();   MaxR.clear();
+    Maxz.clear();   Minr.clear();
+    Maxr.clear();   MeanR.clear();
+    Energy.clear(); AngMom.clear();
     int DangerPoint = n_tests-(int(0.8413*n_tests - 0.5)+1);
     int BadPoints=0;
     if(line[0] != '#') {
