@@ -93,7 +93,7 @@ int main(int argc,char *argv[])
   output << "#vR vRMinus vRPlus vz vzMinus vzPlus vp vpMinus vpPlus\n" << std::flush;
 
   // Tables to hold results
-  std::vector<double> vR, vz, vp;
+  std::vector<double> R, z, vR, vz, vp;
   
   Vector <double,6> XV=1.;
 
@@ -109,6 +109,8 @@ int main(int argc,char *argv[])
     int nMG;
     double MGpar[9];
     double dm;
+    R.clear();
+    z.clear();
     vR.clear();
     vz.clear();
     vp.clear();
@@ -142,6 +144,8 @@ int main(int argc,char *argv[])
 	//cerr << i << ' ' << dm << ' ' << EquatorialCoordsTmp << '\n';
 	XV = OC.GCYfromHEQ(EquatorialCoordsTmp);
 
+	R.push_back(XV[0]/Units::kpc);
+	z.push_back(XV[1]/Units::kpc);
 	vR.push_back(XV[3]/Units::kms);
 	vz.push_back(XV[4]/Units::kms);
 	vp.push_back(XV[5]/Units::kms);
@@ -151,7 +155,8 @@ int main(int argc,char *argv[])
       // Output median and pm 1sigma equivalent percentiles
 
     
-      
+      OutputMedianAndUpperLower(output,R);
+      OutputMedianAndUpperLower(output,z);  
       OutputMedianAndUpperLower(output,vR);
       OutputMedianAndUpperLower(output,vz);
       OutputMedianAndUpperLower(output,vp);

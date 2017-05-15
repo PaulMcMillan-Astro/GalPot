@@ -117,12 +117,23 @@ OrbitIntegratorWithStats::OrbitIntegratorWithStats(Vector<double,6> StartPoint,
   setup(StartPoint,Phi,Ttot);
 }
 
+Vector<double,6> OrbitIntegratorWithStats::reverse_corrected_XV(Vector<double,6> XV) {
+  // reverse V if required
+  Vector<double,6> XV_out = XV;
+  if(reverse) {
+    XV_out[3] = -XV_out[3]; XV_out[4] = -XV_out[4]; XV_out[5] = -XV_out[5];
+  }
+  return XV_out;
+}
+
 void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint,
 				      Potential *PhiIn,
 				      const double Ttot) {
   Pot = PhiIn;
-  Tmax = Ttot;
+  Tmax = fabs(Ttot);
+  reverse = (Ttot<0);
   XV_ini = StartPoint;
+  if(reverse) { XV_ini = reverse_corrected_XV(XV_ini); }
   // Not set up for zero angular momentum orbits
   if(XV_ini[5] == 0.) {
     cerr << "WARNING: Code not suited to zero angular momentum orbits.\n"
@@ -147,8 +158,9 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint,
 
 void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint) {
   XV_ini = StartPoint;
-  Stepper.setup(XV_ini);
+  if(reverse) {  XV_ini = reverse_corrected_XV(XV_ini); }
   
+  Stepper.setup(XV_ini);
   Energy = Stepper.Energy();
   Lz = Stepper.AngularMomentum();
   GuidingRadius = Pot->RfromLc(fabs(Lz));
@@ -182,7 +194,7 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
     maxStepIni = Stepper.maxstep();        // Keep whichever
     
     if( type == "OutputWithTimes" ) tout[nOutRun] = 0.; 
-    output[nOutRun] = XV_ini;
+    output[nOutRun] = reverse_corrected_XV(XV_ini);
     nOutRun++;
        
   }
@@ -222,8 +234,8 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
     
     if( (type == "OutputNoTimes" || type == "OutputWithTimes") && t>=tnext ) {
       if(nOutRun < N) {
-	if( type == "OutputWithTimes" ) tout[nOutRun] = t; 
-	output[nOutRun] = XV;
+	if( type == "OutputWithTimes" ) tout[nOutRun] = (reverse)? -t : t; 
+	output[nOutRun] = reverse_corrected_XV(XV);
 	nOutRun++;
 	tnext += tbetween;
       }
@@ -243,8 +255,8 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
 
     cerr << "Debug check on number of outputs: " << nOutRun << ' ' << N << '\n';
     for(;nOutRun<N;nOutRun++) {
-      if( type == "OutputWithTimes" ) tout[nOutRun] = t; 
-      output[nOutRun] = XV;
+      if( type == "OutputWithTimes" ) tout[nOutRun] =  (reverse)? -t : t; 
+      output[nOutRun] = reverse_corrected_XV(XV);
       nOutRun++;
     }
   }

@@ -52,6 +52,7 @@ class OrbitIntegratorWithStats {
   Potential *Pot;
   OrbitIntegratorStep Stepper;
   bool setupDone;
+  bool reverse;
   double Tmax;
   int runGeneric(const string type,Vector <double,6> *output,double *tout, int N);
 public:
@@ -63,6 +64,7 @@ public:
   void setup(Vector<double,6> StartPoint, Potential *PotIn, const double TmaxIn);
   void setup(Vector<double,6> StartPoint);
 
+  Vector<double,6> reverse_corrected_XV(Vector<double,6>);
   Vector<double,6> XV_ini;
   double Energy;
   double Lz;
