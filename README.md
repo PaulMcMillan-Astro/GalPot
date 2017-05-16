@@ -17,6 +17,8 @@ The executable file testGalPot.exe shows examples of using GalPot
 
 The other executable files provide simple tools for integration of orbits in the given potentials. Running the cshell script Example.csh (e.g. "csh Example.csh") runs example versions of these executables.
 
+In general: Those called findOrbit*.exe require the starting points given on the command line, while those called findManyOrbit*.exe require starting points listed in a file.
+
 Documentation.pdf provides an explanation of the input files used.
 
 Running any of the executables without any arguments should provide a description of how it is used.
