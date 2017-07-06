@@ -2,7 +2,13 @@
 #include make.GalPot
 
 
-all: testGalPot.exe findOrbit.exe findOrbitProperties.exe findManyOrbitProperties.exe findManyOrbitPropertiesfromGalactic.exe findManyOrbitPropertiesfromEquatorial.exe findManyOrbitPropertiesfromEquatorialwErrors.exe findManyOrbitPropertiesfromRAVEMultiGaussian.exe findManyOrbitPropertiesfromGaiaSimple.exe Coord_converter.exe GalPot Other
+all: testGalPot.exe findOrbit.exe findOrbitProperties.exe \
+		findManyOrbitProperties.exe findManyOrbitPropertiesfromGalactic.exe \
+		findManyOrbitPropertiesfromEquatorial.exe \
+		findManyOrbitPropertiesfromEquatorialwErrors.exe \
+		findManyOrbitPropertiesfromRAVEMultiGaussian.exe \
+		findManyOrbitPropertiesfromGaiaSimple.exe Coord_converter.exe RotCurve.exe \
+		GalPot Other
 
 CPP		= g++
 LIBPOT		= obj/libPot.a
@@ -27,7 +33,7 @@ AWAY	  = rm $@.o
 
 AUXIL_H		   = src/Pi.h src/Inline.h src/FreeMemory.h src/Vector.h \
 		     src/Matrix.h src/Numerics.templates src/Numerics.h \
-		     src/Pspline.h 
+		     src/Pspline.h
 
 GalPot_h	   = src/GalPot.h src/Potential.h
 
