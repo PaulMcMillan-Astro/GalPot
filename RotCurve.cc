@@ -22,9 +22,10 @@ int main(int argc,char *argv[])
 {
     ifstream file;
     ofstream outfile;
-    int    npoints=1;
-    Frequencies KNO;
-    double Rmin, Rmax;
+
+    int    npoints=100;
+    double Rmin=0.1, Rmax=10;
+    
     if(argc < 3) {
       cerr << "\nInput: potfile outfile (Rmin Rmax npoints)\n";
       cerr << "e.g. pot/PJM16_best.pot out.tab 0.1 10 100\n\n";
