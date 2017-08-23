@@ -7,7 +7,7 @@ The package also includes code that performs transformations between commonly us
 
 It should compile if you run make.
 
-The potentials provided in pot/ are primarily from McMillan (2017), but also from Piffl et al (2014), McMillan (2011) and Dehnen & Binney (1998).
+The potentials provided in pot/ are primarily from McMillan (2017), but also from Piffl et al (2014), McMillan (2011) and Dehnen & Binney (1998). See pot/README for details. Note that the naming convention for the McMillan (2017) potentials is slightly muddled because the paper and code were originally made available in 2016 (not 2017).
 
 It is under the GNU General Public Licence (GPL).
 

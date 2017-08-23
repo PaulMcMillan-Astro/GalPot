@@ -8,6 +8,8 @@ PJM11_best.Tpot and PJM11_convenient.Tpot correspond to the 'best' and 'convenie
 
 Piffl14.Tpot corresponds to the potential found by Piffl et al (2014, MNRAS, 445, 3133)
 
-PJM16_best.Tpot is the best fitting potential (from the main models) from McMillan 2016 (submitted)
+PJM16_best.Tpot is the best fitting potential (from the main models) from McMillan 2017 (MNRAS, 465, 76). The paper (and code) was originally avaiable in 2016, hence the name.
 
-The potentials in the subdirectory variants/ are also from McMillan (2016), and are the best fitting potentials from any of the alternative MCMC runs for which results are given in Table 6.
+PJM17_best.Tpot is the same as PJM16_best.Tpot (see reasoning above).
+
+The potentials in the subdirectory variants/ are also from McMillan (2017), and are the best fitting potentials from any of the alternative MCMC runs for which results are given in Table 6. I have not copied all of them so they are also called PJM17*
