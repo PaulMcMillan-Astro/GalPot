@@ -7,7 +7,7 @@ The package also includes code that performs transformations between commonly us
 
 It should compile if you run make.
 
-The potentials provided in pot/ are primarily from McMillan (2016), but also from Piffl et al (2014), McMillan (2011) and Dehnen & Binney (1998).
+The potentials provided in pot/ are primarily from McMillan (2017), but also from Piffl et al (2014), McMillan (2011) and Dehnen & Binney (1998).
 
 It is under the GNU General Public Licence (GPL).
 
@@ -23,4 +23,4 @@ Documentation.pdf provides an explanation of the input files used.
 
 Running any of the executables without any arguments should provide a description of how it is used.
 
-If you use this code, please cite whoever determined the potential (preferably McMillan 2016!), and Dehnen & Binney (1998).
+If you use this code, please cite whoever determined the potential (preferably [McMillan 2017](http://dx.doi.org/10.1093/mnras/stw2759)!), and [Dehnen & Binney (1998)](http://dx.doi.org/10.1046/j.1365-8711.1998.01282.x).
