@@ -21,6 +21,13 @@ In general: Those called findOrbit*.exe require the starting points given on the
 
 Documentation.pdf provides an explanation of the input files used.
 
+=========
+# New
+
+I have now added the possibility of adding a Kepler potential or Miyamoto-Nagai potential to the standard ones produced by GalPot. The class MultiPotential exists to combine these, and the file findOrbitMultiPot.cc exists to demonstrate this. The other routines have not been updated to allow this functionality, and findOrbitMultiPot should be considered a template which the interested user can follow.
+
+=========
+
 Running any of the executables without any arguments should provide a description of how it is used.
 
 If you use this code, please cite whoever determined the potential (preferably [McMillan 2017](http://dx.doi.org/10.1093/mnras/stw2759)!), and [Dehnen & Binney (1998)](http://dx.doi.org/10.1046/j.1365-8711.1998.01282.x).

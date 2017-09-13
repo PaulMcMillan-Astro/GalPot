@@ -7,6 +7,7 @@ all: testGalPot.exe findOrbit.exe findOrbitProperties.exe \
 		findManyOrbitPropertiesfromEquatorial.exe \
 		findManyOrbitPropertiesfromEquatorialwErrors.exe \
 		findManyOrbitPropertiesfromRAVEMultiGaussian.exe \
+		findManyOrbitPropertiesfromRAVEMultiGaussianCorrelations.exe \
 		findManyOrbitPropertiesfromGaiaSimple.exe Coord_converter.exe RotCurve.exe \
 		GalPot Other
 
@@ -45,7 +46,15 @@ obj/WDMath:		src/WDMath.cc $(AUXIL_H)
 obj/GalPot: 		src/GalPot.cc $(GalPot_h) $(AUXIL_H)
 	      		$(CPP) $(CFLAGS) src/GalPot.cc;$(ARPOT);$(AWAY)
 
-GalPot: 		obj/Numerics obj/WDMath obj/GalPot
+obj/KeplerPot: 		src/KeplerPot.cc src/KeplerPot.h src/Potential.h $(AUXIL_H)
+					$(CPP) $(CFLAGS) src/KeplerPot.cc;$(ARPOT);$(AWAY)
+obj/MiyamotoNagaiPot: 		src/MiyamotoNagaiPot.cc src/MiyamotoNagaiPot.h src/Potential.h $(AUXIL_H)
+			$(CPP) $(CFLAGS) src/MiyamotoNagaiPot.cc;$(ARPOT);$(AWAY)
+
+obj/MultiPot: 		src/MultiPot.cc src/MultiPot.h src/Potential.h $(AUXIL_H)
+			$(CPP) $(CFLAGS) src/MultiPot.cc;$(ARPOT);$(AWAY)
+GalPot: 		obj/Numerics obj/WDMath obj/GalPot obj/KeplerPot \
+						obj/MiyamotoNagaiPot obj/MultiPot
 
 
 
