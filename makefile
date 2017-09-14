@@ -9,6 +9,7 @@ all: testGalPot.exe findOrbit.exe findOrbitProperties.exe \
 		findManyOrbitPropertiesfromRAVEMultiGaussian.exe \
 		findManyOrbitPropertiesfromRAVEMultiGaussianCorrelations.exe \
 		findManyOrbitPropertiesfromGaiaSimple.exe Coord_converter.exe RotCurve.exe \
+		findOrbitMultiPot.exe \
 		GalPot Other
 
 CPP		= g++
