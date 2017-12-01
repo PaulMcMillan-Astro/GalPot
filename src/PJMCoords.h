@@ -511,7 +511,7 @@ inline vec6 OmniCoords::give(int n) {
     bool found = false;     //  from HGP.
     for(int i=2;i<=5 && !found;i++)
       if(know[i]) {
-	       for(int j=i-;j>1;j--) Backward(j);
+	       for(int j=i-1;j>1;j--) Backward(j);
 	       found = true;
       }
     if(!found) Forward(1);
