@@ -29,3 +29,5 @@ If you use this code, please cite whoever determined the potential (preferably [
 # New
 
 I have now added the possibility of adding a Kepler potential or Miyamoto-Nagai potential to the standard ones produced by GalPot. The class MultiPotential exists to combine these, and the file findOrbitMultiPot.cc exists to demonstrate this. The other routines have not been updated to allow this functionality, and findOrbitMultiPot should be considered a template which the interested user can follow.
+
+Note that the basic GalPot is rather poorly suited to representing smaller-scale objects (like Sgr A* or a nuclear disc). It is recommended to combine GalPot with a Kepler or Miyamoto-Nagai potential if you want to represent these objects.
