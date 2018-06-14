@@ -17,14 +17,14 @@
 
 using std::cout;
 
-int main(int argc,char *argv[])  
+int main(int argc,char *argv[])
 {
 
  ifstream file;
  string potfile = "pot/PJM16_best.Tpot";
  Potential *Phi;
- 
- // Read potential from file 
+
+ // Read potential from file
  file.open(potfile.c_str());
  if(!file) {
    cerr << "Input file does not exist. ";
@@ -33,7 +33,7 @@ int main(int argc,char *argv[])
  }
  Phi = new GalaxyPotential(file);
  file.close();
- 
+
  if(argc<6) {
    cerr << "Input: R z v_R v_z v_phi\n";
    cerr << "   (distance in kpc, velocity in km/s)\n";
@@ -50,7 +50,7 @@ int main(int argc,char *argv[])
  XV[3] = atof(argv[3]) * Units::kms; // v_R
  XV[4] = atof(argv[4]) * Units::kms; // v_z
  XV[5] = atof(argv[5]) * Units::kms; // v_phi
- 
+
  // Set up Integrator class
  OrbitIntegratorWithStats OI(XV, Phi, 10000.);
 

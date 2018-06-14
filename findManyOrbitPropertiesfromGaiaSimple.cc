@@ -29,17 +29,17 @@ void OutputMedianAndUpperLower(ofstream &output, std::vector<double> &VecIn) {
   output << median << ' ';
   //15.87, 84.13 percentiles
   if(n_tests<4) output << VecIn[n_tests-1]-median << ' ' << median-VecIn[0] << ' ';
-  
+
   for(int i=0;i!=2;i++) {
     double percentile = (i==0)? 0.1587 : 0.8413;
     double place = percentile*n_tests - 0.5;
     int iplace = int(place);
     output << fabs(VecIn[iplace] + (place-iplace)*(VecIn[iplace+1]-VecIn[iplace]) - median) << ' ';
-   
+
   }
 }
 
-int main(int argc,char *argv[])  
+int main(int argc,char *argv[])
 {
 
   ifstream file,data;
@@ -54,9 +54,9 @@ int main(int argc,char *argv[])
   Random3 R3(int(tm)+3), R3b(int(tm)+678);
   Gaussian GaussianRandom(&R3,&R3b);
 
-    
+
   OmniCoords OC;
-  
+
 
   file.open(potfile.c_str());
   if(!file){
@@ -65,7 +65,7 @@ int main(int argc,char *argv[])
   }
   Phi = new GalaxyPotential(file);
   file.close();
-  
+
   if(argc<4) {
     cerr << "Input: input_file n_tests output_file\n";
     cerr << "input_file is an ascii file giving parallax, position and motion in equatorial coordinates, with uncertainties. n_tests is number of Monte Carlo sample used per star\n"
@@ -89,14 +89,14 @@ int main(int argc,char *argv[])
 
   // Tables to hold results
   std::vector<double> MinR, MaxR, Maxz, Minr, Maxr, MeanR, Energy, AngMom;
-  
+
   Vector <double,6> XV=1.;
 
   Vector <double,6> EquatorialCoords, EquatorialCoordsErr, EquatorialCoordsTmp;
-  
+
   OrbitIntegratorWithStats OI(XV, Phi, 10000.);
 
-  
+
   while(getline(data,line)) {
     MinR.clear();   MaxR.clear();
     Maxz.clear();   Minr.clear();
@@ -110,16 +110,16 @@ int main(int argc,char *argv[])
 
       for(int i=0;i!=n_tests;i++) {
 	// Add uncertainties
-	
+
 	for(int j=1;j!=6;j++)
 	  EquatorialCoordsTmp[j] = EquatorialCoords[j]
 	    + EquatorialCoordsErr[j] * GaussianRandom();
-	
+
 	do {
 	  EquatorialCoordsTmp[0] = 1./( EquatorialCoords[0] +
 				        EquatorialCoordsErr[0] * GaussianRandom());
 	} while(EquatorialCoordsTmp[0] < 0.);  // I'm not letting you have a negative distance. Don't be silly.
-	
+
 	EquatorialCoordsTmp[0] *= Units::kpc;
 	EquatorialCoordsTmp[1] *= Units::degree;
 	EquatorialCoordsTmp[2] *= Units::degree;
@@ -128,28 +128,28 @@ int main(int argc,char *argv[])
 	EquatorialCoordsTmp[5] *= Units::masyr;
 
 	XV = OC.GCYfromHEQ(EquatorialCoordsTmp);
-	
+
 	OI.setup(XV);
 	if(OI.run() == 0) {
-	  MinR.push_back(OI.MinR/Units::kpc); 
+	  MinR.push_back(OI.MinR/Units::kpc);
 	  MaxR.push_back(OI.MaxR/Units::kpc);
 	  Maxz.push_back(OI.Maxz/Units::kpc);
 	  Minr.push_back(OI.Minr/Units::kpc);
 	  Maxr.push_back(OI.Maxr/Units::kpc);
 	  MeanR.push_back(OI.MeanR/Units::kpc);
 	  Energy.push_back(OI.Energy/(Units::kms*Units::kms));
-	  AngMom.push_back(OI.Lz/(Units::kpc*Units::kms)); 
+	  AngMom.push_back(OI.Lz/(Units::kpc*Units::kms));
 	} else {
 	  BadPoints++;
 	  // Orbit unbound. Put in some sensible values
-	  MinR.push_back(XV[0]/Units::kpc); 
+	  MinR.push_back(XV[0]/Units::kpc);
 	  MaxR.push_back(1.e10);
 	  Maxz.push_back(1.e10);
-	  Minr.push_back(sqrt(XV[0]+XV[0]+XV[1]*XV[1])/Units::kpc);
+	  Minr.push_back(sqrt(XV[0]*XV[0]+XV[1]*XV[1])/Units::kpc);
 	  Maxr.push_back(1.e10);
 	  MeanR.push_back(1.e10);
 	  Energy.push_back(OI.Energy/(Units::kms*Units::kms));
-	  AngMom.push_back(OI.Lz/(Units::kpc*Units::kms)); 
+	  AngMom.push_back(OI.Lz/(Units::kpc*Units::kms));
 	}
       }
       // when finished
@@ -160,7 +160,7 @@ int main(int argc,char *argv[])
 		  << "Too many unbound orbits for star with coordinates "
 		  << EquatorialCoords << "\n";
       }
-      
+
       OutputMedianAndUpperLower(output,MinR);
       OutputMedianAndUpperLower(output,MaxR);
       OutputMedianAndUpperLower(output,Maxz);
@@ -170,8 +170,8 @@ int main(int argc,char *argv[])
       OutputMedianAndUpperLower(output,Energy);
       OutputMedianAndUpperLower(output,AngMom);
       output << '\n';
-      
-      
+
+
     }
   }
 

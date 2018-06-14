@@ -28,14 +28,14 @@ using std::cout;
 int main(int argc,char *argv[])
 {
 
-  if(argc<4) { 
+  if(argc<4) {
     cerr << "Inputs: XXXfromXXX input_file output_file (nskip=0) "
-	 << "(code_units_input=f) (code_units_output=f) " 
+	 << "(code_units_input=f) (code_units_output=f) "
 	 << "(R0="<< GalactoConstants::Rsun <<") "
 	 << "(z0="<< GalactoConstants::zsun <<") "
 	 << "(v0="<< GalactoConstants::vcsun*Units::kms_i<<")"
-	 << " (epoch=2000)\n" 
-	 << argv[0] << " h for help\n"; 
+	 << " (epoch=2000)\n"
+	 << argv[0] << " h for help\n";
     if(argc>1) if(argv[1][0] == 'h') {
       cerr << "Program to convert between different coordinate systems (see "
 	   << "PJMCoords.h)\n"
@@ -47,7 +47,7 @@ int main(int argc,char *argv[])
 	   << "\tHGP\t\tHeliocentric Galactic Polar (r,l,b,vr,mu_l*,mu_b)\n"
 	   << "\tHEQ\t\tHeliocentric EQuatorial polar (r,a,d,vr,mu_a*,mu_d)\n\n"
 	   << "Input file must contain coordinates in each row, with nskip "
-	   << "values before the first coord value in each case\n"
+	   << "values before the first coord value in each row\n"
 	   << "Output is just the new coordinates\n"
 	   << "code_units_(in/out)put true if (in/out)put values "
 	   << "in kpc, Myr, radians\n"
@@ -57,9 +57,9 @@ int main(int argc,char *argv[])
     }
     exit(0);
   }
-  bool code_in=false, code_out=false; 
+  bool code_in=false, code_out=false;
   int n_in=1, infile_offset=0, n_per_line=0, n_excess=0, codeunits=0;
-  double R0 = GalactoConstants::Rsun, 
+  double R0 = GalactoConstants::Rsun,
     v0 = GalactoConstants::vcsun*Units::kms_i,
     z0 = GalactoConstants::zsun,
     original_epoch, epoch=0.; // not known here
@@ -74,7 +74,7 @@ int main(int argc,char *argv[])
     if(parse_comm_line(argv[i],"z0=",z0))                      understood=true;
     if(parse_comm_line(argv[i],"epoch=",epoch))                understood=true;
     if(!understood) {
-      cerr << "Input "<<argv[i]<<" not understood\n"; 
+      cerr << "Input "<<argv[i]<<" not understood\n";
       exit(0);
     }
   }
@@ -82,13 +82,13 @@ int main(int argc,char *argv[])
   double line_pre[1000], line_post[1000];
   OmniCoords OC;
   OC.give_epoch(original_epoch);
-  OC.change_sol_pos(R0,z0);   
+  OC.change_sol_pos(R0,z0);
   OC.change_vc(v0*Units::kms);
   if(epoch!=0. && epoch != original_epoch) OC.change_epoch(epoch);
   // OC.change_vsol(10*Units::kms, 10*Units::kms, 10*Units::kms);
   // left here in case you need to change the peculiar motion of the Sun.
 
-  
+
   vec6 input, output;
   ifstream from;
   ofstream to;
@@ -112,7 +112,7 @@ int main(int argc,char *argv[])
     for(int j=0;j<infile_offset;j++) from >> line_pre[j];
     for(int j=0;j!=6;j++) from >> input[j];
     for(int j=0;j!=n_excess;j++) from >> line_post[j];
-  
+
     if(code_in) {
       if(intype=="HEQ") OC.take_HEQ(input);
       else if(intype=="HGP") OC.take_HGP(input);
@@ -149,7 +149,7 @@ int main(int argc,char *argv[])
 	exit(1);
       }
     } else {
-    
+
       if(outtype=="HEQ") to << OC.give_HEQ()<< " ";
       else if(outtype=="HGP") to << OC.give_HGP()<< " ";
       else if(outtype=="HCA") to << OC.give_HCA()<< " ";
