@@ -85,10 +85,11 @@ int main(int argc,char *argv[])
   n_tests = atoi(argv[2]);
   output.open(argv[3]);
 
-  output << "#MinR MinRMinus MinRPlus MaxR MaxRMinus MaxRPlus Maxz MaxzMinus MaxzPlus Minr MinrMinus MinrPlus Maxr MaxrMinus MaxrPlus MeanR MeanRMinus MeanRPlus Energy EnergyMinus EnergyPlus AngMom AngMomMinus AngMomPlus \n" << std::flush;
+  output << "#MinR MinRMinus MinRPlus MaxR MaxRMinus MaxRPlus Maxz MaxzMinus MaxzPlus Minr MinrMinus MinrPlus Maxr MaxrMinus MaxrPlus MeanR MeanRMinus MeanRPlus Energy EnergyMinus EnergyPlus AngMom AngMomMinus AngMomPlus Eccentricity EccentricityPlus EccentricityMinus\n" << std::flush;
 
   // Tables to hold results
   std::vector<double> MinR, MaxR, Maxz, Minr, Maxr, MeanR, Energy, AngMom;
+  std::vector<double> Ecc;
 
   Vector <double,6> XV=1.;
 
@@ -104,10 +105,11 @@ int main(int argc,char *argv[])
     Maxz.clear();   Minr.clear();
     Maxr.clear();   MeanR.clear();
     Energy.clear(); AngMom.clear();
+    Ecc.clear();
     if(line[0] != '#') {
       std::stringstream ss(line);
       for(int i=0;i!=6;i++) ss >> EquatorialCoords[i] >> EquatorialCoordsErr[i];
-      cerr << EquatorialCoords << '\n';
+      //cerr << EquatorialCoords << '\n';
       for(int i=0;i!=n_tests;i++) {
 	// Add uncertainties
 	for(int j=0;j!=6;j++)
@@ -138,6 +140,7 @@ int main(int argc,char *argv[])
 	  MeanR.push_back(OI.MeanR/Units::kpc);
 	  Energy.push_back(OI.Energy/(Units::kms*Units::kms));
 	  AngMom.push_back(OI.Lz/(Units::kpc*Units::kms));
+    Ecc.push_back(OI.PseudoEccentricity);
 	} else {
 	  BadPoints++;
 	  // Orbit unbound. Put in some sensible values
@@ -149,8 +152,9 @@ int main(int argc,char *argv[])
 	  MeanR.push_back(1.e10);
 	  Energy.push_back(OI.Energy/(Units::kms*Units::kms));
 	  AngMom.push_back(OI.Lz/(Units::kpc*Units::kms));
-	}
+    Ecc.push_back(1.);
       }
+    }
       // when finished
       // Output median and pm 1sigma equivalent percentiles
 
@@ -168,6 +172,8 @@ int main(int argc,char *argv[])
       OutputMedianAndUpperLower(output,MeanR);
       OutputMedianAndUpperLower(output,Energy);
       OutputMedianAndUpperLower(output,AngMom);
+      OutputMedianAndUpperLower(output,Ecc);
+
       output << '\n'<< std::flush;
 
 

@@ -13,7 +13,6 @@
 #include <fstream>
 #include <iostream>
 #include "GalPot.h"
-
 using std::cout;
 using std::cin;
 
@@ -30,6 +29,7 @@ int main(int argc,char *argv[])
     }
 
     cout<< "Reading input potential described in file " << argv[1] << '\n';
+
     file.open(argv[1]);
     GalaxyPotential Phi(file);
     file.close();

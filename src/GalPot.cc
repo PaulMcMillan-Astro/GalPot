@@ -44,7 +44,7 @@
 //-----------------------------------------------------------------------------+
 #ifndef GalPot_cc
 #define GalPot_cc
-#include "GalPot.h" 
+#include "GalPot.h"
 #include "FreeMemory.h"
 //#include "Numerics.h"
 #include "Pspline.h"
@@ -108,7 +108,7 @@ double DiskAnsatz::SurfaceDensity(const double R) const
 inline double DiskAnsatz::mass_integrand(const double y) const
 {
   if(y<=0. || y>=1.) return 0.;
-  register double y1=1.-y, x=y/y1;    
+  register double y1=1.-y, x=y/y1;
   if(eps) return exp(-R0oRd/x-x+eps*cos(Pi*x))*x/(y1*y1);
   return exp(-R0oRd/x-x)*x/(y1*y1);
 }
@@ -511,7 +511,7 @@ Spheroids::Spheroids(const Spheroids& SP) : ns(SP.ns)
   S   = new SpheroidDensity[ns];
   Sup = S+ns;
   SpheroidDensity *p=S;
-  for(register int i=0; p<Sup; p++,i++) 
+  for(register int i=0; p<Sup; p++,i++)
     p->setup(SP.Parameter(i));
 }
 
@@ -606,10 +606,10 @@ void Multipole::setup(const double ri, const double ra,
 {
   Rmin = ri;
   Rmax = ra;
-  gamma= g; 
+  gamma= g;
   beta = b;
   lRmin= log(Rmin);
-  lRmax= log(Rmax); 
+  lRmax= log(Rmax);
   g2   = 2.-gamma;
 
   const    DBN    Zero=DBN(0.);
@@ -797,10 +797,10 @@ void Multipole::setup(const double ri, const double ra,
   // 4.1 set linear grid in theta
   //
   //nemo_dprintf(6,"Multipole::setup(): 4.1\n");
-  for(i=0; i<N2; i++) 
+  for(i=0; i<N2; i++)
     X[1][i] = double(i) / double(N2-1);
   //
-  // 4.2 set dPhi/dlogr & dPhi/dcos[theta] 
+  // 4.2 set dPhi/dlogr & dPhi/dcos[theta]
   //
   //nemo_dprintf(6,"Multipole::setup(): 4.2\n");
   for(i=0; i<N2; i++) {
@@ -1014,7 +1014,7 @@ Frequencies Multipole::kapnuom(const double R) const
   om[2] = dP[0] / R;
   Free1D(dP);
   Free2D(d2P);
-  return om; 
+  return om;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1032,7 +1032,7 @@ double GalaxyPotential::operator() (const double R, const double z,
                                     double& dR, double &dz) const
 {
   double d[2];
-  register double r  =hypot(R,z), pot=(r)? M(r,z/r,R/r,d) : M(0,0,0); 
+  register double r  =hypot(R,z), pot=(r)? M(r,z/r,R/r,d) : M(0,0,0);
   dR = (r)? d[0] : 0.; dz = (r)? d[1] : 0.;
   for(register DiskAnsatz *p=D; p<Dup; p++) {
     pot += (*p)(R,z,r,d);

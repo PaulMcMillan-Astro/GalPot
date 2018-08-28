@@ -169,7 +169,7 @@ int main(int argc,char *argv[])
 	  MinR.push_back(XV[0]/Units::kpc);
 	  MaxR.push_back(1.e10);
 	  Maxz.push_back(1.e10);
-	  Minr.push_back(sqrt(XV[0]+XV[0]+XV[1]*XV[1])/Units::kpc);
+	  Minr.push_back(sqrt(XV[0]*XV[0]+XV[1]*XV[1])/Units::kpc);
 	  Maxr.push_back(1.e10);
 	  MeanR.push_back(1.e10);
 	  Energy.push_back(OI.Energy/(Units::kms*Units::kms));
