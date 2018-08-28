@@ -102,6 +102,6 @@ int main(int argc, char const *argv[]) {
   /* code */
   char name[] = "pot/PJM17_best.Tpot";
   GalaxyPotential *Phi = GalPot_new(name);
-
+  GalPot_delete(Phi);
   return 0;
 }

@@ -40,6 +40,10 @@ class GalaxyPotential:
     RfromLc(Lz)                 returns R, radius of circular orbit with angular momentum Lz
     LfromRc(R)                  returns Lz, angular momentum of circular orbit with radius R
 
+    Members
+    -----------
+    kpc_Myr_to_km_s: conversion factor for velocities (from internal units to km/s)
+
     Notes:
     Thanks to Til Piffl, from whom I took some of this code.
 
@@ -58,6 +62,8 @@ class GalaxyPotential:
         lib.GalPot_new.restype = c_void_p
         lib.GalPot_new.argtypes = [c_char_p]
 
+        lib.GalPot_delete.restype = c_void_p
+        lib.GalPot_delete.argtypes = [c_void_p]
         lib.GalPot_Potential_single.restype = c_double
         lib.GalPot_Potential_single.argtypes = [c_void_p, c_double,c_double]
 

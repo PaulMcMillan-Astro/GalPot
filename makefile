@@ -83,8 +83,8 @@ obj/PyGalPot:	src/PyGalPot.cc GalPot Other
 obj/libPyGalPot.so:	obj/PyGalPot GalPot
 			$(CPP) obj/PyGalPot.o -Lobj -lPot -lOther $(LDFLAGS_so)
 
-PyGalPot.exe: obj/PyGalPot.o GalPot
-			$(CPP) $(MFLAGS) -o $@ $<  -Lobj -lPot -lOther -lm
+PyGalPot.exe: obj/PyGalPot GalPot
+			$(CPP) $(MFLAGS) -o $@ obj/libPyGalPot.so  -Lobj -lPot -lOther -lm
 
 
 %.exe:	%.cc GalPot Other
