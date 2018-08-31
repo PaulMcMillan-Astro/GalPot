@@ -40,11 +40,16 @@ int main(int argc,char *argv[])
  if(argc<9) {
    cerr << "Input: R z phi v_R v_z v_phi output_file dt Tmax\n";
    cerr << "   (distance in kpc, velocity in km/s)\n";
-   //cerr << "   (distance in kpc, velocity in km/s)\n";
+   cerr << "Outputs will be at t=0,dt,2*dt... until Tmax (which can be negative)\n";
+   cerr << "Anything more complicated will require a re-write of the executable\n";
    return 1;
  }
 
  out.open(argv[7]);
+
+ // Note that it is possible to use any monotoically increasing or decreasing
+ // set of values for the output, but this exaple is the most usual case - equal
+ // steps.
  dt   = atof(argv[8]);
  Tmax = atof(argv[9]);
  if(dt*Tmax< 0) {
