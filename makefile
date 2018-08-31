@@ -2,7 +2,8 @@
 #include make.GalPot
 
 
-all: testGalPot.exe findOrbit.exe findOrbitProperties.exe \
+all: testGalPot.exe findOrbit.exe findOrbitSetTimes.exe \
+	  findOrbitProperties.exe \
 		findManyOrbitProperties.exe findManyOrbitPropertiesfromGalactic.exe \
 		findManyOrbitPropertiesfromEquatorial.exe \
 		findManyOrbitPropertiesfromEquatorialwErrors.exe \

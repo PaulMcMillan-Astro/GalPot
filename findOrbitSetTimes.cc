@@ -25,6 +25,7 @@ int main(int argc,char *argv[])
  int nOut = 10; // default just in case
  string potfile = "pot/PJM16_best.Tpot";
  Potential *Phi;
+ double dt,Tmax;
 
  // Read potential from file
  file.open(potfile.c_str());
@@ -37,14 +38,29 @@ int main(int argc,char *argv[])
  file.close();
 
  if(argc<9) {
-   cerr << "Input: R z phi v_R v_z v_phi output_file N_points_out\n";
+   cerr << "Input: R z phi v_R v_z v_phi output_file dt Tmax\n";
    cerr << "   (distance in kpc, velocity in km/s)\n";
+   //cerr << "   (distance in kpc, velocity in km/s)\n";
    return 1;
  }
 
  out.open(argv[7]);
- nOut = atoi(argv[8]);
-
+ dt   = atof(argv[8]);
+ Tmax = atof(argv[9]);
+ if(dt*Tmax< 0) {
+   cerr << "dt and Tmax are of opposite signs.\n"
+        << "Will assume that Tmax is of the correct sign.\n\n";
+   dt = -dt;
+ }
+ if(fabs(dt)>fabs(Tmax)) {
+   cerr << "dt smaller than Tmax.\n";
+   dt = Tmax;
+ }
+ nOut = int(Tmax/dt);
+ double *T = new double[nOut];
+ for(int i=0;i<=nOut;i++) {
+   T[i] = i*dt;
+ }
  // Read position & velocity from input (In galactocentric cylindrical coordinates)
  Vector <double,6> XV=0.;
 
@@ -57,22 +73,22 @@ int main(int argc,char *argv[])
  XV[5] = atof(argv[6]) * Units::kms; // v_phi
 
  // Set up Integrator class
- OrbitIntegratorWithStats OI(XV, Phi, 10000.);
+ OrbitIntegratorWithStats OI(XV, Phi, Tmax);
 
  Vector<double,6> *OrbOut = new Vector<double,6>[nOut];
 
  // Alternatively add :
- // double *tOut = new double[nOut];
+ // double *tOut = new double[nout];
  //
  // Then run
  //
  //  int IntegrationFail = OI.runWithOutputIncludingTime(OrbOut,tOut,nOut);
 
- out << "#R    z     phi     v_R      v_z     v_phi\n";
+ out << " t    R    z     phi     v_R      v_z     v_phi\n";
 
  // run integration
- int IntegrationFail = OI.runWithOutput(OrbOut,nOut);
-
+ // int IntegrationFail = OI.runWithOutput(OrbOut,nOut);
+ int IntegrationFail = OI.runWithOutputAtGivenTimes(OrbOut,T,nOut);
  // Output results
  if(IntegrationFail == 0) {
    cout << "Guiding Centre radius: " << OI.GuidingRadius << '\n' << std::flush;
@@ -87,12 +103,13 @@ int main(int argc,char *argv[])
 	<< " kpc km/s\n"
        	<< "Mean Cylindrical radius: "<< OI.MeanR << '\n' << std::flush;
    for(int i=0;i!=nOut;i++) {
-     out << OrbOut[i][0] / Units::kpc  << ' '
-	 << OrbOut[i][1] / Units::kpc  << ' '
-	 << OrbOut[i][2] / Units::degree  << ' '
-	 << OrbOut[i][3] / Units::kms  << ' '
-	 << OrbOut[i][4] / Units::kms  << ' '
-	 << OrbOut[i][5] / Units::kms  << '\n' << std::flush;
+     out <<T[i] << ' '
+         << OrbOut[i][0] / Units::kpc  << ' '
+	       << OrbOut[i][1] / Units::kpc  << ' '
+	       << OrbOut[i][2] / Units::degree  << ' '
+	       << OrbOut[i][3] / Units::kms  << ' '
+	       << OrbOut[i][4] / Units::kms  << ' '
+	       << OrbOut[i][5] / Units::kms  << '\n' << std::flush;
    }
  } else {
    cout << "Input unbound in potential. Energy "

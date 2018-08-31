@@ -36,14 +36,14 @@ OrbitIntegratorStep::OrbitIntegratorStep(const Vector<double,6> xv, Potential* P
   setup(xv,Phi,dE);
 }
 
-void OrbitIntegratorStep::setup(const Vector<double,6> xv, Potential* Phi, const double dE) 
+void OrbitIntegratorStep::setup(const Vector<double,6> xv, Potential* Phi, const double dE)
  {
   Pot = Phi;
   set_tolerance(dE);
   setup(xv);
 }
 
-void OrbitIntegratorStep::setup(const Vector<double,6> xv) 
+void OrbitIntegratorStep::setup(const Vector<double,6> xv)
  {
   QP = xv;
   QP[5] = xv[5]/xv[0];
@@ -62,15 +62,15 @@ Vec6 OrbitIntegratorStep::RK3Dint(const Vector<double,6> Y)
   double aR,az,phidd;
   Pot->eff(Y(0),Y(1),aR,az);
   phidd = -2.*Y(3)*Y(5)/Y(0);
-  return GiveVec6(Y(3),Y(4),Y(5),-aR,-az,phidd); // N.B. 3rd/6th component not 
-                                             // velocity/acceleration (angular) 
+  return GiveVec6(Y(3),Y(4),Y(5),-aR,-az,phidd); // N.B. 3rd/6th component not
+                                             // velocity/acceleration (angular)
 }
- 
+
 void OrbitIntegratorStep::RungeKutta(const double dt)
 {
-  QP[5] = Jphi/(QP[0]*QP[0]); 
+  QP[5] = Jphi/(QP[0]*QP[0]);
   Vec6 dY,Y0=QP,Y1=Y0;
-  
+
   // Failure to reuse
   Y1+=(dY=dt*RK3Dint(Y0))/6.;
   Y1+=(dY=dt*RK3Dint(Y0+.5*dY))/3.;
@@ -103,7 +103,7 @@ void OrbitIntegratorStep::stepRK_by(double& dt, const double f)
       RungeKutta(dt);
       dE = fabs(E - oldE);
   }
-    
+
   QP[5] = Jphi/(QP[0]*QP[0]);
   while (QP[2]< 0.) QP[2] += TPi;
   while (QP[2]>TPi) QP[2] -= TPi;
@@ -146,7 +146,7 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint,
     }
   }
   //To FIX: R,z = 0
-  
+
   Stepper.setup(XV_ini,Pot);
   //setup(StartPoint);
   Energy = Stepper.Energy();
@@ -159,7 +159,7 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint,
 void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint) {
   XV_ini = StartPoint;
   if(reverse) {  XV_ini = reverse_corrected_XV(XV_ini); }
-  
+
   Stepper.setup(XV_ini);
   Energy = Stepper.Energy();
   Lz = Stepper.AngularMomentum();
@@ -181,25 +181,31 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
   double tbetween, tnext=0., maxStepIni = Stepper.maxstep();
 
   if(!setupDone) setup(XV_ini);
-  
+
   if(Energy>0.) {
     setupDone=false;
     return -1; // Unbound - failure.
   }
-  
+
   if(type=="NoOutput") tnext=Tmax;
   else if(type == "OutputNoTimes" || type == "OutputWithTimes") {
     tbetween = Tmax/double(N-1);
     if( tbetween < maxStepIni ) Stepper.set_maxstep(tbetween);
     maxStepIni = Stepper.maxstep();        // Keep whichever
-    
-    if( type == "OutputWithTimes" ) tout[nOutRun] = 0.; 
+
+    if( type == "OutputWithTimes" ) tout[nOutRun] = 0.;
     output[nOutRun] = reverse_corrected_XV(XV_ini);
     nOutRun++;
-       
-  }
 
-  
+  } else if(type=="OutputSetTimes") {
+			if(tout[nOutRun] == 0.)  {
+				output[nOutRun] = reverse_corrected_XV(XV_ini);
+		    nOutRun++;
+			}
+		tnext = fabs(tout[nOutRun]);
+	}
+
+
   // initial values
   MinR = XV_ini[0];
   MaxR = XV_ini[0];
@@ -209,21 +215,25 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
   Minr = XV_ini[0]*XV_ini[0]+XV_ini[1]*XV_ini[1];
   Maxr = Minr;
 
-  
+
   while(t<Tmax) {
     //Stepper.set_maxstep(maxStepIni);
     if(Tmax-t<dt) {
       dt = Tmax-t;
       Stepper.set_maxstep(dt);
     }
-    
+    if(type=="OutputSetTimes") {
+			Stepper.set_maxstep(std::min(maxStepIni,tnext-t));
+		}
+
+
     Stepper.stepRK_by(dt);
     XV = Stepper.XV();
     double r2 = XV[0]*XV[0]+XV[1]*XV[1];
     // Could do better by more intelligent average
     MeanR += XV[0]*dt;
     // could do better with interpolation
-    if(XV[0]<MinR) MinR = XV[0]; 
+    if(XV[0]<MinR) MinR = XV[0];
     if(XV[0]>MaxR) MaxR = XV[0];
     if(fabs(XV[1])> Maxz) Maxz = fabs(XV[1]);
     if(r2<Minr) Minr = r2;
@@ -231,16 +241,23 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
 
 
     t += dt;
-    
+
     if( (type == "OutputNoTimes" || type == "OutputWithTimes") && t>=tnext ) {
       if(nOutRun < N) {
-	if( type == "OutputWithTimes" ) tout[nOutRun] = (reverse)? -t : t; 
-	output[nOutRun] = reverse_corrected_XV(XV);
-	nOutRun++;
-	tnext += tbetween;
+				if( type == "OutputWithTimes" ) tout[nOutRun] = (reverse)? -t : t;
+				output[nOutRun] = reverse_corrected_XV(XV);
+				nOutRun++;
+				tnext += tbetween;
       }
     }
-    
+    if(type=="OutputSetTimes" && t>=tnext) {
+			if(nOutRun < N) {
+				output[nOutRun] = reverse_corrected_XV(XV);
+				nOutRun++;
+			 	tnext  = fabs(tout[nOutRun]);
+		 	}
+			else tnext = Tmax;
+		}
   }
 
   Maxr = sqrt(Maxr);
@@ -255,13 +272,13 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
 
     cerr << "Debug check on number of outputs: " << nOutRun << ' ' << N << '\n';
     for(;nOutRun<N;nOutRun++) {
-      if( type == "OutputWithTimes" ) tout[nOutRun] =  (reverse)? -t : t; 
+      if( type == "OutputWithTimes" ) tout[nOutRun] =  (reverse)? -t : t;
       output[nOutRun] = reverse_corrected_XV(XV);
       nOutRun++;
     }
   }
-  
-  
+
+
   return 0; // success
 }
 
