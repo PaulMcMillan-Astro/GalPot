@@ -85,7 +85,8 @@ class GalaxyPotential:
 
         lib.GalPot_Potential_and_derivatives.restype = c_double
         lib.GalPot_Potential_and_derivatives.argtypes = [c_void_p,POINTER(c_double),POINTER(c_double),
-                                                                POINTER(c_double),POINTER(c_double),c_int]
+                                                        POINTER(c_double),POINTER(c_double),
+                                                        POINTER(c_double),c_int]
 
         lib.GalPot_Density.restype = c_double
         lib.GalPot_Density.argtypes = [c_void_p,POINTER(c_double),POINTER(c_double),POINTER(c_double),c_int]
