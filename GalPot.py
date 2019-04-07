@@ -24,7 +24,7 @@ class GalaxyPotential:
     This is put here as a (hopefully) convenient method of using GalPot in this new Pythonic world.
     The original C++ code is still the main element.
 
-    Everything is given in GalaxyPotential's internal units, with are kpc, Mpc and M_solar
+    Everything is given in GalaxyPotential's internal units, with are kpc, Myr and M_solar
 
     Methods
     ----------
