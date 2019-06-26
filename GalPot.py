@@ -3,6 +3,7 @@
 from ctypes import *
 import numpy as np
 import os.path
+from collections import namedtuple
 
 #import os
 #print(os.path.dirname(os.path.realpath(__file__)))
@@ -21,24 +22,37 @@ class GalaxyPotential:
     filename : string
         Name of the parameter file for the GalaxyPotential.
 
-    This is put here as a (hopefully) convenient method of using GalPot in this new Pythonic world.
+    This is put here as a (hopefully) convenient method of using GalPot 
+    in this new Pythonic world.
     The original C++ code is still the main element.
 
-    Everything is given in GalaxyPotential's internal units, with are kpc, Myr and M_solar
+    Everything is given in GalaxyPotential's internal units, with are 
+    kpc, Myr and M_solar
 
     Methods
     ----------
-    Potential(R,z) :            returns P, Potential at postion(s)
-    Potential_derivatives(R,z): returns P, dPdR, dPdz: Potential and derivatives at position(s)
-    ForceRz(R,z) :              returns f_R,f_z, specific force from potential at position(s)
-    Acceleration(xv_cyl) :      returns a_R, a_z, a_phi: acceleration of moving body in potential
-    XVDerivative(xv_cyl):       returns dxv/dt, derivative of phase space position (required for orbit integration)
-    Density(R,z):               returns rho, density at position(s)
-    Vcirc2(R):                  returns vcirc^2: square of circular velocity at R (single value or array)
-    Vcirc(R):                   returns vcirc: circular velocity at R (single value or array)
-    KapNuOm(R)                  returns kappa,nu,omega: epicycle frequencies at R (single value only)
-    RfromLc(Lz)                 returns R, radius of circular orbit with angular momentum Lz
-    LfromRc(R)                  returns Lz, angular momentum of circular orbit with radius R
+    Potential(R,z) :            returns P
+        Potential at postion(s)
+    Potential_derivatives(R,z): returns P, dPdR, dPdz 
+        Potential and derivatives at position(s)
+    ForceRz(R,z) :              returns f_R,f_z 
+        specific force from potential at position(s)
+    Acceleration(xv_cyl) :      returns a_R, a_z, a_phi 
+        acceleration of moving body in potential
+    XVDerivative(xv_cyl):       returns dxv/dt 
+        derivative of phase space position (for orbit integration)
+    Density(R,z):               returns rho 
+        density at position(s)
+    Vcirc2(R):                  returns vcirc^2 
+        square of circular velocity at R (single value or array)
+    Vcirc(R):                   returns vcirc
+        circular velocity at R (single value or array)
+    KapNuOm(R)                  returns kappa,nu,omega 
+        epicycle frequencies at R (single value only)
+    RfromLc(Lz)                 returns R
+        radius of circular orbit with angular momentum Lz
+    LfromRc(R)                  returns Lz 
+        angular momentum of circular orbit with radius R
 
     Members
     -----------
@@ -119,11 +133,13 @@ class GalaxyPotential:
         """Returns potential at R, z
 
         Parameters:
-            R: Galactocentric radius (cylindrical) in kpc. Float or array of floats.
-            z: Galactocentric z in kpc. Float or array of floats.
-
+            R: Float or array of floats.
+                Galactocentric radius (cylindrical) in kpc. 
+            z: Float or array of floats.
+                Galactocentric z in kpc. 
         Returns:
-            pot: Potential in M_solar kpc**2/Myr**2. Float or numpy array.
+            pot: Float or numpy array.
+                Potential in M_solar kpc**2/Myr**2. 
         """
         if len(np.array(R).reshape(-1)) == 1:
             return lib.GalPot_Potential_single(self.obj,c_double(R),c_double(z)) #* self.kpc_Myr_to_km_s**2
@@ -146,13 +162,18 @@ class GalaxyPotential:
         """Returns potential and its derivatives wrt R,z at R, z
 
         Parameters:
-            R: Galactocentric radius (cylindrical) in kpc. Float or array of floats.
-            z: Galactocentric z in kpc. Float or array of floats.
+            R: Float or array of floats.
+                Galactocentric radius (cylindrical) in kpc. 
+            z: Float or array of floats.
+                Galactocentric z in kpc. 
 
         Returns:
-            pot: Potential in M_solar kpc**2/Myr**2. Float or numpy array.
-            dPdR: Derivative of pot wrt to R in M_solar kpc/Myr**2. Float or numpy array.
-            dPdz: Derivative of pot wrt to z in M_solar kpc/Myr**2. Float or numpy array.
+            pot: Float or numpy array.
+                Potential in M_solar kpc**2/Myr**2. 
+            dPdR: Float or numpy array.
+                Derivative of pot wrt to R in M_solar kpc/Myr**2. 
+            dPdz: Float or numpy array.
+                Derivative of pot wrt to z in M_solar kpc/Myr**2. 
         """
         if len(np.array(R).reshape(-1)) == 1:
             dPdR = c_double()
@@ -364,3 +385,234 @@ class GalaxyPotential:
             Lz: Angular momentum in kpc**2/Myr. Float.
         """
         return np.double(lib.GalPot_LfromRc_single(self.obj,c_double(R)))
+
+
+
+class OrbitIntegrator:
+
+    """Interface for orbit integration in GalPot
+
+    Parameters:
+    ----------
+    GalaxyPotentialInput : GalaxyPotential
+        GalaxyPotential in which the orbit will be integrated.
+    t_end :                float
+        End time for integration (in Myr)
+    
+
+    This is put here as a convenient method using the orbit integrator with 
+    GalPot in Python.
+
+    The original C++ code is still the main element, and this just calls 
+    the relevant functions. It is noticibly faster than using Python 
+    integrators if you are only interested in the orbital parameters.
+
+    Everything is given in GalaxyPotential's internal units, with are 
+    kpc, Myr and M_solar.
+    To convert to km/s, it may be convenient to use the value 
+    GalaxyPotential.kpc_Myr_to_km_s 
+
+    Methods
+    ----------
+    getOrbitStats(XV) :             returns OrbitStat, a named tuple 
+                                    containing orbit properties
+    getOrbitPathandStats(XV,times): returns position and velocity on orbit 
+                                    at specified times, and OrbitStat
+
+    """
+
+    kpc_Myr_to_km_s = 977.77
+
+    def __init__(self,GalaxyPotentialInput,t_end=13800.):
+        """Intialise interface for orbit integration in GalPot
+
+        Parameters:
+            GalaxyPotentialInput : GalaxyPotential
+                GalaxyPotential in which the orbit will be integrated.
+            t_end :                float
+                End time for integration (in Myr)
+        """
+        
+        # Declare various things from the C++ code
+        lib.OrbitIntegrator_new.restype = c_void_p
+        lib.OrbitIntegrator_new.argtypes = [c_void_p, c_double]
+        lib.OrbitIntegrator_delete.restype = c_void_p
+        lib.OrbitIntegrator_delete.argtypes = [c_void_p]
+        lib.runOrbitIntegratorforstats.restype = c_int
+        lib.runOrbitIntegratorforstats.argtypes =[c_void_p,POINTER(c_double),
+                                                  POINTER(c_double),c_int]
+        lib.runOrbitIntegratorwithPath.respath = c_int
+        lib.runOrbitIntegratorwithPath.argtypes = [c_void_p,POINTER(c_double),
+                                                   POINTER(c_double),c_int,
+                                                   POINTER(c_double),
+                                                   POINTER(c_double),c_int]
+
+        # Convert string to usable format and construct the Galaxy potential
+        self.obj = lib.OrbitIntegrator_new(GalaxyPotentialInput.obj,t_end)
+
+    def __del__(self):
+        '''Removes pointer declared new in the relevant C++ code'''
+        return lib.OrbitIntegrator_delete(self.obj)
+
+
+    def getOrbitStats(self,XV):
+        """Returns stats for the orbit that starts at point XV
+
+        Parameters:
+            XV:     ndarray or list (dimensions N x 6)
+                Position & velocity [R,z,phi,v_R,v_z,v_phi] with units 
+                kpc, radians, kpc/Myr.
+
+        Returns:
+
+            Energy: ndarray (or float if one dimensional array input)           
+                Orbital Energy. If positive, orbit is unbound, and 
+                values other than Lz are set to 0
+            Lz: ndarray (or float if one dimensional array input)
+                Angular Momentum
+            Pericentre: ndarray (or float if one dimensional array input)
+                Minimum Galactocentric radius (r = sqrt(R**2+z**2))
+            Apocentre: ndarray (or float if one dimensional array input)
+                Maximum Galactocentric radius (r = sqrt(R**2+z**2))
+            Zmax: ndarray (or float if one dimensional array input)
+                Maximum Galactocentric height
+            GuidingRadius: ndarray (or float if one dimensional array input)
+                Radius of a circular orbit with the same angular momentum
+            PseudoEccentricity: ndarray (or float if one dimensional array input)
+                (Apocentre-Pericentre)/(Apocentre+Pericentre). I call it 
+                "Pseudo" becuase eccentricity only really makes sense in a
+                sperically symmetric system
+
+        """
+        oneD = False
+        #use_ndarray_output = (type(XV) == np.ndarray)
+        try:
+        # `sample` is an ND-array.
+            Nvalues, Ndim = XV.shape
+        except (AttributeError, ValueError):
+        # `sample` is (a sequence of) 1D arrays.
+            XV = np.atleast_2d(XV)
+            Nvalues, Ndim = XV.shape
+            if Nvalues == 1 : oneD=True
+        
+        assert (Ndim == 6), ("Input must have 6 values per array row "
+                             +"(R,z,phi,vR,vz,vphi)")
+
+        ArrayWithLength6N = c_double * (6*Nvalues)
+        ArrayWithLength7N = c_double * (7*Nvalues)
+        XV_c = ArrayWithLength6N()
+        output_c = ArrayWithLength7N()
+        for i,XVval in enumerate(XV.flatten()):
+            XV_c[i] = XVval
+            
+        lib.runOrbitIntegratorforstats(self.obj,XV_c,output_c,Nvalues)
+        
+        Energy              = output_c[0::7]
+        Lz                  = output_c[1::7]
+        Pericentre          = output_c[2::7]
+        Apocentre           = output_c[3::7]
+        Zmax                = output_c[4::7]
+        GuidingRadius       = output_c[5::7]
+        PseudoEccentricity  = output_c[6::7]
+        OrbitStat = namedtuple('OrbitStat',
+                               ('Energy','Lz','Pericentre','Apocentre','Zmax',
+                                'GuidingRadius','PseudoEccentricity'))
+        if oneD : 
+            return OrbitStat(Energy[0],Lz[0],Pericentre[0],Apocentre[0],
+                             Zmax[0],GuidingRadius[0],PseudoEccentricity[0])
+        return OrbitStat(np.array(Energy),np.array(Lz),np.array(Pericentre),
+                         np.array(Apocentre),np.array(Zmax),np.array(GuidingRadius),
+                         np.array(PseudoEccentricity))
+
+
+    def getOrbitPathandStats(self,XV, times):
+        """Returns orbital path and stats for the orbit that starts at point XV
+
+        Parameters:
+            XV:     ndarray or list (dimensions N x 6)
+                Position & velocity [R,z,phi,v_R,v_z,v_phi] with units 
+                kpc, radians, kpc/Myr.
+
+            times - ndarray or list (1 dimensional)
+                Times for output of orbital path, with units Myr
+       
+        Returns:
+            paths:
+                Position & velocity [R,z,phi,v_R,v_z,v_phi] on the orbits at 
+                the specified times. 
+
+            OrbitStats: a named tuple containing the following
+                Energy: ndarray (or float if one dimensional array input)           
+                    Orbital Energy. If positive, orbit is unbound, and 
+                    values other than Lz are set to 0
+                Lz: ndarray (or float if one dimensional array input)
+                    Angular Momentum
+                Pericentre: ndarray (or float if one dimensional array input)
+                    Minimum Galactocentric radius (r = sqrt(R**2+z**2))
+                Apocentre: ndarray (or float if one dimensional array input)
+                    Maximum Galactocentric radius (r = sqrt(R**2+z**2))
+                Zmax: ndarray (or float if one dimensional array input)
+                    Maximum Galactocentric height
+                GuidingRadius: ndarray (or float if one dimensional array input)
+                    Radius of a circular orbit with the same angular momentum
+                PseudoEccentricity: ndarray (or float if one dimensional array input)
+                    (Apocentre-Pericentre)/(Apocentre+Pericentre). I call it 
+                    "Pseudo" becuase eccentricity only really makes sense in a
+                    sperically symmetric system
+
+        """
+
+        oneD = False
+        
+        try:
+        # `sample` is an ND-array.
+            Nvalues, Ndim = XV.shape
+        except (AttributeError, ValueError):
+        # `sample` is (a sequence of) 1D arrays.
+            XV = np.atleast_2d(XV)
+            Nvalues, Ndim = XV.shape
+            if Nvalues == 1 : oneD=True
+        nt = len(times)
+        assert (Ndim == 6), ("Input must have 6 values per array row "
+                             +"(R,z,phi,vR,vz,vphi)")
+
+        # Needed for c code
+        ArrayWithLength6N = c_double * (6*Nvalues)
+        ArrayWithLength7N = c_double * (7*Nvalues)
+        ArrayWithLengthnt = c_double * (nt)
+        ArrayWithLengthntN6 = c_double * (nt*Nvalues*6)
+        XV_c = ArrayWithLength6N()
+        input_t_c = ArrayWithLengthnt()
+        output_c = ArrayWithLength7N()
+        output_path_c = ArrayWithLengthntN6()
+
+        for i,t in enumerate(times) :
+            input_t_c[i] = t 
+        for i,XVval in enumerate(XV.flatten()):
+            XV_c[i] = XVval
+        
+        # call c++ routines
+        lib.runOrbitIntegratorwithPath(self.obj,XV_c,input_t_c,nt, 
+                                       output_path_c,output_c, Nvalues)
+        # organise output
+        paths = np.array(output_path_c).reshape([Nvalues,-1,6])
+        
+        Energy              = output_c[0::7]
+        Lz                  = output_c[1::7]
+        Pericentre          = output_c[2::7]
+        Apocentre           = output_c[3::7]
+        Zmax                = output_c[4::7]
+        GuidingRadius       = output_c[5::7]
+        PseudoEccentricity  = output_c[6::7]       
+        OrbitStat = namedtuple('OrbitStat',
+                               ('Energy','Lz','Pericentre','Apocentre','Zmax',
+                                'GuidingRadius','PseudoEccentricity'))
+        if oneD : 
+            return paths[0],OrbitStat(Energy[0],Lz[0],Pericentre[0],Apocentre[0],
+                             Zmax[0],GuidingRadius[0],PseudoEccentricity[0])
+        return paths, OrbitStat(np.array(Energy),np.array(Lz),np.array(Pericentre),
+                         np.array(Apocentre),np.array(Zmax),np.array(GuidingRadius),
+                         np.array(PseudoEccentricity))
+
+
+

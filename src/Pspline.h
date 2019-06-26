@@ -612,8 +612,8 @@ void Derivs(S*   const x[3],
         for(j=0; j<n[1]; j++)
             SplinedY(x[2],y[0][i][j],n[2],y[3][i][j],&zero);
 
-    delete z;
-    delete z1;
+    delete[] z;
+    delete[] z1;
 }
 	    
 #endif

@@ -23,7 +23,7 @@
 class OrbitIntegratorStep {
 private:
     Potential*  Pot;                       // pointer to the potential
-    Vector <double,6> QP;  // R,z, phi, vR,vz, vphi
+    Vector <double,6> QP;                  // R,z, phi, vR,vz, vphi
 
     double      Jphi, E, tol, dtm,dtmin;   // energy, tolerance, max time step, min time step
     void        RungeKutta(const double dt);  // 4th order Runge-Kutta integrator
@@ -52,6 +52,7 @@ class OrbitIntegratorWithStats {
   Potential *Pot;
   OrbitIntegratorStep Stepper;
   bool setupDone;
+  bool run_complete;
   bool reverse;
   double Tmax;
   int runGeneric(const string type,Vector <double,6> *output,double *tout, int N);

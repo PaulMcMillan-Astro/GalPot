@@ -153,6 +153,7 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint,
   Lz = Stepper.AngularMomentum();
   GuidingRadius = Pot->RfromLc(fabs(Lz));
   setupDone = true;
+  run_complete = false;
 }
 
 
@@ -165,6 +166,7 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint) {
   Lz = Stepper.AngularMomentum();
   GuidingRadius = Pot->RfromLc(fabs(Lz));
   setupDone =true;
+  run_complete = false;
 }
 
 
@@ -264,7 +266,7 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
   Minr = sqrt(Minr);
   MeanR /= t;
   PseudoEccentricity = (Maxr-Minr)/(Maxr+Minr);
-
+  run_complete = true;
   setupDone=false;
 
   // Just in case: pad output array if too small.

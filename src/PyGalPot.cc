@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "GalPot.h"
+#include "OrbitIntegrator.h"
 #include <cmath>
 
 using std::cout;
@@ -95,6 +96,108 @@ extern "C" {
     *Omega = freqs(2);
     return 0;
   }
+
+//-----------------------------------------------------------------------------
+//
+//  Routines for using OrbitIntegrator
+//
+//-----------------------------------------------------------------------------
+
+  // set up a new OrbitIntegrator
+  OrbitIntegratorWithStats* OrbitIntegrator_new(GalaxyPotential* Phi, double tEnd){
+    Vector <double,6> XV=1.;
+    OrbitIntegratorWithStats *OI = new OrbitIntegratorWithStats(XV, Phi, tEnd);
+    return OI;
+  }
+  // delete OrbitIntegrator, freeing memory
+  void OrbitIntegrator_delete(OrbitIntegratorWithStats* OI){
+    delete OI;
+    return;
+  }
+
+  // run the orbit integrator purely to get orbit statistics
+  // Note that this can be run with multiple different stating points
+  int runOrbitIntegratorforstats(OrbitIntegratorWithStats* OI, 
+                                 double XV[],      // Input: R,z,phi,vR,vz,vphi
+                                 double outputs[], // Output: Energy, Lz, peri, apo, Rg, e
+                                 int Ndim) {       // Input: Number of input XVs
+    
+    Vector <double,6> XVvec;
+    for (int n = 0; n<Ndim; n++) {
+      for(int i=0;i<6;i++) {
+        XVvec[i] = XV[6*n+i]; 
+      }
+      OI->setup(XVvec);
+      int failure = OI->run();
+      outputs[7*n+0] = OI->Energy;
+      outputs[7*n+1] = OI->Lz;
+      if (failure==0){
+        outputs[7*n+2] = OI->Minr;
+        outputs[7*n+3] = OI->Maxr;
+        outputs[7*n+4] = OI->Maxz;
+        outputs[7*n+5] = OI->GuidingRadius;
+        outputs[7*n+6] = OI->PseudoEccentricity;
+      } else {
+        for(int i=2; i<7; i++) {
+          outputs[7*n+i] = 0.;
+        }
+      }
+  }
+  return 0;
+  }
+
+  // run the orbit integrator purely to get orbit path(s) and statistics
+  // Note that this can be run with multiple different stating points
+  int runOrbitIntegratorwithPath(OrbitIntegratorWithStats* OI, 
+                                  double XV[],      // Input: R,z,phi,vR,vz,vphi
+                                  double tseries[], // Input: times for output
+                                  int nt,           // Input: number of times
+                                  double path[],    // Output: xv at t
+                                  double outputs[], // Output: Energy, Lz, peri, apo, Rg, e
+                                  int Ndim) {       // Input: Number of input XVs
+    // I really do need that to be a 6-vector
+    Vector <double,6> XVvec;
+    Vector <double,6>* XV_out = new Vector <double,6>[nt];
+    for (int n = 0; n<Ndim; n++) {
+      for(int i=0;i<6;i++) {
+        XVvec[i] = XV[6*n+i]; 
+      }
+      OI->setup(XVvec);
+      int failure = OI->runWithOutputAtGivenTimes(XV_out,tseries,nt);
+      for(int i=0; i<nt; i++) {
+        for(int j=0;j<6;j++){
+          if(failure == 0)
+            path[n*nt*6+i*6+j] = XV_out[i][j];
+          else 
+            path[n*nt*6+i*6+j] = 0.;
+        }
+      }
+      outputs[7*n+0] = OI->Energy;
+      outputs[7*n+1] = OI->Lz;
+      if (failure==0){
+        outputs[7*n+2] = OI->Minr;
+        outputs[7*n+3] = OI->Maxr;
+        outputs[7*n+4] = OI->Maxz;
+        outputs[7*n+5] = OI->GuidingRadius;
+        outputs[7*n+6] = OI->PseudoEccentricity;
+      } else {
+        for(int i=2; i<7; i++) {
+          outputs[7*n+i] = 0.;
+        }
+      }
+  }
+  return 0;
+  }
+
+
+
+
+
+
+
+
+
+
 }
 
 
