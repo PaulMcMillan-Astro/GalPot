@@ -14,12 +14,12 @@ extern "C" {
     file.open(fname);
     if(file.is_open())
       {
-	Phi = new GalaxyPotential(file);
+	      Phi = new GalaxyPotential(file);
       }
     else
       {
-	cerr << "Potential file "<< fname << " doesn't exist. Exiting...\n";
-	exit(1);
+	      cerr << "Potential file "<< fname << " doesn't exist. Exiting...\n";
+	      exit(1);
       }
     file.close();
     return Phi;
