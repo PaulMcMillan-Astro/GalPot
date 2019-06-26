@@ -1,7 +1,7 @@
 GalPot
 ============
 
-This is a stand-alone version of [Walter Dehnen's GalaxyPotential C++ code](http://ukads.nottingham.ac.uk/abs/1998MNRAS.294..429D), with an added Python wrapper for those who want it (see below for details). It is a version I took from the falcON code in the [NEMO Stellar Dynamics Toolbox](http://chara.astro.umd.edu/nemo/), and cut down to stand alone. It is a convenient way of finding the gravitational potential associated with axisymmetric density profiles.
+This is a stand-alone version of [Walter Dehnen's GalaxyPotential C++ code](http://ukads.nottingham.ac.uk/abs/1998MNRAS.294..429D), with an added Python wrapper for those who want it (see below for details). It is a version I took from the falcON code in the [NEMO Stellar Dynamics Toolbox](http://chara.astro.umd.edu/nemo/), and cut down to stand alone. It is a convenient way of finding the gravitational potential associated with axisymmetric density profiles. It now comes with a Python wrapper.
 
 The package also includes code that performs transformations between commonly used coordinate systems for both positions and velocities (the class OmniCoords), and that integrates orbits in the potentials.
 
@@ -32,16 +32,14 @@ I have now added the possibility of adding a Kepler potential or Miyamoto-Nagai 
 
 Note that the basic GalPot is rather poorly suited to representing smaller-scale objects (like Sgr A* or a nuclear disc). It is recommended to combine GalPot with a Kepler or Miyamoto-Nagai potential if you want to represent these objects.
 
-## New 8/2018:
+## New 8/2018-6/2019:
 
-I have now added a Python wrapper - note that only the gravitational potential code has been wrapped, because astropy & scipy already provide convenient methods for the other activities.
+I have now added a Python wrapper for the gravitational potential code, and orbit integration. Astropy already provides convenient methods for coordinate transforms. Until 6/2019 the orbit integration was also left to python routines, but the c++ is 20 times faster, so I've wrapped that too. 
 
 The library (obj/libPyGalPot.so) is compiled with make, along with the C++ executables. The wrapper is then in the file GalPot.py
 
-GalPotPythonExample.ipynb demonstrates the Python wrapper. The orbit integration is done with scipy.integrate.solve_ivp, which is new in scipy 1.0.0 - that part will only work if your scipy install is up to date.
+GalPotPythonExample.ipynb demonstrates the Python wrapper. 
 
 The intention of the Python wrapper is that it is available for people who want to do things that are more complicated than the things already done in the executables, but don't want to work in c++.
-
-Warning: it is significantly slower than the raw c++ code.
 
 Comments on usability welcome.

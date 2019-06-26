@@ -361,7 +361,7 @@ class GalaxyPotential:
         """
         kappa,nu,Om = c_double(0.),c_double(0.),c_double(0.)
         lib.GalPot_KapNuOm_single(self.obj,c_double(R),kappa,nu,Om)
-        #lib.GalPot_KapNuOm_single(self.obj,c_double(R),byref(kappa),byref(nu),byref(Om))
+        
         return np.double(kappa),np.double(nu),np.double(Om)
 
     def RfromLc(self,Lz):
