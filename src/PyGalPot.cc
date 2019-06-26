@@ -10,8 +10,17 @@ using std::cin;
 extern "C" {
   GalaxyPotential* GalPot_new(char fname[]){
     ifstream file;
+    GalaxyPotential *Phi = NULL;
     file.open(fname);
-    GalaxyPotential *Phi = new GalaxyPotential(file);
+    if(file.is_open())
+      {
+	Phi = new GalaxyPotential(file);
+      }
+    else
+      {
+	cerr << "Potential file "<< fname << " doesn't exist. Exiting...\n";
+	exit(1);
+      }
     file.close();
     return Phi;
   }
