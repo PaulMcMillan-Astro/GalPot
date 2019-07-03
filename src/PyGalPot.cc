@@ -123,6 +123,10 @@ extern "C" {
     delete OI;
     return;
   }
+  void resetOrbitIntegratorEndTime(OrbitIntegratorWithStats* OI, double time) {
+    OI->setTmax(time);
+    return;
+  }
 
   // run the orbit integrator purely to get orbit statistics
   // Note that this can be run with multiple different stating points
@@ -214,6 +218,13 @@ int main(int argc, char const *argv[]) {
   /* code */
   char name[] = "pot/PJM17_best.Tpot";
   GalaxyPotential *Phi = GalPot_new(name);
-  GalPot_delete(Phi);
+  //GalPot_delete(Phi);
+  Vector <double,6> XV=1.;
+  OrbitIntegratorWithStats* OI = OrbitIntegrator_new(Phi,13800.);
+  
+  //resetOrbitIntegratorEndTime(OI,1380.);
+  
+  OI->run();
+
   return 0;
 }

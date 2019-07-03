@@ -113,7 +113,7 @@ void OrbitIntegratorStep::stepRK_by(double& dt, const double f)
 
 OrbitIntegratorWithStats::OrbitIntegratorWithStats(Vector<double,6> StartPoint,
 						   Potential *Phi,
-						   const double Ttot) {
+						   double Ttot) {
   setup(StartPoint,Phi,Ttot);
 }
 
@@ -128,7 +128,7 @@ Vector<double,6> OrbitIntegratorWithStats::reverse_corrected_XV(Vector<double,6>
 
 void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint,
 				      Potential *PhiIn,
-				      const double Ttot) {
+				      double Ttot) {
   Pot = PhiIn;
   Tmax = fabs(Ttot);
   reverse = (Ttot<0);
@@ -169,6 +169,12 @@ void  OrbitIntegratorWithStats::setup(Vector<double,6> StartPoint) {
   run_complete = false;
 }
 
+void OrbitIntegratorWithStats::setTmax(double TmaxIn) { 
+    Tmax = fabs(TmaxIn); 
+    reverse = (TmaxIn<0.); 
+    setupDone=false;
+    }
+
 
 // The idea is that whatever output I'm asking for, the Runge-Kutta
 // integration happens here. The type tells the function what the return will
@@ -181,7 +187,6 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
   double outputDelt, dt=1.e-2, t_tol=1.e-4;
   Vector <double,6> XVold=XV_ini,XV;
   double tbetween, tnext=0., maxStepIni = Stepper.maxstep();
-
   if(!setupDone) setup(XV_ini);
 
   if(Energy>0.) {

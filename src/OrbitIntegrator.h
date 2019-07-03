@@ -46,7 +46,7 @@ public:
     double     maxstep()    {return dtm;}
 };
 
-// Class that integrates orbit for a time T, determining min, max and mean R, max z, (SOS in the future)?
+// Class that integrates orbit for a time T, determining min, max and mean R, max z, etc
 
 class OrbitIntegratorWithStats {
   Potential *Pot;
@@ -59,11 +59,13 @@ class OrbitIntegratorWithStats {
 public:
   OrbitIntegratorWithStats() {;}
   OrbitIntegratorWithStats(Vector<double,6> StartPoint, Potential *PotIn,
-			   const double TmaxIn=13800.);
+			   double TmaxIn=13800.);
   ~OrbitIntegratorWithStats() {;}
   
-  void setup(Vector<double,6> StartPoint, Potential *PotIn, const double TmaxIn);
+  void setup(Vector<double,6> StartPoint, Potential *PotIn, double TmaxIn);
   void setup(Vector<double,6> StartPoint);
+
+  void setTmax(double TmaxIn);
 
   Vector<double,6> reverse_corrected_XV(Vector<double,6>);
   Vector<double,6> XV_ini;

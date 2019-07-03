@@ -387,6 +387,12 @@ class GalaxyPotential:
         return np.double(lib.GalPot_LfromRc_single(self.obj,c_double(R)))
 
 
+#---------------------------------------------------------------------------
+#
+#   OrbitIntegrator class
+#
+#---------------------------------------------------------------------------
+
 
 class OrbitIntegrator:
 
@@ -396,8 +402,6 @@ class OrbitIntegrator:
     ----------
     GalaxyPotentialInput : GalaxyPotential
         GalaxyPotential in which the orbit will be integrated.
-    t_end :                float
-        End time for integration (in Myr)
     
 
     This is put here as a convenient method using the orbit integrator with 
@@ -414,7 +418,7 @@ class OrbitIntegrator:
 
     Methods
     ----------
-    getOrbitStats(XV) :             returns OrbitStat, a named tuple 
+    getOrbitStats(XV, t_end) :      returns OrbitStat, a named tuple 
                                     containing orbit properties
     getOrbitPathandStats(XV,times): returns position and velocity on orbit 
                                     at specified times, and OrbitStat
@@ -423,14 +427,12 @@ class OrbitIntegrator:
 
     kpc_Myr_to_km_s = 977.77
 
-    def __init__(self,GalaxyPotentialInput,t_end=13800.):
+    def __init__(self,GalaxyPotentialInput):
         """Intialise interface for orbit integration in GalPot
 
         Parameters:
             GalaxyPotentialInput : GalaxyPotential
                 GalaxyPotential in which the orbit will be integrated.
-            t_end :                float
-                End time for integration (in Myr)
         """
         
         # Declare various things from the C++ code
@@ -438,6 +440,8 @@ class OrbitIntegrator:
         lib.OrbitIntegrator_new.argtypes = [c_void_p, c_double]
         lib.OrbitIntegrator_delete.restype = c_void_p
         lib.OrbitIntegrator_delete.argtypes = [c_void_p]
+        lib.resetOrbitIntegratorEndTime.restype = c_void_p
+        lib.resetOrbitIntegratorEndTime.argtypes = [c_void_p, c_double]
         lib.runOrbitIntegratorforstats.restype = c_int
         lib.runOrbitIntegratorforstats.argtypes =[c_void_p,POINTER(c_double),
                                                   POINTER(c_double),c_int]
@@ -448,20 +452,22 @@ class OrbitIntegrator:
                                                    POINTER(c_double),c_int]
 
         # Convert string to usable format and construct the Galaxy potential
-        self.obj = lib.OrbitIntegrator_new(GalaxyPotentialInput.obj,t_end)
+        self.obj = lib.OrbitIntegrator_new(GalaxyPotentialInput.obj,c_double(13800.))
 
     def __del__(self):
         '''Removes pointer declared new in the relevant C++ code'''
         return lib.OrbitIntegrator_delete(self.obj)
 
 
-    def getOrbitStats(self,XV):
+    def getOrbitStats(self,XV, t_end=13800.):
         """Returns stats for the orbit that starts at point XV
 
         Parameters:
             XV:     ndarray or list (dimensions N x 6)
                 Position & velocity [R,z,phi,v_R,v_z,v_phi] with units 
                 kpc, radians, kpc/Myr.
+            t_end: float (default 13800.)
+                Final integration time (by default 13800 Myr)
 
         Returns:
 
@@ -484,8 +490,9 @@ class OrbitIntegrator:
                 sperically symmetric system
 
         """
+        
         oneD = False
-        #use_ndarray_output = (type(XV) == np.ndarray)
+        
         try:
         # `sample` is an ND-array.
             Nvalues, Ndim = XV.shape
@@ -504,7 +511,9 @@ class OrbitIntegrator:
         output_c = ArrayWithLength7N()
         for i,XVval in enumerate(XV.flatten()):
             XV_c[i] = XVval
-            
+        
+        #lib.resetOrbitIntegratorEndTime(self.obj,c_double(t_end))
+        lib.resetOrbitIntegratorEndTime(self.obj,c_double(t_end))
         lib.runOrbitIntegratorforstats(self.obj,XV_c,output_c,Nvalues)
         
         Energy              = output_c[0::7]
@@ -528,6 +537,8 @@ class OrbitIntegrator:
     def getOrbitPathandStats(self,XV, times):
         """Returns orbital path and stats for the orbit that starts at point XV
 
+        Orbit is integrated over the times given, which should be in 
+        strictly increasing (or decreasing) order. Times are in Myr.
         Parameters:
             XV:     ndarray or list (dimensions N x 6)
                 Position & velocity [R,z,phi,v_R,v_z,v_phi] with units 
@@ -561,6 +572,8 @@ class OrbitIntegrator:
                     sperically symmetric system
 
         """
+        # find maximum (or minimum if negative)
+        t_end = times[np.argmax(np.absolute(times))]
 
         oneD = False
         
@@ -592,6 +605,9 @@ class OrbitIntegrator:
             XV_c[i] = XVval
         
         # call c++ routines
+
+        lib.resetOrbitIntegratorEndTime(self.obj,c_double(t_end))
+
         lib.runOrbitIntegratorwithPath(self.obj,XV_c,input_t_c,nt, 
                                        output_path_c,output_c, Nvalues)
         # organise output
