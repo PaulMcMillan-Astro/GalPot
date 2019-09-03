@@ -1,0 +1,6 @@
+tmp*
+Untitled*
+*.exe
+.ipynb_checkpoints/
+.vscode/
+__pycache__/
