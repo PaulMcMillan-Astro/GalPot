@@ -1,5 +1,15 @@
-// Combining potentials.
+/***************************************************************************//**
+\file MultiPot.cc
+\brief Contains class MultiPotential.
 
+Combines multiple potentials into one.
+
+*                                                                              *
+* MultiPot.cc                                                                   *
+*                                                                              *
+* C++ code written by Paul McMillan, 2014-
+*                                                                              *
+*******************************************************************************/
 #include "MultiPot.h"
 
 

@@ -1,5 +1,5 @@
 
-#include make.GalPot
+# Makefile written by McMillan 2008-
 
 
 all: testGalPot.exe findOrbit.exe findOrbitSetTimes.exe \

@@ -3,9 +3,7 @@
 *  Units.h                                                                     *
 *                                                                              *
 * C++ code written by Walter Dehnen, 1995/96,                                  *
-* Lund Observatory, Lund University.                                           *
-* address: Box 43, SE-221 00 Lund, Sweden                                      *
-* e-mail:  p.mcmillan1@physics.ox.ac.uk                                           *
+*          modified by Paul McMillan 2008-
 *                                                                              *
 ********************************************************************************
 *                                                                              *

@@ -6,9 +6,7 @@
 // C++ code                                                                    |
 //                                                                             |
 // Copyright Walter Dehnen, 1996-2004                                          |
-// e-mail:   walter.dehnen@astro.le.ac.uk                                      |
-// address:  Department of Physics and Astronomy, University of Leicester      |
-//           University Road, Leicester LE1 7RH, United Kingdom                |
+// Modified by Paul McMillan 2008-                                             |
 //                                                                             |
 // This program is free software; you can redistribute it and/or modify        |
 // it under the terms of the GNU General Public License as published by        |

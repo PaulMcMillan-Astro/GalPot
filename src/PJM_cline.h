@@ -5,10 +5,7 @@
 *                                                                              *
 * PJM_cline.h                                                                  *
 *                                                                              *
-* C++ code written by Paul McMillan, 2011                                      *
-* Oxford University, Department of Physics, Theoretical Physics.               *
-* address: 1 Keble Road, Oxford OX1 3NP, United Kingdom                        *
-* e-mail:  p.mcmillan1@physics.ox.ac.uk                                        *
+* C++ code written by Paul McMillan, 2011-   
 *                                                                              *
 *       Classes which output the value of a distribution function              *
 *                                                                              *

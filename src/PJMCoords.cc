@@ -1,3 +1,18 @@
+/***************************************************************************//**
+\file PJMCoords.h
+\brief Contains class OmniCoords.
+Code that converts between various different Heliocentric & Galctocentric
+coordinate systems.
+
+
+  PJMCoords.cc (adapted from Coordinates.h)
+
+  C++ code written by Paul McMillan 2010,
+                      Walter Dehnen, 1995-96
+
+*/
+
+
 #include "PJMCoords.h"
 #include <cmath>
 #include "Constants.h"

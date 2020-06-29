@@ -6,9 +6,6 @@
 * PJM_utils.h                                                                  *
 *                                                                              *
 * C++ code written by Paul McMillan, 2011                                      *
-* Oxford University, Department of Physics, Theoretical Physics.               *
-* address: 1 Keble Road, Oxford OX1 3NP, United Kingdom                        *
-* e-mail:  p.mcmillan1@physics.ox.ac.uk                                        *
 *                                                                              *
 *       Utilities                                                              *
 *                                                                              *

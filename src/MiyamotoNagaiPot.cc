@@ -2,11 +2,7 @@
 *                                                                              *
 * MiyamotoNagaiPot.cc                                                          *
 *                                                                              *
-* C++ code written by Walter Dehnen, 1994-96,                                  *
-*                     Paul McMillan, 2006-07                                   *
-* Oxford University, Department of Physics, Theoretical Physics.               *
-* address: 1 Keble Road, Oxford OX1 3NP, United Kingdom                        *
-* e-mail:  p.mcmillan1@physics.ox.ac.uk                                        *
+* C++ code written by Paul McMillan, 2006-                                     *
 *                                                                              *
 *******************************************************************************/
 #include "MiyamotoNagaiPot.h"

@@ -3,9 +3,7 @@
 * FreeMemory.h                                                                 *
 *                                                                              *
 * C++ code written by Walter Dehnen, 1996,                                     *
-* Oxford University, Department of Physics, Theoretical Physics                *
-* address: Box 43, SE-221 00 Lund, Sweden                                      *
-* e-mail : w.dehnen@physics.ox.ac.uk                                           *
+*            Modified by Paul McMillan 2008-                                   *
 *                                                                              *
 ********************************************************************************
 *                                                                              *

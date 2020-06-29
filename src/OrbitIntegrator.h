@@ -3,8 +3,8 @@
 \brief Classes and functions used for integrating orbits in gravitational potentials
 
 *                                                                              *
-* C++ code written by Walter Dehnen, 1994-96,                                  *
-*                     Paul McMillan, 2007-                                     *
+* C++ code written by Paul McMillan, 2016                                      *
+*          loosely based on code from Walter Dehnen 1994-1996                  *
 * e-mail: paul@astro.lu.se                                                     *
 * github: https://github.com/PaulMcMillan-Astro/Torus                          *
 *                                                                              *

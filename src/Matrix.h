@@ -3,9 +3,7 @@
 * Matrix.h                                                                     *
 *                                                                              *
 * C++ code written by Walter Dehnen, 1994/95,                                  *
-* Oxford University, Department of Physics, Theoretical Physics                *
-* address: Box 43, SE-221 00 Lund, Sweden                                      *
-* e-mail : dehnen@thphys.ox.ac.uk                                              *
+*          modified by Paul McMillan 2008-
 *                                                                              *
 *******************************************************************************/
 

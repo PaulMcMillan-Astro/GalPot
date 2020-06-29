@@ -1,3 +1,14 @@
+/***************************************************************************//**
+\file PyGalPot.cc
+\brief Python wrapper for GalPot
+
+* C++ code written by Paul McMillan, 2016-                                     *
+*                                                                              *
+*                                                                              *
+*                                                                              *
+*******************************************************************************/
+
+
 #include <fstream>
 #include <iostream>
 #include "GalPot.h"

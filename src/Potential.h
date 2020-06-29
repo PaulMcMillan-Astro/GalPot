@@ -4,9 +4,6 @@
 *                                                                              *
 * C++ code written by Walter Dehnen, 1994/95,                                  *
 *                     Paul McMillan, 2006/07                                   *
-* Lund Observatory, Lund University.                                           *
-* address: Box 43, SE-221 00 Lund, Sweden                                      *
-* e-mail:  p.mcmillan1@physics.ox.ac.uk                                        *
 *                                                                              *
 *******************************************************************************/
 
@@ -78,8 +75,8 @@ public:
     	  if(R==0.) {
               cerr << " error in class Potential::eff: R=0 at non-zero Lz\n";
               exit(1); }
-    	  register double potential     = (*this)(R,z,dPdR,dPdz);
-   	  register double Lzsq_over_Rsq = Lzsq/(R*R);
+    	  double potential     = (*this)(R,z,dPdR,dPdz);
+   	  double Lzsq_over_Rsq = Lzsq/(R*R);
    	  dPdR                         -= Lzsq_over_Rsq / R;
     	  return potential + 0.5 * Lzsq_over_Rsq; }
 };

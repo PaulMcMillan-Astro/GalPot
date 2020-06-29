@@ -5,9 +5,7 @@
 // C++ code                                                                    |
 //                                                                             |
 // written by Walter Dehnen, 1994-2001                                         |
-// e-mail:   dehnen@mpia-hd.mpg.de                                             |
-// address:  Max-Planck Institut für Astronomie, Königstuhl 69117 Heidelberg   |
-//           Germany                                                           |
+// Modified by Paul McMillan 2008-
 //                                                                             |
 //-----------------------------------------------------------------------------+
 //

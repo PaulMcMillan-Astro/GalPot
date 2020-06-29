@@ -6,9 +6,6 @@ Gives various parameters of the Galaxy and observing systems.
 *                                                                              *
 *  C++ code written by Walter Dehnen, 1995/96.                                 *
 *                      Paul McMillan, 2007-                                    *
-*  Lund Observatory, Lund University.                                          *
-*  address: Box 43, SE-221 00 Lund, Sweden                                     *
-*  e-mail:  paul@astro.lu.se                                                   *
 *                                                                              *
 *******************************************************************************/
 /*

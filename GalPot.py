@@ -1,5 +1,6 @@
 
 
+#  Code written by Paul McMillan 2016-
 from ctypes import *
 import numpy as np
 import os.path

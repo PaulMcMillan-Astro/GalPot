@@ -3,9 +3,7 @@
 * WDMath.cc                                                                    *
 *                                                                              *
 * C++ code written by Walter Dehnen, 1994/95,                                  *
-* Lund Observatory, Lund University.                                           *
-* address: 1Keble Road, Oxford, OX1 3NP, United Kingdom.                       *
-* e-mail:  dehnen@thphys.ox.ac.uk                                              *
+*          modified by Paul McMillan 2008-
 *                                                                              *
 ********************************************************************************
 *                                                                              *

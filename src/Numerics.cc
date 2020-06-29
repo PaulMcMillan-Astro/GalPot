@@ -3,9 +3,7 @@
 * Numerics.cc                                                                  *
 *                                                                              *
 * C++ code written by Walter Dehnen, 1994/95,                                  *
-* Lund Observatory, Lund University.                                           *
-* address: 1 Keble Road, Oxford, OX1 3NP, United Kingdom.                      *
-* e-mail:  w.dehnen1@physics.ox.ac.uk                                          *
+*          modified by Paul McMillan, 2008- (cuts made)
 *                                                                              *
 *******************************************************************************/
 

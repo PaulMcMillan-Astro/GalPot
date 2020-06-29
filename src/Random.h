@@ -8,8 +8,7 @@ Basically all you need to generate random numbers.
 *  Random.h                                                                    *
 *                                                                              *
 * C++ code written by Walter Dehnen, 1994/95,                                  *
-* Oxford University, Department of Physics, Theoretical Physics.               *
-* address: 1 Keble Road, Oxford OX1 3NP, United Kingdom                        *
+*          modified by Paul McMillan 2008-
 *                                                                              *
 *******************************************************************************/
 /*                                                                             *
