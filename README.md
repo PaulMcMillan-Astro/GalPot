@@ -1,7 +1,7 @@
 GalPot
 ============
 
-This is a stand-alone version of [Walter Dehnen's GalaxyPotential C++ code](http://ukads.nottingham.ac.uk/abs/1998MNRAS.294..429D), with an added Python wrapper for those who want it (see below for details). It is a version I took from the falcON code in the [NEMO Stellar Dynamics Toolbox](http://chara.astro.umd.edu/nemo/), and cut down to stand alone. It is a convenient way of finding the gravitational potential associated with axisymmetric density profiles. It now comes with a Python wrapper.
+This is a stand-alone version of [Walter Dehnen's GalaxyPotential C++ code](http://ukads.nottingham.ac.uk/abs/1998MNRAS.294..429D), with an added Python wrapper for those who want it (see below for details). It is a version I took from the falcON code in the [NEMO Stellar Dynamics Toolbox](https://github.com/teuben/nemo), and cut down to stand alone. It is a convenient way of finding the gravitational potential associated with axisymmetric density profiles. It now comes with a Python wrapper.
 
 The package also includes code that performs transformations between commonly used coordinate systems for both positions and velocities (the class OmniCoords), and that integrates orbits in the potentials.
 
