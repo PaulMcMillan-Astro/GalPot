@@ -13,8 +13,8 @@
 // nothing too dangerous...
 //
 
-#ifndef _Inline_def_
-#define _Inline_def_ 1
+#ifndef Inline_GalPot_
+#define Inline_GalPot_ 1
 
 #include <cstdlib>
 #include <fstream>
@@ -72,12 +72,12 @@ TM S    sign    (const S x, const S s)   { return ( s>0 )?  abs(x) : -abs(x); }
 TM S    mod     (const S x, const S y)   { return x-y*int(x/y); }
 TM S    square  (const S x)              { return x*x; }
 TM S    cube    (const S x)              { return x*x*x; }
-TM void swap    (S&a, S&b)               { register S t=a; a=b; b=t; }
+TM void swap    (S&a, S&b)               {  S t=a; a=b; b=t; }
 TM S    pow_uint(const S x, const unsigned int n)
 {
   if(n==0) return S(1);
-  register S z=x, y=(n%2)? x : S(1);
-  for(register unsigned int i=n>>1; i; i>>=1) { z*=z; if(i%2) y*=z; }
+   S z=x, y=(n%2)? x : S(1);
+  for( unsigned int i=n>>1; i; i>>=1) { z*=z; if(i%2) y*=z; }
   return y;
 }
 TM S    pow_int (const S x, const int i)
@@ -107,7 +107,7 @@ inline void SwallowRestofLine(istream& from)
 //------------------------------------------------------------------------------
 inline const char* stndrdth(const int i)
 {
-    register int ia= (i<0)? -i:i;
+     int ia= (i<0)? -i:i;
     switch( ia % 100 ) {
         case 11: 
         case 12: 

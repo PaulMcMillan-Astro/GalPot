@@ -196,30 +196,30 @@ public:
 };
 inline bool Disks::none_hollow() const {
   if(nd==0) return 1;
-  for(register DiskAnsatz *p=D; p<Dup; p++) if( (p->is_hollow()) ) return 0;
+  for( DiskAnsatz *p=D; p<Dup; p++) if( (p->is_hollow()) ) return 0;
   return 1;
 }
 inline bool Disks::all_hollow() const {
   if(nd==0) return 0;
-  for(register DiskAnsatz *p=D; p<Dup; p++) if( !(p->is_hollow()) ) return 0;
+  for( DiskAnsatz *p=D; p<Dup; p++) if( !(p->is_hollow()) ) return 0;
   return 1;
 }
 inline double Disks::Mass(const double r) const {
   if(nd==0) return 0.;
-  register double R=0.;
-  for(register DiskAnsatz *p=D; p<Dup; p++) R += p->mass(r);
+   double R=0.;
+  for( DiskAnsatz *p=D; p<Dup; p++) R += p->mass(r);
   return R;
 }
 inline double Disks::SurfaceDensity(const double a) const {
   if(nd==0) return 0.;
-  register double R=0.;
-  for(register DiskAnsatz *p=D; p<Dup; p++) R += p->SurfaceDensity(a);
+   double R=0.;
+  for( DiskAnsatz *p=D; p<Dup; p++) R += p->SurfaceDensity(a);
   return R;
 }
 inline double Disks::operator() (const double R, const double z) const {
   if(nd==0) return 0.;
-  register double r=hypot(R,z), pot=0.;
-  for(register DiskAnsatz *p=D; p<Dup; p++) pot+= (*p)(R,z,r);
+   double r=hypot(R,z), pot=0.;
+  for( DiskAnsatz *p=D; p<Dup; p++) pot+= (*p)(R,z,r);
   return pot;
 }
 inline double Disks::operator() (const double R, const double z,
@@ -229,34 +229,34 @@ inline double Disks::operator() (const double R, const double z,
     dz = 0.;
     return 0.;
   }
-  register double d[2], r=hypot(R,z), pot=0.;
-  register DiskAnsatz *p=D;
+   double d[2], r=hypot(R,z), pot=0.;
+   DiskAnsatz *p=D;
   for(dR=dz=0.; p<Dup; p++)
     { pot += (*p)(R,z,r,d); dR+=d[0]; dz+=d[1]; }
   return pot;
 }
 inline double Disks::Laplace(const double a, const double b) const {
   if(nd==0) return 0.;
-  register double L=0.;
-  for(register DiskAnsatz *p=D; p<Dup; p++) L += p->Laplace(a,b);
+   double L=0.;
+  for( DiskAnsatz *p=D; p<Dup; p++) L += p->Laplace(a,b);
   return L;
 }
 inline double Disks::Density(const double a, const double b) const {
   if(nd==0) return 0.;
-  register double R=0.;
-  for(register DiskAnsatz *p=D; p<Dup; p++) R += p->Density(a,b);
+   double R=0.;
+  for( DiskAnsatz *p=D; p<Dup; p++) R += p->Density(a,b);
   return R;
 }
 inline double Disks::Residual(const double a, const double b, const double c)
   const {
   if(nd==0) return 0.;
-  register double R=0.;
-  for(register DiskAnsatz *p=D; p<Dup; p++) R += p->Residual(a,b,c);
+   double R=0.;
+  for( DiskAnsatz *p=D; p<Dup; p++) R += p->Residual(a,b,c);
   return R;
 }
 inline void   Disks::DescribePot(ostream& to) const
 {
-    register DiskAnsatz *p=D;
+     DiskAnsatz *p=D;
     for(; p<Dup; p++) p->DescribePot(to);
 }
 //////////////////////////////////////////////////////////////////////////////
@@ -328,32 +328,32 @@ public:
 };
 inline bool Spheroids::massive() const {
   if(ns==0) return 0;
-  for(register SpheroidDensity *p=S; p<Sup;p++)
+  for( SpheroidDensity *p=S; p<Sup;p++)
     if(p->scale_density()) return true;
   return false;
 }
 inline double Spheroids::Mass(const double a) const {
   if(ns==0.) return 0.;
-  register double R=0.;
-  for(register SpheroidDensity *p=S; p<Sup; p++) R += p->mass(a);
+   double R=0.;
+  for( SpheroidDensity *p=S; p<Sup; p++) R += p->mass(a);
   return R;
 }
 inline double Spheroids::Density(const double a, const double b) const {
   if(ns==0.) return 0.;
-  register double R=0.;
-  for(register SpheroidDensity *p=S; p<Sup; p++) R += p->Density(a,b);
+   double R=0.;
+  for( SpheroidDensity *p=S; p<Sup; p++) R += p->Density(a,b);
   return R;
 }
 inline double Spheroids::Residual(const double a, const double b,
 				  const double c) const {
   if(ns==0) return 0.;
-  register double R=0.;
-  for(register SpheroidDensity *p=S; p<Sup; p++) R += p->Residual(a,b,c);
+   double R=0.;
+  for( SpheroidDensity *p=S; p<Sup; p++) R += p->Residual(a,b,c);
   return R;
 }
 inline void   Spheroids::DescribePot(ostream& to) const
 {
-    register SpheroidDensity *p=S;
+     SpheroidDensity *p=S;
     for(; p<Sup; p++) p->DescribePot(to);
 }
 

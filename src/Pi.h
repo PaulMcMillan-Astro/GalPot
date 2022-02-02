@@ -7,8 +7,8 @@
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _Pi_def_
-#define _Pi_def_ 1
+#ifndef Pi_GalPot_
+#define Pi_GalPot_ 1
 #include <complex>
 using std::complex;
 
@@ -22,8 +22,6 @@ const double FPi  = 4.   * Pi;
 const double SPi  = 1.772453850905516027298167483341;	// Sqrt[Pi]
 const double STPi = 2.506628274631000502415765284811;   // Sqrt[2 Pi]
 
-const complex<double> IMAG = complex<double>(0,1);	// i
-const complex<double> ITPi = IMAG * TPi;		// 2 i Pi
 
 
 #endif

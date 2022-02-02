@@ -98,7 +98,7 @@ void DiskAnsatz::setup(const DiskPar& p)
 double DiskAnsatz::SurfaceDensity(const double R) const
 {
   if(hollow && R==0.) return 0.;
-  register double y=R/Rd;
+   double y=R/Rd;
   if(eps==0.)         return S0*exp(-R0/R-y);
   return S0*exp(-R0/R-y+eps*cos(Pi*y));
 }
@@ -106,14 +106,14 @@ double DiskAnsatz::SurfaceDensity(const double R) const
 inline double DiskAnsatz::mass_integrand(const double y) const
 {
   if(y<=0. || y>=1.) return 0.;
-  register double y1=1.-y, x=y/y1;
+   double y1=1.-y, x=y/y1;
   if(eps) return exp(-R0oRd/x-x+eps*cos(Pi*x))*x/(y1*y1);
   return exp(-R0oRd/x-x)*x/(y1*y1);
 }
 
 double DiskAnsatz::mass(const double R) const
 {
-  register double F=TPi*S0*Rd2;
+   double F=TPi*S0*Rd2;
   if(R<=0.) {         // give total mass
     if(eps)
       return F*qbulir(this,&DiskAnsatz::mass_integrand,0.,1.,1.e-6);
@@ -125,19 +125,19 @@ double DiskAnsatz::mass(const double R) const
 
 double DiskAnsatz::Density(const double R, const double z) const
 {
-  register double rhR;
+   double rhR;
   if(eps)          rhR= (hollow && R==0.)? 0. : exp(-R0/R-R/Rd+eps*cos(Pi*R/Rd));
   else if(hollow)  rhR= (R==0.)? 0. : exp(-R0/R-R/Rd);
   else             rhR= exp(-R/Rd);
   if(thin)                            // vertically thin disk: return Sigma
     return S0*rhR;
   else if(isothermal) {               // vertically isothermal disk
-    register double x  =abs(z/zd),
+     double x  =abs(z/zd),
       ex =exp(-x),
       ex1=1.+ex;
     return S0*rhR * ex/(ex1*ex1*zd);
   }                                   // vertically exponential disk
-  register double x  =abs(z/zd),
+   double x  =abs(z/zd),
     ex =exp(-x);
   return S0*rhR * 0.5*ex/zd;
 }
@@ -147,14 +147,14 @@ double DiskAnsatz::Residual(const double r, const double st, const double ct)
 // gives aimed Laplace(Phi_multipole)
 {
   if(ct==0. || S0==0.) return 0;
-  register double R=r*st, z=r*ct, g,gp,gpp, F,f,fp,fpp;
+   double R=r*st, z=r*ct, g,gp,gpp, F,f,fp,fpp;
   // deal with the vertical part
   if(thin) {
     g   = abs(z);
     gp  = sign(z);
     gpp = 0.;
   } else if(isothermal) {
-    register double x,sh1;
+     double x,sh1;
     x   = abs(z/zd);
     gpp = exp(-x);
     sh1 = 1.+gpp;
@@ -162,7 +162,7 @@ double DiskAnsatz::Residual(const double r, const double st, const double ct)
     gp  = sign(z)*(1.-gpp)/sh1;
     gpp/= 0.5*sh1*sh1*zd;
   } else {
-    register double x;
+     double x;
     x   = abs(z/zd);
     gpp = exp(-x);
     g   = zd*(gpp-1+x);
@@ -173,14 +173,14 @@ double DiskAnsatz::Residual(const double r, const double st, const double ct)
   if(hollow && r==0.) F=f=fp=fpp=0.;
   else if(eps) {
     if(hollow) {
-      register double rq=r*r,cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
+       double rq=r*r,cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
       F   = (R==0)? 0. : exp(-R0/R-R/Rd+eps*cos(Pi*R/Rd));
       f   = exp(-R0/r-r/Rd+eps*cr);
       fp  = R0/rq-(1.+eps*sr)/Rd;
       fpp = (fp*fp-2.*R0/(rq*r)-eps*cr/Rd2)*f;
       fp *= f;
     } else {
-      register double cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
+       double cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
       F   = exp(-R/Rd+eps*cos(Pi*R/Rd));
       f   = exp(-r/Rd+eps*cr);
       fp  = -(1.+eps*sr)/Rd;
@@ -189,7 +189,7 @@ double DiskAnsatz::Residual(const double r, const double st, const double ct)
     }
   } else {
     if(hollow) {
-      register double rq=r*r;
+       double rq=r*r;
       F   = (R==0)? 0. : exp(-R0/R-R/Rd);
       f   = exp(-R0/r-r/Rd);
       fp  = R0/rq-1./Rd;
@@ -213,21 +213,21 @@ double DiskAnsatz::operator() (const double R, const double z, const double r,
     if(dP) dP[0]=dP[1]=0.;
     return 0.;
   }
-  register double g,f;
+   double g,f;
   if(dP) {
-    register double gp,fp;
+     double gp,fp;
     if(thin) {
       g  = abs(z);
       gp = sign(z);
     } else if(isothermal) {
-      register double x,ex,sh1;
+       double x,ex,sh1;
       x  = abs(z/zd);
       ex = exp(-x);
       sh1= 1.+ex;
       g  = 2*zd*(0.5*x+log(0.5*sh1));
       gp = sign(z)*(1.-ex)/sh1;
     } else {
-      register double x,ex;
+       double x,ex;
       x  = abs(z/zd);
       ex = exp(-x);
       g  = zd*(ex-1+x);
@@ -237,17 +237,17 @@ double DiskAnsatz::operator() (const double R, const double z, const double r,
     if(hollow && r==0.) f=fp=0.;
     else if(eps) {
       if(hollow) {
-	register double rq=r*r,cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
+	 double rq=r*r,cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
 	f   = exp(-R0/r-r/Rd+eps*cr);
 	fp  = (R0/rq-(1.+eps*sr)/Rd)*f;
       } else {
-	register double cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
+	 double cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
 	f   = exp(-r/Rd+eps*cr);
 	fp  = -(1.+eps*sr)*f/Rd;
       }
     } else {
       if(hollow) {
-	register double rq=r*r;
+	 double rq=r*r;
 	f   = exp(-R0/r-r/Rd);
 	fp  = (R0/rq-1./Rd)*f;
       } else {
@@ -261,13 +261,13 @@ double DiskAnsatz::operator() (const double R, const double z, const double r,
     if(thin) {
       g  =abs(z);
     } else if(isothermal) {
-      register double x,ex,sh1;
+       double x,ex,sh1;
       x  = abs(z/zd);
       ex = exp(-x);
       sh1= 1.+ex;
       g  = 2*zd*(0.5*x+log(0.5*sh1));
     } else {
-      register double x,ex;
+       double x,ex;
       x  = abs(z/zd);
       ex = exp(-x);
       g  = zd*(ex-1+x);
@@ -289,14 +289,14 @@ double DiskAnsatz::operator() (const double R, const double z, const double r,
 double DiskAnsatz::Laplace(const double R, const double z) const
 {
   if(S0==0.) return 0;
-  register double r=hypot(R,z), g,gp,gpp, F,f,fp,fpp;
+   double r=hypot(R,z), g,gp,gpp, F,f,fp,fpp;
   // deal with the vertical part
   if(thin) {
     g  =abs(z);
     gp =sign(z);
     gpp=0.;
   } else if(isothermal) {
-    register double x,sh1;
+     double x,sh1;
     x   = abs(z/zd);
     gpp = exp(-x);
     sh1 = 1.+gpp;
@@ -304,7 +304,7 @@ double DiskAnsatz::Laplace(const double R, const double z) const
     gp  = sign(z)*(1.-gpp)/sh1;
     gpp/= 0.5*sh1*sh1*zd;
   } else {
-    register double x;
+     double x;
     x   = abs(z/zd);
     gpp = exp(-x);
     g   = zd*(gpp-1+x);
@@ -315,14 +315,14 @@ double DiskAnsatz::Laplace(const double R, const double z) const
   if(hollow && r==0.) F=f=fp=fpp=0.;
   else if(eps) {
     if(hollow) {
-      register double rq=r*r,cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
+       double rq=r*r,cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
       F   = (R==0)? 0. : exp(-R0/R-R/Rd+eps*cos(Pi*R/Rd));
       f   = exp(-R0/r-r/Rd+eps*cr);
       fp  = R0/rq-(1.+eps*sr)/Rd;
       fpp = (fp*fp-2.*R0/(rq*r)-eps*cr/Rd2)*f;
       fp *= f;
     } else {
-      register double cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
+       double cr=cos(Pi*r/Rd),sr=sin(Pi*r/Rd);
       F   = exp(-R/Rd+eps*cos(Pi*R/Rd));
       f   = exp(-r/Rd+eps*cr);
       fp  = -(1.+eps*sr)/Rd;
@@ -331,7 +331,7 @@ double DiskAnsatz::Laplace(const double R, const double z) const
     }
   } else {
     if(hollow) {
-      register double rq=r*r;
+       double rq=r*r;
       F   = (R==0)? 0. : exp(-R0/R-R/Rd);
       f   = exp(-R0/r-r/Rd);
       fp  = R0/rq-1./Rd;
@@ -351,7 +351,7 @@ Frequencies DiskAnsatz::kapnuom(const double R) const
 // returns dPhi/dR, d^2Phi/dR^2, d^2Phi/dz^2 at z=0
 {
   if(S0==0.) return Frequencies(0.);
-  register double er, gpp;
+   double er, gpp;
   if(hollow) er = (R==0)? 0. : exp(-R0/R-R/Rd+eps*cos(Pi*R/Rd));
   else   er = exp(-R/Rd+eps*cos(Pi*R/Rd));
   if(thin) {                          // vertically thin disk
@@ -376,7 +376,7 @@ void Disks::reset(const int N, const DiskPar* p)
 {
   delete[] D;
   nd = N;
-  register int i;
+   int i;
   D   = new DiskAnsatz[nd];
   Dup = D+nd;
   for(i=0; i<nd; i++) (D+i)->setup(p[i]);
@@ -393,7 +393,7 @@ Disks::Disks(std::istream& from)
   SwallowRestofLine(from);
   D   = new DiskAnsatz[nd];
   Dup = D+nd;
-  register DiskAnsatz *p=D;
+   DiskAnsatz *p=D;
   for(; p<Dup; p++) {
     from >> P;
     SwallowRestofLine(from);
@@ -406,14 +406,14 @@ Disks::Disks(const Disks& DS) : nd(DS.nd)
 {
   D   = new DiskAnsatz[nd];
   Dup = D+nd;
-  register DiskAnsatz *p=D;
-  for(register int i=0; p<Dup; p++,i++)
+   DiskAnsatz *p=D;
+  for( int i=0; p<Dup; p++,i++)
     p->setup(DS.Parameter(i));
 }
 
 Disks::Disks(const int N, const DiskPar* p) : nd(N)
 {
-  register int i;
+   int i;
   D   = new DiskAnsatz[nd];
   Dup = D+nd;
   for(i=0; i<nd; i++) (D+i)->setup(p[i]);
@@ -441,7 +441,7 @@ void SpheroidDensity::setup(const SphrPar& d)
 
 double SpheroidDensity::Density(const double R, const double z) const
 {
-  register double m = hypot(R,z*qi), m0=m*r0i, rho=rh0;
+   double m = hypot(R,z*qi), m0=m*r0i, rho=rh0;
   if(gam==0.5)   rho /= sqrt(m0);
   else if(gam==1.)    rho /= m0;
   else if(gam==2.)    rho /= m0*m0;
@@ -458,7 +458,7 @@ double SpheroidDensity::Density(const double R, const double z) const
 double SpheroidDensity::mass_integrand(const double y) const
 {
   if(rci) {
-    register double y1=1.-y, m=r0*y/y1;
+     double y1=1.-y, m=r0*y/y1;
     return pow(y,2.-gam) * pow(y1,bet-4.) * exp(-square(m*rci));
   }
   return pow(y,2-gam) * pow(1.-y,bet-4.);
@@ -478,7 +478,7 @@ void Spheroids::reset(const int N, const SphrPar* p)
 {
   delete[] S;
   ns = N;
-  register int i;
+   int i;
   S   = new SpheroidDensity[ns];
   Sup = S+ns;
   for(i=0; i<ns; i++) (S+i)->setup(p[i]);
@@ -509,13 +509,13 @@ Spheroids::Spheroids(const Spheroids& SP) : ns(SP.ns)
   S   = new SpheroidDensity[ns];
   Sup = S+ns;
   SpheroidDensity *p=S;
-  for(register int i=0; p<Sup; p++,i++)
+  for( int i=0; p<Sup; p++,i++)
     p->setup(SP.Parameter(i));
 }
 
 Spheroids::Spheroids(const int N, const SphrPar* p) : ns(N)
 {
-  register int i;
+   int i;
   S   = new SpheroidDensity[ns];
   Sup = S+ns;
   for(i=0; i<ns; i++) (S+i)->setup(p[i]);
@@ -523,16 +523,16 @@ Spheroids::Spheroids(const int N, const SphrPar* p) : ns(N)
 
 double Spheroids::beta() const
 {
-  register double b=1.e3;
-  for(register SpheroidDensity *p=S; p<Sup; p++)
+   double b=1.e3;
+  for( SpheroidDensity *p=S; p<Sup; p++)
     b = min(b, p->outer_power());
   return (b==1.e3)? -1 : b;
 }
 
 double Spheroids::gamma() const
 {
-  register double g=0.;
-  for(register SpheroidDensity *p=S; p<Sup; p++)
+   double g=0.;
+  for( SpheroidDensity *p=S; p<Sup; p++)
     g = max(g, p->inner_power());
   return g;
 }
@@ -613,11 +613,11 @@ void Multipole::setup(const double ri, const double ra,
   const    DBN    Zero=DBN(0.);
   const    double half=0.5, three=3., sixth=1./6.,
     dlr =(lRmax-lRmin)/double(K[0]-1);
-  register int    i,l,k,ll,lli1;
-  register double dx,dx2,xl_ll,xh_ll,risq,ril2,dP;
+   int    i,l,k,ll,lli1;
+   double dx,dx2,xl_ll,xh_ll,risq,ril2,dP;
   DBN    A[4],P2l,dP2l;
 
-  register DBN    EX;
+   DBN    EX;
   //
   // 0  check for inconsistencies in input
   //
@@ -835,7 +835,7 @@ double Multipole::operator() (const double r, const double ct, const double st,
                               double* dP) const
 {
   double Xi[2];
-  register double lr=log(r), Phi;
+   double lr=log(r), Phi;
   Xi[0] = min(lRmax,max(lRmin,lr));
   Xi[1] = abs(ct);
   Phi   = Psplev2D(X,Y,Z,K,Xi,dP);
@@ -857,7 +857,7 @@ double Multipole::operator() (const double r, const double ct, const double st,
     if(dP) dP[0] =-Phi;
   }
   if(dP) {
-    register double temp;
+     double temp;
     dP[0]/= r;
     dP[1]*=-st/r;
     temp  = ct*dP[0] - st*dP[1];
@@ -871,7 +871,7 @@ double Multipole::vcsquare(const double R, double &dvcqdR) const
 {
   const int n2[2]={2,2};
   double Xi[2], dP[2], **d2P;
-  register double lr=log(R), Phi;
+   double lr=log(R), Phi;
   Alloc2D(d2P,n2);
   Xi[0] = min(lRmax,max(lRmin,lr));
   Xi[1] = 0.;
@@ -903,9 +903,9 @@ double Multipole::RfromLc (const double L, double* dR) const
         if(dR) *dR=0.;
 	return 0.;
     }
-    register double lL=log(L);
+     double lL=log(L);
     if(dR) {
-        register double R;
+         double R;
         if(lL<lzmin) {
 	    *dR = tg3;
 	    R   = Rmin * exp(tg3*(lL-lzmin));
@@ -929,9 +929,9 @@ double Multipole::LfromRc (const double R, double* dL) const
         if(dL) *dL=0.;
 	return 0.;
     }
-    register double lR=log(R);
+     double lR=log(R);
     if(dL) {
-        register double L;
+         double L;
         if(lR<lRmin) {
 	    *dL = g3h;
 	    L   = exp(lzmin + g3h*(lR-lRmin));
@@ -951,7 +951,7 @@ double Multipole::LfromRc (const double R, double* dL) const
 double Multipole::Laplace(const double r, const double ct) const
 {
   const    int    m[2]={2,2};
-  register double lr=log(r), Phi, Lap;
+   double lr=log(r), Phi, Lap;
   double Xi[2], *dP, **d2P;
   Alloc1D(dP,2);
   Alloc2D(d2P,m);
@@ -984,7 +984,7 @@ Frequencies Multipole::kapnuom(const double R) const
 // returns dPhi/dR, d^2Phi/dR^2/ d^2Phi/dz^2
 {
   const    int    m[2]={2,2};
-  register double lr=log(R), Rq=R*R, Phi;
+   double lr=log(R), Rq=R*R, Phi;
   double Xi[2], *dP, **d2P;
   Alloc1D(dP,2);
   Alloc2D(d2P,m);
@@ -1021,8 +1021,8 @@ Frequencies Multipole::kapnuom(const double R) const
 
 double GalaxyPotential::operator() (const double R, const double z) const
 {
-  register double r  =hypot(R,z), pot=(r)? M(r,z/r,R/r) : M(0,0,0);
-  for(register DiskAnsatz *p=D; p<Dup; p++) pot+= (*p)(R,z,r);
+   double r  =hypot(R,z), pot=(r)? M(r,z/r,R/r) : M(0,0,0);
+  for( DiskAnsatz *p=D; p<Dup; p++) pot+= (*p)(R,z,r);
   return pot;
 }
 
@@ -1030,9 +1030,9 @@ double GalaxyPotential::operator() (const double R, const double z,
                                     double& dR, double &dz) const
 {
   double d[2];
-  register double r  =hypot(R,z), pot=(r)? M(r,z/r,R/r,d) : M(0,0,0);
+   double r  =hypot(R,z), pot=(r)? M(r,z/r,R/r,d) : M(0,0,0);
   dR = (r)? d[0] : 0.; dz = (r)? d[1] : 0.;
-  for(register DiskAnsatz *p=D; p<Dup; p++) {
+  for( DiskAnsatz *p=D; p<Dup; p++) {
     pot += (*p)(R,z,r,d);
     dR  += (r)? d[0] : 0.;
     dz  += (r)? d[1] : 0.;
@@ -1051,8 +1051,8 @@ void GalaxyPotential::OortConstants(const double R, double &A, double &B) const
 
 double GalaxyPotential::Laplace(const double R, const double z) const
 {
-  register double r=hypot(R,z), L=M.Laplace(r,z/r);
-  register DiskAnsatz *p=D;
+   double r=hypot(R,z), L=M.Laplace(r,z/r);
+   DiskAnsatz *p=D;
   for(; p<Dup; p++) L += p->Laplace(R,z);
   return L;
 }
@@ -1060,7 +1060,7 @@ double GalaxyPotential::Laplace(const double R, const double z) const
 Frequencies GalaxyPotential::KapNuOm  (const double R) const
 {
   Frequencies Om = M.kapnuom(R);
-  for(register DiskAnsatz *p=D; p<Dup; p++) Om += p->kapnuom(R);
+  for( DiskAnsatz *p=D; p<Dup; p++) Om += p->kapnuom(R);
   Om[2]/= R;
   Om[0]+= 3*Om(2);
   Om.apply(&sqrt);

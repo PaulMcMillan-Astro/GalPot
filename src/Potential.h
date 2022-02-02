@@ -7,8 +7,8 @@
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _Pot_def_
-#define _Pot_def_ 1
+#ifndef Pot_GalPot_
+#define Pot_GalPot_ 1
 
 #include "Vector.h"
 typedef Vector<double,3> Frequencies;

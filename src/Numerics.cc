@@ -40,11 +40,11 @@ OUTPUT: return approximated value for the integral;
         err    actual relative error of the return value.
 ------------------------------------------------------------------------------*/
 {
-    register double ba=b-a;
+     double ba=b-a;
     if(ba==0.) return 0.;
 
-    register int    i,n=2,nn=3,mx=25,m,mr, bo,bu=0,odd=1;
-    register double c,d1,ddt,den,e,eps,eta=1.e-7,gr,hm,nt,
+     int    i,n=2,nn=3,mx=25,m,mr, bo,bu=0,odd=1;
+     double c,d1,ddt,den,e,eps,eta=1.e-7,gr,hm,nt,
 		    sm,t,t1,t2,t2a,ta,tab=0.,tb,v=0.,w;
     double          d[7],dt[7];
 
@@ -146,12 +146,12 @@ OUTPUT: return approximated value for the integral;
 ////////////////////////////////////////////////////////////////////////////////
 void GaussLegendre(Pdbl x, Pdbl w, const int n)
 {
-    register double eps;
+     double eps;
     for(eps=1.e-10; (eps+1.)!=1.; eps*=0.5);
     eps  =1.e-10;                       // eps != actual computing accuracy
                                   // because that was crashing the f'ing thing
-    register int j,i,m=(n+1)/2;
-    register double z1,z,pp,p3,p2,p1;
+     int j,i,m=(n+1)/2;
+     double z1,z,pp,p3,p2,p1;
     for (i=0;i<m;i++) {
 	z=cos(Pi*(i+0.75)/(n+0.5));
 	do {
@@ -177,8 +177,8 @@ void LegendrePeven(double* p, const double x, const int np)
 // based on a routine from J.J. Binney
 // evaluates even Legendre Polys up to l=2*(np-1) at x
 {
-    register int    n,l,l2;
-    register double x2=x*x;
+     int    n,l,l2;
+     double x2=x*x;
     p[0] = 1.;
     p[1] = 1.5*x2-0.5;
     for(n=2; n<np; n++) {
@@ -194,8 +194,8 @@ void dLegendrePeven(double* p, double* d, const double x, const int np)
 // based on a routine from J.J. Binney
 // evaluates even Legendre Polys and its derivs up to l=2*(np-1) at x
 {
-    register int    n,l,l2;
-    register double x2=x*x;
+     int    n,l,l2;
+     double x2=x*x;
     p[0] = 1.;
     d[0] = 0.;
     p[1] = 1.5*x2-0.5;

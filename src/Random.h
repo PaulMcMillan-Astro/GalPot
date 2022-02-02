@@ -23,8 +23,8 @@ Basically all you need to generate random numbers.
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _Random_
-#define _Random_ 1
+#ifndef Random_GalPot_
+#define Random_GalPot_ 1
 
 #include <algorithm>
 ////////////////////////////////////////////////////////////////////////////////

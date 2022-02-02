@@ -7,12 +7,12 @@
 *                                                                              *
 * C++ code written by Paul McMillan, 2011-   
 *                                                                              *
-*       Classes which output the value of a distribution function              *
+*       Routines to work with the command line                                 *
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _PJMcline_
-#define _PJMcline_ 1
+#ifndef PJMcline_GalPot_
+#define PJMcline_GalPot_ 1
 
 #include "PJM_utils.h"
 

@@ -33,7 +33,7 @@ const int    maxit  = 100;
 const double fpmin  = 1.e-40,
              eps    = 1.e-9,
 	     logeps =-20.72326583694641115616192309216;
-
+         
 ////////////////////////////////////////////////////////////////////////////////
 // 1. auxiliary functions *************************************************** //
 ////////////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,8 @@ static void gser(double& gamser, const double a, const double x, double& lng)
 	gamser=0.;
 	return;
     }
-    register int    n;
-    register double sum,del,ap;
+     int    n;
+     double sum,del,ap;
     ap  = a;
     del = sum = 1.0/a;
     for(n=1; n<=maxit; n++) {
@@ -63,7 +63,7 @@ static void gser(double& gamser, const double a, const double x, double& lng)
 
 static void gcf(double& gammcf, double a, double x, double& lng)
 {
-    register int i;
+     int i;
     double an,b,c,d,del,h;
 
     lng = LogGamma(a);
@@ -93,12 +93,15 @@ void MathError(const char* msgs)
     cerr<<" error in Mathematics: "<<msgs<<'\n';
 #ifndef ebug
     exit(1);
+#else
+    return;
 #endif
 }
 
 void MathWarning(const char* msgs)
 {
     cerr<<" Warning in Mathematics: "<<msgs<<'\n';
+    return;
 }
 
 //==============================================================================
@@ -109,8 +112,8 @@ double SphVol(const int d)
     if(d==1) return 2;
     if(d==2) return Pi;
 //  if(d==3) return FPi/3.;
-    register int k,n;
-    register double 
+     int k,n;
+     double 
     cn = Pi,
     ae = 2.,
     ao = Pih;
@@ -128,9 +131,14 @@ double SphVol(const int d)
 //==============================================================================
 // logarithms of complex trigonometric and hyperbolic functions
 //==============================================================================
+complex<double> lnsin(const complex<double>& x);
+complex<double> lncos(const complex<double>& x);
+complex<double> lnsinh(const complex<double>& x);
+complex<double> lncosh(const complex<double>& x) ;
+
 complex<double> lnsin(const complex<double>& x) 	// log(sin(x))
 {
-    register double 
+     double 
     ep = exp(-2*abs(imag(x))),
     em = sin(real(x))*(1.+ep);
     ep = cos(real(x))*(1.-ep);
@@ -140,7 +148,7 @@ complex<double> lnsin(const complex<double>& x) 	// log(sin(x))
 
 complex<double> lncos(const complex<double>& x) 	// log(cos(x))
 {
-    register double 
+     double 
     ep = exp(-2*abs(imag(x))),
     em = cos(real(x))*(1.+ep);
     ep = sin(real(x))*(1.-ep);
@@ -150,7 +158,7 @@ complex<double> lncos(const complex<double>& x) 	// log(cos(x))
 
 complex<double> lnsinh(const complex<double>& x) 	// log(sinh(x))
 {
-    register double 
+     double 
     ep = exp(-2*abs(real(x))),
     em = sin(imag(x))*(1.+ep);
     ep = cos(imag(x))*(1.-ep);
@@ -160,7 +168,7 @@ complex<double> lnsinh(const complex<double>& x) 	// log(sinh(x))
 
 complex<double> lncosh(const complex<double>& x) 	// log(cosh(x))
 {
-    register double 
+     double 
     ep = exp(-2*abs(real(x))),
     em = cos(imag(x))*(1.+ep);
     ep = sin(imag(x))*(1.-ep);
@@ -171,6 +179,7 @@ complex<double> lncosh(const complex<double>& x) 	// log(cosh(x))
 //==============================================================================
 // Gamma functions
 //==============================================================================
+double LogGamma(const double x);
 
 double LogGamma(const double x)
 {
@@ -182,11 +191,11 @@ double LogGamma(const double x)
 	return log(Pi/sin(Pi*x)) - LogGamma(1.-x);
     }
 
-    register double ser=1.000000000190015,
+     double ser=1.000000000190015,
     y   = x,
     tmp = y+5.5;
     tmp-= (y+0.5) * log(tmp);
-    for(register int j=0; j<6; j++) ser+= cof[j]/++y;
+    for( int j=0; j<6; j++) ser+= cof[j]/++y;
     return -tmp + log(STPi*ser/x);
 }
 
@@ -198,13 +207,13 @@ complex<double> LogGamma(const complex<double> z)
     if( imag(z)==0. && real(z) <= 0. && is_integral(-real(z)) ) 
 	MathError("LogGamma called at z = -n");
 
-    register char turn = (real(z)<1)? 1 : 0;
+     char turn = (real(z)<1)? 1 : 0;
     complex<double> 
     ser = 1.000000000190015,
     y   = turn? 2.-z : z,
     tmp = y+4.5;
     tmp-= (y-0.5)*log(tmp);
-    for(register int j=0; j<6; j++) {
+    for( int j=0; j<6; j++) {
 	ser+= c[j]/y;
 	y  += 1.;
     }
@@ -214,6 +223,8 @@ complex<double> LogGamma(const complex<double> z)
 //	tmp -= log(STPi*ser*sin(y)/y);
     } else 
 	tmp = log(STPi*ser) - tmp;
+
+    complex<double> ITPi = complex<double>(0,TPi); // 2 i Pi
     while(imag(tmp)> Pi) tmp-= ITPi;
     while(imag(tmp)<-Pi) tmp+= ITPi;
     return tmp;
@@ -267,10 +278,10 @@ double En(const int n, const double x)
     if(n<0 || x<0. || (x==0. && n<=1)) MathError("bad argumends in En()");
     if(n==0)  return exp(-x)/x;
     if(x==0.) return 1./double(n-1);
-    register double ans;
+     double ans;
     if(x>1.) {
-        register int    i,nm1=n-1;
-        register double a,b,c,d,del,h;
+         int    i,nm1=n-1;
+         double a,b,c,d,del,h;
 	b = x+n;
 	c = 1./fpmin;
 	d = 1./b;
@@ -287,8 +298,8 @@ double En(const int n, const double x)
 	ans = h*exp(-x);
 	MathWarning("continued fraction failed in En()");
     } else {
-        register int    i,ii,nm1=n-1;
-        register double del,fac,psi;
+         int    i,ii,nm1=n-1;
+         double del,fac,psi;
 	ans = nm1? 1./double(nm1) : -log(x)-EulerGamma;
 	fac = 1.;
 	for(i=1; i<=maxit; i++) {
@@ -313,8 +324,8 @@ double Ei(const double x)
 {
     if(x<=0.)   return -En(1,-x);
     if(x<fpmin) return log(x)+EulerGamma;
-    register int    k;
-    register double fact=1.,sum=0.,term=1.;
+     int    k;
+     double fact=1.,sum=0.,term=1.;
     if(x<=-logeps) {
 	for(k=1; k<=maxit; k++) {
 	    fact*= x/k;
@@ -345,7 +356,7 @@ double Ei(const double x)
 
 double J0(const double x)
 {
-    register double ax=abs(x),y,ans1,ans2;
+     double ax=abs(x),y,ans1,ans2;
     if(ax < 8.) {
 	y    = x*x;
 	ans1 = 57568490574.0+y*(-13362590354.0+y*(651619640.7
@@ -354,7 +365,7 @@ double J0(const double x)
 		+y*(59272.64853+y*(267.8532712+y*1.0))));
 	return ans1/ans2;
     }
-    register double z=8./ax, xx=ax-0.785398164;
+     double z=8./ax, xx=ax-0.785398164;
     y   =z*z;
     ans1=1.0+y*(-0.1098628627e-2+y*(0.2734510407e-4
 	    +y*(-0.2073370639e-5+y*0.2093887211e-6)));
@@ -365,7 +376,7 @@ double J0(const double x)
 
 double J1(const double x)
 {
-    register double ax=abs(x),y,ans1,ans2;
+     double ax=abs(x),y,ans1,ans2;
     if(ax < 8.) {
 	y    = x*x;
 	ans1 = x*(72362614232.0+y*(-7895059235.0+y*(242396853.1
@@ -374,7 +385,7 @@ double J1(const double x)
 		+y*(99447.43394+y*(376.9991397+y*1.0))));
 	return ans1/ans2;
     }
-    register double z=8./ax, xx=ax-2.356194491;
+     double z=8./ax, xx=ax-2.356194491;
     y    = z*z;
     ans1 = 1.0+y*(0.183105e-2+y*(-0.3516396496e-4
 	      +y*(0.2457520174e-5+y*(-0.240337019e-6))));
@@ -391,8 +402,8 @@ double Jn(const int n, const double x)
     if(n==-1) return -J1(x);
 
     const double acc=60., bigno=1.e10, bigni=1.e-10;
-    register int    j,jsum,m;
-    register double ax,bj,bjm,bjp,sum,tox,ans;
+     int    j,jsum,m;
+     double ax,bj,bjm,bjp,sum,tox,ans;
 
     ax=abs(x);
     if(ax==0.0) return 0.0;
@@ -408,7 +419,7 @@ double Jn(const int n, const double x)
 	ans=bj;
     } else {
 	tox  = 2./ax;
-	m    = 2*((n+(int) sqrt(acc*n))/2);
+	m    = 2*( (n + int (sqrt(acc*n)) )/2);
 	jsum = 0;
 	bjp  = ans = sum = 0.;
 	bj   = 1.;
@@ -435,7 +446,7 @@ double Jn(const int n, const double x)
 double Y0(const double x)
 {
     if(x<0.) MathError(" negative argument in Y0(x)");
-    register double y,ans1,ans2;
+     double y,ans1,ans2;
     if(x < 8.0) {
 	y    = x*x;
 	ans1 =-2957821389.0+y*(7062834065.0+y*(-512359803.6
@@ -444,7 +455,7 @@ double Y0(const double x)
 		+y*(47447.26470+y*(226.1030244+y*1.0))));
 	return (ans1/ans2)+0.636619772*J0(x)*log(x);
     }
-    register double z=8./x, xx=x-0.785398164;
+     double z=8./x, xx=x-0.785398164;
 	y    = z*z;
 	ans1 = 1.0+y*(-0.1098628627e-2+y*(0.2734510407e-4
 		  +y*(-0.2073370639e-5+y*0.2093887211e-6)));
@@ -457,7 +468,7 @@ double Y0(const double x)
 double Y1(const double x)
 {
     if(x<0.) MathError(" negative argument in Y1(x)");
-    register double y,ans1,ans2;
+     double y,ans1,ans2;
     if(x < 8.) {
 	y    = x*x;
 	ans1 = x*(-0.4900604943e13+y*(0.1275274390e13
@@ -468,7 +479,7 @@ double Y1(const double x)
 		+y*(0.1020426050e6+y*(0.3549632885e3+y)))));
 	return (ans1/ans2)+0.636619772*(J1(x)*log(x)-1.0/x);
     }
-    register double z=8./x, xx=x-2.356194491;
+     double z=8./x, xx=x-2.356194491;
     y    = z*z;
     ans1 = 1.0+y*(0.183105e-2+y*(-0.3516396496e-4
 	      +y*(0.2457520174e-5+y*(-0.240337019e-6))));
@@ -483,8 +494,8 @@ double Yn(const int n, const double x)
     if(x<0.) MathError(" negative argument in Yn(x)");
     if(n==0) return Y0(x);
     if(n==1) return Y1(x);
-    register int j;
-    register double by=Y1(x),bym=Y0(x),byp,tox=2./x;
+     int j;
+     double by=Y1(x),bym=Y0(x),byp,tox=2./x;
     for(j=1; j<n; j++) {
 	byp = j*tox*by-bym;
 	bym = by;
@@ -495,7 +506,7 @@ double Yn(const int n, const double x)
 
 double I0(const double x)
 {
-    register double ax=abs(x),y;
+     double ax=abs(x),y;
     if(ax < 3.75) {
 	y = x/3.75;
 	y*= y;
@@ -511,7 +522,7 @@ double I0(const double x)
 
 double I1(const double x)
 {
-    register double ans,ax=abs(x),y;
+     double ans,ax=abs(x),y;
     if(ax < 3.75) {
 	y = x/3.75;
 	y*= y;
@@ -536,13 +547,13 @@ double In(const int n, const double x)
     if(n==1)  return I1(x);
     if(x==0.) return 0.;
 
-    register int    j;
-    register double bi,bim,bip,tox,ans;
+     int    j;
+     double bi,bim,bip,tox,ans;
 
     tox=2.0/fabs(x);
     bip=ans=0.0;
     bi=1.0;
-    for(j=2*(n+(int)sqrt(acc*n)); j>0; j--) {
+    for(j=2*(n+int(sqrt(acc*n))); j>0; j--) {
 	bim = bip+j*tox*bi;
 	bip = bi;
 	bi  = bim;
@@ -560,7 +571,7 @@ double In(const int n, const double x)
 double K0(const double x)
 {
     if(x<0.) MathError(" negative argument in K0(x)");
-    register double y;
+     double y;
     if(x <= 2.) {
 	y = x*x/4.;
 	return (-log(x/2.0)*I0(x))+(-0.57721566+y*(0.42278420
@@ -576,7 +587,7 @@ double K0(const double x)
 double K1(const double x)
 {
     if(x<0.) MathError(" negative argument in K1(x)");
-    register double y;
+     double y;
     if(x <= 2.) {
 	y=x*x/4.0;
 	return (log(x/2.0)*I1(x))+(1.0/x)*(1.0+y*(0.15443144
@@ -595,8 +606,8 @@ double Kn(const int n, const double x)
     if(x<0.) MathError(" negative argument in Kn(x)");
     if(n==0) return K0(x);
     if(n==1) return K1(x);
-    register int j;
-    register double bk,bkm,bkp,tox;
+     int j;
+     double bk,bkm,bkp,tox;
 
     tox = 2./x;
     bkm = K0(x);
@@ -619,8 +630,8 @@ double HermiteH(const int n, const double x)
 {
     if(n==0) return 1;
     if(n==1) return 2.*x;
-    register int    i=1;
-    register double h0=1., h1=2*x, hi=h1;
+     int    i=1;
+     double h0=1., h1=2*x, hi=h1;
     while(n>i) {
 	hi = 2. * (x*h1 - i*h0);
 	h0 = h1;
@@ -634,7 +645,7 @@ void HermiteH(const int n, const double x, double *H)
 {
     H[0] = 1.; 	if(n==0) return;
     H[1] = 2*x;	if(n==1) return;
-    register int i=1;
+     int i=1;
     while(n>i) {
         H[i+1] = 2 * (x*H[i] - 2*H[i-1]);
         i++;
@@ -645,7 +656,7 @@ void NormSqHermite(const int n, double *N)
 {
     N[0] = SPi;		if(n==0) return;	// Sqrt[Pi]
     N[1] = 2*SPi;	if(n==1) return;	// 2*Sqrt[Pi]
-    register int i=1;
+     int i=1;
     while(n>=i++) N[i] = 2*i*N[i-1];
 }
 
@@ -653,8 +664,8 @@ double HermiteH_normalized(const int n, const double x)
 {
     if(n==0) return 1.   / sqrt(Pi);
     if(n==1) return 2.*x / sqrt(TPi);;
-    register int    i=1, N=2;
-    register double h0=1., h1=2*x, hi=h1;
+     int    i=1, N=2;
+     double h0=1., h1=2*x, hi=h1;
     while(n>i) {
 	hi = 2. * (x*h1 - i*h0);
 	h0 = h1;
@@ -669,12 +680,12 @@ void HermiteH_normalized(const int n, const double x, double *H)
 {
     if(n>=0) H[0] = 1.;
     if(n>0)  H[1] = 2*x;
-    register int i=1;
+     int i=1;
     while(n>i) {
         H[i+1] = 2 * (x*H[i] - 2*H[i-1]);
         i++;
     }
-    register int N=1;
+     int N=1;
     i=0;
     while(n>=i) {
 	H[i] /= sqrt(N*Pi);

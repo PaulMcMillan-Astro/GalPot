@@ -27,8 +27,8 @@ Random3::Random3(const long idum)
     inextp = new int;
     ma     = new long[56];
 
-    register long  mj,mk;
-    register int   i,ii,k;
+     long  mj,mk;
+     int   i,ii,k;
 
     mj     = mseed - (idum<0 ? -idum : idum);
     mj    %= mbig;
@@ -59,8 +59,8 @@ Random3::~Random3()
 
 double Random3::RandomDouble ()
 {
-    register long   mj;
-    register double r;
+     long   mj;
+     double r;
     do {
 	if(++(*inext)  >= 56) *inext  = 1;
 	if(++(*inextp) >= 56) *inextp = 1;
@@ -136,8 +136,8 @@ Sobol::Sobol(const int ACTL, const int BITS)
 // seed initial Mi; i=1,...,degs
 // these must be odd integer numbers less than 2^i.
 // Finally the direction numbers are Vi = 2^(bits-i) * Mi
-    register int i,i2,ip,l;
-    register unsigned long vi;
+     int i,i2,ip,l;
+     unsigned long vi;
     v = (new unsigned long[bits])-1;
     for(i=1,i2=2; i<=degs; i++,i2<<=1) {
 	if(i2<=poly) 
@@ -172,7 +172,7 @@ Sobol::~Sobol()
 
 double Sobol::RandomDouble ()
 {
-    register unsigned long im=in++, j;
+     unsigned long im=in++, j;
     for(j=1; j<=bits; j++) {
 	if( !(im&1) ) break;
 	im >>= 1;
@@ -201,7 +201,7 @@ double Gaussian::operator() ()
 	iset = 0;
 	return gset;
     } else {
-	register double v1,v2,rsq,fac;
+	 double v1,v2,rsq,fac;
 	do {
 	    v1  = 2 * R1->RandomDouble() - 1.;
 	    v2  = 2 * R2->RandomDouble() - 1.;

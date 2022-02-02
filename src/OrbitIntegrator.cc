@@ -85,7 +85,7 @@ void OrbitIntegratorStep::RungeKutta(const double dt)
 
 void OrbitIntegratorStep::stepRK_by(double& dt, const double f)
 {
-  //    register OrbitIntegratorStep next = *this;
+  //     OrbitIntegratorStep next = *this;
   Vec6 oldQP = QP;
   double oldE = E;
   double fac=(f<=1.)? 1.4:f, FAC=pow(fac,5), dE;

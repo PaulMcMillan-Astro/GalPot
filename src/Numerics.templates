@@ -90,8 +90,8 @@
 * HeapIndexAbs()  abs()                                                        *
 *******************************************************************************/
 
-#ifndef _Numerics_templates_def_
-#define _Numerics_templates_def_ 1
+#ifndef Numerics_templates_GalPot_
+#define Numerics_templates_GalPot_ 1
 
 #include <iostream>
 #include "Inline.h"
@@ -188,7 +188,7 @@ inline void find(int& klo, const int n, S const *x, const S xi)
 template<class S>
 inline int find_for_polev(int& j, const int n, const int m, const S *x, const S xi)
 {
-    register int M=m;
+     int M=m;
     j = int( (xi-x[0]) / (x[n-1]-x[0]) * (n-1) );
     j = hunt(x,n,xi,j) - (m+1)/2 + 1;
     if(j>=0 && j<n && x[j]==xi)	 M = 1; 	// no interpolation required
@@ -202,8 +202,8 @@ template<class S, class T>
 T polint(const S *xa, const T *ya, const int n, const S x)
 // polynom interpolation using n values
 {
-    register int i,m;
-    register T   y, *P=new T[n];
+     int i,m;
+     T   y, *P=new T[n];
 
     for(i=0;i<n;i++) P[i]=ya[i];
     for(m=1;m<n;m++)
@@ -227,7 +227,8 @@ T polev(S x, S*xarr, T*yarr, const int n, const int m=4)
 
 ////////////////////////////////////////////////////////////////////////////////
 template<class S, class T>
-T polev_2d(const S xi[2], S* const xarr[2], T**yarr, const int n[2], const int m[2]=0)
+T polev_2d(const S xi[2], S* const xarr[2], T**yarr, const int n[2], 
+			const int m[2]=NULL)
 // polynomial interpolation in 2 dimensions using m1xm2 of n1xn2 values
 {
     int j[2], M[2];
@@ -239,7 +240,7 @@ T polev_2d(const S xi[2], S* const xarr[2], T**yarr, const int n[2], const int m
         M[1] = find_for_polev(j[1],n[1],4,xarr[1],xi[1]);
     }
 
-    register int l;
+     int l;
     T *y0 = new T[M[0]];
     for(l=0;l<M[0];l++)
 	y0[l] = polint(xarr[1]+j[1], yarr[j[0]+l]+j[1], M[1], xi[1]);
@@ -254,7 +255,7 @@ T polev_3d(S    const xi[3],
 	   S*   const xarr[3],
 	   T***       yarr,
 	   int  const n[3],
-	   int  const m[3]=0)
+	   int  const m[3]=NULL)
 // polynomial interpolation in 3 dimensions using m1xm2xm3 of n1xn2xn3 values
 {
     int j[3], M[3];
@@ -267,7 +268,7 @@ T polev_3d(S    const xi[3],
       M[1] = find_for_polev(j[1],n[1],4,xarr[1],xi[1]);
       M[2] = find_for_polev(j[2],n[2],4,xarr[2],xi[2]);
     }
-    register int k0,k1;
+     int k0,k1;
     T *y0 = new T[M[0]];
     T *y1 = new T[M[1]];
     for(k0=0; k0<M[0]; k0++) {
@@ -295,8 +296,8 @@ void Spline(S*  const x,	// input:   table of points
 // - y can be of more general type than scalar, e.g., Vector, Matrix.
 { 
     const S  zero=0., half=0.5, one=1., two=2., three=3., six=6.;
-    register int i;
-    register S   qn,p,sig,dx,dx1,dx2;
+     int i;
+     S   qn,p,sig,dx,dx1,dx2;
              T   un,dy,dy1;
     T *u = new T[n-1];
     S *v = new S[n-1];
@@ -341,9 +342,9 @@ void SplinedY(S*  const x,	// input:   table of points
 // computes dy/dx of a cubic spline that passes through the given points
 { 
     const S  zero=0., half=0.5, one=1., two=2., three=3., six=6.;
-    register int i;
-    register S   qn,p,sig,dx,dx1,dx2;
-    register T   un,dy,dy1;
+     int i;
+     S   qn,p,sig,dx,dx1,dx2;
+     T   un,dy,dy1;
     T *u = new T[n-1];
     T *y2= new T[n-1];
     S *v = new S[n-1];
@@ -400,8 +401,8 @@ void spline(S*  const x,	// input:   table of points
 // - y can be of more general type than scalar, e.g., Vector, Matrix.
 { 
     const S  zero=0., half=0.5, one=1., two=2., three=3., six=6.;
-    register int i;
-    register S   qn,p,sig,dx,dx1,dx2;
+     int i;
+     S   qn,p,sig,dx,dx1,dx2;
              T   un,dy,dy1;
     T *u = new T[n-1];
     S *v = new S[n-1];
@@ -456,8 +457,8 @@ T splout(			// return:  y(xi)
 // - y can be of more general type than scalar, e.g., Vector, Matrix.
 {
     const S  zero=0., half=0.5, one=1., two=2., three=3., six=6.;
-    register int i, k, klo=0, khi=n-1;
-    register S   a,b,h,qn,p,sig,dx,dx1,dx2;
+     int i, k, klo=0, khi=n-1;
+     S   a,b,h,qn,p,sig,dx,dx1,dx2;
     while(khi-klo > 1) {
 	k=(khi+klo)/2;
 	if(x[k]>xi) khi=k;
@@ -466,7 +467,7 @@ T splout(			// return:  y(xi)
     if((h=x[khi]-x[klo])==zero) Numerics_error("splout: bad X input");
     if(x[klo]==xi) return y[klo];
 
-    register T   Y,un,dy,dy1;
+     T   Y,un,dy,dy1;
     T *y2= new T[n-1];
     T *u = new T[n-1];
     S *v = new S[n-1];
@@ -519,13 +520,13 @@ T splint(			// return:  y(xi)
 	 T* d2y=0)		// output:  d^2y/d^2x(xi) if d2y != 0
 {
     const    S   zero=0., one=1., three=3., six=6.;
-    register S   h,h6,A,B;
+     S   h,h6,A,B;
     if((h=x[1]-x[0])==zero) Numerics_error("splint bad X input");
     h6 = h / six;
     A  = (x[1]-xi) / h;
     B  = one - A;
     if(dy) {
-        register S Aq=A*A, Bq=B*B;
+         S Aq=A*A, Bq=B*B;
         *dy = (y[1]-y[0])/h + h6*((three*Bq-one)*y2[1]-(three*Aq-one)*y2[0]);
         if(d2y) *d2y = A*y2[0] + B*y2[1];
         return A*y[0] +B*y[1] +((Aq-one)*A*y2[0]+(Bq-one)*B*y2[1])*(h*h6);
@@ -547,13 +548,13 @@ T splinT(			// return:  y(xi)
 	 T* d2y=0)		// output:  d^2y/d^2x(xi) if d2y != 0
 {
     const    S   zero=0., one=1., three=3., six=6.;
-    register S   h,h6,A,B;
+     S   h,h6,A,B;
     if((h=xhi-xlo)==zero) Numerics_error("splint bad X input");
     h6 = h / six;
     A  = (xhi-xi) / h;
     B  = one - A;
     if(dy) {
-        register S Aq=A*A, Bq=B*B;
+         S Aq=A*A, Bq=B*B;
         *dy = (yhi-ylo)/h + h6*((three*Bq-one)*y2hi-(three*Aq-one)*y2lo);
         if(d2y) *d2y = A*y2lo + B*y2hi;
         return A*ylo +B*yhi +((Aq-one)*A*y2lo+(Bq-one)*B*y2hi)*(h*h6);
@@ -578,24 +579,24 @@ void splinTarr(
 {
 // computes K splines simultaneously
     const    S   zero=0., one=1., three=3., six=6.;
-    register T   *Y=y, *Yl=yl, *Yh=yh, *Y2l=y2l, *Y2h=y2h, *YK=y+K;
-    register S   h,h6,hh,A,B,Aq,Bq,Ap,Bp;
+     T   *Y=y, *Yl=yl, *Yh=yh, *Y2l=y2l, *Y2h=y2h, *YK=y+K;
+     S   h,h6,hh,A,B,Aq,Bq,Ap,Bp;
     if((h=xh-xl)==zero) Numerics_error("splinTarr bad X input");
     h6=h/six;
     hh=h*h6;
     A =(xh-xi)/h;  Aq=A*A;  Ap=(Aq-one)*A*hh;
     B =one-A;      Bq=B*B;  Bp=(Bq-one)*B*hh;
     if(d2y) {
-	register T *dY=dy, *d2Y=d2y;
-	register S Au=h6*(three*Aq-one), Bu=h6*(three*Bq-one);
+	 T *dY=dy, *d2Y=d2y;
+	 S Au=h6*(three*Aq-one), Bu=h6*(three*Bq-one);
         for(; Y<YK; Y++,Yl++,Yh++,Y2l++,Y2h++,dY++,d2Y++) {
 	    *Y   = A**Yl+B**Yh+Ap**Y2l+Bp**Y2h;
             *dY  = (*Yh-*Yl)/h + Bu**Y2h-Au**Y2l;
             *d2Y = A**Y2l + B**Y2h;
 	}
     } else if(dy) {
-	register T *dY=dy;
-	register S Au=h6*(three*Aq-one), Bu=h6*(three*Bq-one);
+	 T *dY=dy;
+	 S Au=h6*(three*Aq-one), Bu=h6*(three*Bq-one);
         for(; Y<YK; Y++,Yl++,Yh++,Y2l++,Y2h++,dY++) {
 	    *Y   = A**Yl+B**Yh+Ap**Y2l+Bp**Y2h;
             *dY  = (*Yh-*Yl)/h + Bu**Y2h-Au**Y2l;
@@ -640,8 +641,8 @@ void spline_2d(
 	T*   const yp11=0,  // input:   dy/dx0(x0[i], x1[0])     nat if yp11 = 0
 	T*   const ypn1=0)  // input:   dy/dx0(x0[i], x1[n1-1])  nat if ypn1 = 0
 {
-    register int i,j;
-    register T   yp1,ypn;
+     int i,j;
+     T   yp1,ypn;
     T *t = new T[n[0]];
     T *t2= new T[n[0]];
 // 1. for each x1 do 1D spline for y in x0
@@ -677,7 +678,7 @@ T splev_2d(			// return:  y(x0i,x1i)
 	T**        d2y=0)	// output:  d^2y/dxi/dxj    if d2y!= 0
 {
     int l0=0, l1=0;
-    register T yl,yh,y2l,y2h;
+     T yl,yh,y2l,y2h;
     find(l0,n[0],x[0],xi[0]);
     find(l1,n[1],x[1],xi[1]);
     if(d2y) {
@@ -722,7 +723,7 @@ void spline_3d(
 	T**  ypn2=0)       // input:   dy/dx2(x0[i], x1[j], x2[n2-1]) nat if=0
 {
 // if the pointers yp?? = 0, a natural spline is used.
-    register int i,j,k,nn=max(n[0],n[1]);
+     int i,j,k,nn=max(n[0],n[1]);
     T *t = new T[nn];
     T *t2= new T[nn];
 // 1. for each x2 do 2D spline for y in x0-x1
@@ -789,7 +790,7 @@ T splev_3d(	          // return:   y(xi_0,xi_1,xi_2)
     find(l0,n[0],x[0],xi[0]);
     find(l1,n[1],x[1],xi[1]);
     find(l2,n[2],x[2],xi[2]);
-    register int k0=l0+1, k1=l1+1, k2=l2+1;
+     int k0=l0+1, k1=l1+1, k2=l2+1;
     T  Al[16]={   y[l0][l1][l2],   y[k0][l1][l2],a[0][l0][l1][l2],a[0][k0][l1][l2],
                   y[l0][k1][l2],   y[k0][k1][l2],a[0][l0][k1][l2],a[0][k0][k1][l2],
                a[1][l0][l1][l2],a[1][k0][l1][l2],a[2][l0][l1][l2],a[2][k0][l1][l2],
@@ -859,11 +860,11 @@ S qbulir(C* o, S(C::*func)(S), const S a, const S b, const S eps_, S& err)
 //      err    actual relative error of the return value.
 //------------------------------------------------------------------------------
 {
-    register S ba=b-a;
+     S ba=b-a;
     if(ba==0.) return 0.;
 
-    register int    i,n=2,nn=3,mx=25,m,mr, bo,bu=0,odd=1;
-    register S      c,d[7],d1,ddt,den,dt[7],e,eps,eta=S(1.e-7),
+     int    i,n=2,nn=3,mx=25,m,mr, bo,bu=0,odd=1;
+     S      c,d[7],d1,ddt,den,dt[7],e,eps,eta=S(1.e-7),
                     gr,hm,nt,sm,t,t1,t2,t2a,ta,tab,tb,v,w;
 
     while(eta+1. != 1.) eta *=S(0.5);
@@ -971,12 +972,12 @@ template<class C, class S>
 S qbulir(const C* const o, S(C::*func)(S) const, const S a, const S b, const S eps_)
 // as qbulir() above, but without return of an error estimate.
 {
-    register S ba=b-a;
+     S ba=b-a;
     if(ba==0.) return 0.;
 
-    register int    i,n=2,nn=3,mx=25,m,mr, bo,bu=0,odd=1;
+     int    i,n=2,nn=3,mx=25,m,mr, bo,bu=0,odd=1;
 	     S      d[7],dt[7];
-    register S      c,d1,ddt,den,e,eps,err,eta=S(1.e-7),
+     S      c,d1,ddt,den,e,eps,err,eta=S(1.e-7),
                     gr,hm,nt,sm,t,t1,t2,t2a,ta,tab=0.,tb,v=0.,w;
 
     while(eta+1. != 1.) eta *=S(0.5);
@@ -1086,8 +1087,8 @@ void LegendrePeven(Vector<S,N>& p, const double x)
 // based on a routine from J.J. Binney
 // evaluates even Legendre Polys up to l=2*(N-1) at x
 {
-    register int    n,l,l2;
-    register double x2=x*x;
+     int    n,l,l2;
+     double x2=x*x;
     p[0] = 1.;
     p[1] = 1.5*x2-0.5;
     for(n=2; n<N; n++) {
@@ -1103,8 +1104,8 @@ void dLegendrePeven(Vector<S,N>& p, Vector<S,N>& d, const double x)
 // based on a routine from J.J. Binney
 // evaluates even Legendre Polys and its derivs up to l=2*(N-1) at x
 {
-    register int    n,l,l2;
-    register double x2=x*x;
+     int    n,l,l2;
+     double x2=x*x;
     p[0] = 1.;
     d[0] = 0.;
     p[1] = 1.5*x2-0.5;

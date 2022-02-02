@@ -7,8 +7,8 @@
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _Numerics_def_
-#define _Numerics_def_ 1
+#ifndef Numerics_GalPot_
+#define Numerics_GalPot_ 1
 
 #include "Vector.h"
 #include "Matrix.h"

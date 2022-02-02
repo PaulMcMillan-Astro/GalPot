@@ -8,10 +8,7 @@ coordinate systems.
   PJMCoords.h (adapted from Coordinates.h)
 
   C++ code written by Paul McMillan 2010,
-                      Walter Dehnen, 1995-96,
-  Lund Observatory, Lund University.
-  address: 1 Keble Road, Oxford OX1 34P, United Kingdom
-  e-mail:  p.mcmillan1@physics.ox.ac.uk
+                      Walter Dehnen, 1995-96
 
 ********************************************************************************
 
@@ -154,21 +151,18 @@ Eventually I decided that I should probably use some proper c++ for this
 
 */
 
-#ifndef _Galactic_Coordinates_PJM_def_
-#define _Galactic_Coordinates_PJM_def_ 1
+#ifndef Galactic_Coordinates_PJM_GalPot_
+#define Galactic_Coordinates_PJM_GalPot_ 1
 #include "Constants.h"
 #include "Vector.h"
 #include "Matrix.h"
 
-#ifndef _Galactic_Coordinates_def_
-#define _Galactic_Coordinates_def_ 1
 typedef Vector<double,6> GCA;
 typedef Vector<double,6> GCY;
 typedef Vector<double,6> LSR;
 typedef Vector<double,6> HCA;
 typedef Vector<double,6> HGP;
 typedef Vector<double,6> HEQ;
-#endif
 
 typedef Vector<bool,6> bool6;
 typedef Vector<double,6> vec6;

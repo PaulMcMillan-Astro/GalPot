@@ -18,7 +18,7 @@ LIBOTHER	= obj/libOther.a
 
 CFLAGS        = -c -fpic -o $@.o -O3 -ffast-math -Isrc/
 CFLAGSKEEP    = -c -o $@ -O3 -ffast-math -Isrc/
-
+#CFLAGS = -stdlib=libc++ -std=c++14 -march=native -g -Weverything -ftemplate-backtrace-limit=0 -O3 -fPIC -funroll-loops -c -o $@.o -ffast-math -Isrc/
 #CMPFLAGS        = -c -o $@.o -O3 -ffast-math -fopenmp -Isrc/
 
 MFLAGS	= -O3 -ffast-math -Isrc/

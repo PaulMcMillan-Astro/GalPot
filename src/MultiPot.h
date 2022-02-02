@@ -11,8 +11,8 @@ Combines multiple potentials into one.
 *                                                                              *
 *******************************************************************************/
 
-#ifndef MultiPotential_def_
-#define MultiPotential_def_ 1
+#ifndef MultiPotential_GalPot_
+#define MultiPotential_GalPot_ 1
 
 #include <iostream>
 #include <cmath>

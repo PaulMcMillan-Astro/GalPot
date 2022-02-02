@@ -10,8 +10,8 @@ Which is a Miyamoto-Nagai potential. The clue is in the name.
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _MiyNag_h_
-#define _MiyNag_h_ 1
+#ifndef _MiyamotoNagai_GalPot_
+#define _MiyamotoNagai_GalPot_ 1
 
 #include <iostream>
 #include "Potential.h"

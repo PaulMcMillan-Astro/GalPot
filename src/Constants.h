@@ -15,8 +15,8 @@ Various constants used for the coordinates over the place.
 
  */
 
-#ifndef _Galactic_Constants_def_
-#define _Galactic_Constants_def_ 1
+#ifndef Galactic_Constants_GalPot_
+#define Galactic_Constants_GalPot_ 1
 
 #include "Units.h"
 

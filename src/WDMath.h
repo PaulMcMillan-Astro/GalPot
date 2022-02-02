@@ -11,8 +11,8 @@
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _Math_def_
-#define _Math_def_ 1
+#ifndef Math_GalPot_
+#define Math_GalPot_ 1
 
 #include <cmath>
 
@@ -39,7 +39,7 @@ void   MathWarning	(const char*);	// writes out warning message
 //==============================================================================
 
 double SphVol(const int);	// volume of the unit sphere in n dimensions
-
+bool is_integral(const double); // Is it an integer?
 //==============================================================================
 // Log's and Exp's (inlines)
 //==============================================================================

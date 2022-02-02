@@ -10,8 +10,8 @@
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _TorusOrb_
-#define _TorusOrb_ 1
+#ifndef Orbit_GalPot_
+#define Orbit_GalPot_ 1
 
 #include "Vector.h"
 #include "Potential.h"

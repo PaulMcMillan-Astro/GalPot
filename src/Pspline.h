@@ -58,8 +58,8 @@
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _Pspline_def_
-#define _Pspline_def_ 1
+#ifndef Pspline_GalPot_
+#define Pspline_GalPot_ 1
 
 #include "FreeMemory.h"
 #include "Numerics.h"
@@ -91,9 +91,9 @@ void Pspline(
 // value at the grid points. At the grid boundaries  d^3y/dx^3=0  is adopted.
 {
     const S      zero=0.,one=1.,three=3.,seven=7.,ten=10.,twelve=12.; 
-    register int i;
-    register S   p,sig,dx,dx1,dx2;
-    register T   dy=Y[1]-Y[0], dy1=dy;
+     int i;
+     S   p,sig,dx,dx1,dx2;
+     T   dy=Y[1]-Y[0], dy1=dy;
     S *v = new S[n-1];
     dx   = x[1]-x[0];
     Y3[0]= v[0] = zero;
@@ -129,7 +129,7 @@ T Psplint(			// return:  y(xi)
 	T* d2Yi=0)		// output:  d^2y/d^2x(xi) if d2y != 0
 {
     const    S zero=0.,one=1.,two=2.,five=5.,six=6.,nine=9.,fe=48.;
-    register S h,hi,hf, A,B,C,D,Aq,Bq;
+     S h,hi,hf, A,B,C,D,Aq,Bq;
     if((h=x[1]-x[0])==zero) Numerics_error("bad X input in Psplint()");
     hi = one/h;
     hf = h*h;
@@ -138,17 +138,17 @@ T Psplint(			// return:  y(xi)
 //  if(A*B<zero) Numerics_error("X not bracketed in Psplint()");
     C  = h*Aq*B;
     D  =-h*Bq*A;
-    register T  t1 = hi*(Y[1]-Y[0]),
+     T  t1 = hi*(Y[1]-Y[0]),
     		C2 = Y1[0]-t1,
     		C3 = Y1[1]-t1,
     		t2 = six*(Y1[0]+Y1[1]-t1-t1)/hf,
     		C4 = Y3[0]-t2,
     		C5 = Y3[1]-t2;
     hf/= fe;
-    register T 	Yi = A*Y[0] + B*Y[1] + C*C2 + D*C3
+     T 	Yi = A*Y[0] + B*Y[1] + C*C2 + D*C3
 		     + hf * ( C*(Aq+Aq-A-one)*C4 + D*(Bq+Bq-B-one)*C5 );
     if(dYi) {
-        register S BAA=B-A-A, ABB=A-B-B;
+         S BAA=B-A-A, ABB=A-B-B;
 	hf  += hf;
 	*dYi = t1 + (A*ABB)*C2 + (B*BAA)*C3
 	     + hf*A*B*((one+A-five*Aq)*C4+ (one+B-five*Bq)*C5);
@@ -178,7 +178,7 @@ T PsplinT(			// return:  y(xi)
 	T* d2Yi=0)		// output:  d^2y/d^2x(xi) if d2y != 0
 {
     const    S zero=0.,one=1.,two=2.,five=5.,six=6.,nine=9.,fe=48.;
-    register S h,hi,hf, A,B,C,D,Aq,Bq;
+     S h,hi,hf, A,B,C,D,Aq,Bq;
     if((h=x1-x0)==zero) Numerics_error("PsplinT bad X input");
     hi = one/h;
     hf = h*h;
@@ -187,17 +187,17 @@ T PsplinT(			// return:  y(xi)
 //  if(A*B<zero) Numerics_error("X not bracketed in Psplint()");
     C  = h*Aq*B;
     D  =-h*Bq*A;
-    register T 	t1 = hi*(Y1-Y0),
+     T 	t1 = hi*(Y1-Y0),
     		C2 = Y10-t1,
     		C3 = Y11-t1,
     		t2 = six*(Y10+Y11-t1-t1)/hf,
     		C4 = Y30-t2,
     		C5 = Y31-t2;
     hf/= fe;
-    register T 	Yi = A*Y0+ B*Y1+ C*C2+ D*C3+ 
+     T 	Yi = A*Y0+ B*Y1+ C*C2+ D*C3+ 
 		     hf*(C*(Aq+Aq-A-one)*C4+ D*(Bq+Bq-B-one)*C5);
     if(dYi) {
-        register S BAA=B-A-A, ABB=A-B-B;
+         S BAA=B-A-A, ABB=A-B-B;
 	hf  += hf;
 	*dYi = t1 + (A*ABB)*C2 + (B*BAA)*C3
 	     + hf*A*B*((one+A-five*Aq)*C4+ (one+B-five*Bq)*C5);
@@ -229,9 +229,9 @@ void PsplinTarr(
 	T* d2y=0)		// output:  d^2y_k/d^2x(xi) if d2y != 0
 {
     const    S zero=0.,one=1.,two=2.,five=5.,six=6.,nine=9.,fe=48.;
-    register S h,hi,hq,hf, A,B,C,D,E,F,Aq,Bq;
-    register T C2=*yl,C3=C2,C4=C2,C5=C2, t1=C2,t2=C2;
-    register T *Y=y,*Yl=yl,*Yh=yh,*Y1l=y1l,*Y1h=y1h,*Y3l=y3l,*Y3h=y3h,*YK=y+K;
+     S h,hi,hq,hf, A,B,C,D,E,F,Aq,Bq;
+     T C2=*yl,C3=C2,C4=C2,C5=C2, t1=C2,t2=C2;
+     T *Y=y,*Yl=yl,*Yh=yh,*Y1l=y1l,*Y1h=y1h,*Y3l=y3l,*Y3h=y3h,*YK=y+K;
     if((h=xh-xl)==zero) Numerics_error("PsplinTarr bad X input");
     hi = one/h;
     hq = h*h;
@@ -244,11 +244,11 @@ void PsplinTarr(
     E  = hf*C*(Aq+Aq-A-one);
     F  = hf*D*(Bq+Bq-B-one);
     if(d2y) {
-        register S hf2= hf+hf, BAA=B-A-A, ABB=A-B-B,
+         S hf2= hf+hf, BAA=B-A-A, ABB=A-B-B,
                    AB=A*B, ABh=hf2*AB, Cp=Aq-AB-AB, Dp=Bq-AB-AB,
 		   Ep=ABh*(one+A-five*Aq), Fp=ABh*(one+B-five*Bq),
 		   Epp=hf2*(two*Aq*(nine*B-A)-one), Fpp=hf2*(two*Bq*(B-nine*A)+one);
-	register T *dY=dy, *d2Y=d2y;
+	 T *dY=dy, *d2Y=d2y;
 	for(; Y<YK; Y++,Yl++,Yh++,Y1l++,Y1h++,Y3l++,Y3h++,dY++,d2Y++) {
             t1   = hi*(*Yh-*Yl);
             C2   = *Y1l-t1;
@@ -263,9 +263,9 @@ void PsplinTarr(
 	    *d2Y*= hi;
 	}
     } else if(dy) {
-        register S AB=A*B, ABh=(hf+hf)*AB, Cp=Aq-AB-AB, Dp=Bq-AB-AB,
+         S AB=A*B, ABh=(hf+hf)*AB, Cp=Aq-AB-AB, Dp=Bq-AB-AB,
 		   Ep=ABh*(one+A-five*Aq), Fp=ABh*(one+B-five*Bq);
-	register T *dY=dy;
+	 T *dY=dy;
 	for(; Y<YK; Y++,Yl++,Yh++,Y1l++,Y1h++,Y3l++,Y3h++,dY++) {
             t1  = hi*(*Yh-*Yl);
             C2  = *Y1l-t1;
@@ -320,9 +320,9 @@ void Pspline2D(
 	T** a[4])        // output:  tables of coeffs a[0],a[1],a[2],a[3]
 {
 // 2D Pspline with natural boundary conditions
-    register   T   z=y[0][0][0];
+       T   z=y[0][0][0];
     z = 0.;
-    register int i,j;
+     int i,j;
     T *t = new T[n[0]];
     T *t1= new T[n[0]];
     T *t3= new T[n[0]];
@@ -401,7 +401,7 @@ T Psplev2D(		 // return:  y(x0i,x1i)
     int l0=0, l1=0;
     find_for_Pspline(l0,n[0],x[0],xi[0]);
     find_for_Pspline(l1,n[1],x[1],xi[1]);
-    register int k0=l0+1, k1=l1+1;
+     int k0=l0+1, k1=l1+1;
 
 /*
 // for testing Pspl2D() above
@@ -451,9 +451,9 @@ void Pspline3D(
 	T*** a[11])          // output:  tables of coeffs a[i], i=0,...,10
 {
 // 3D Pspline with natural boundary conditions
-    register   T   z=y[0][0][0][0];
+       T   z=y[0][0][0][0];
     z = 0.;
-    register int i,j,k,nn=max(n[0],n[1]);
+     int i,j,k,nn=max(n[0],n[1]);
     T *t = new T[nn];
     T *t1= new T[nn];
     T *t2= new T[nn];
@@ -522,7 +522,7 @@ T Psplev3D(		   // return:  y(x0i,x1i)
     find_for_Pspline(l0,n[0],x[0],xi[0]);
     find_for_Pspline(l1,n[1],x[1],xi[1]);
     find_for_Pspline(l2,n[2],x[2],xi[2]);
-    register int k0=l0+1,k1=l1+1,k2=l2+1;
+     int k0=l0+1,k1=l1+1,k2=l2+1;
     T Y0l[4]={y[0][l0][l1][l2],y[0][k0][l1][l2],y[0][l0][k1][l2],y[0][k0][k1][l2]},
       Y0h[4]={y[0][l0][l1][k2],y[0][k0][l1][k2],y[0][l0][k1][k2],y[0][k0][k1][k2]},
       Y3l[4]={y[3][l0][l1][l2],y[3][k0][l1][l2],y[3][l0][k1][l2],y[3][k0][k1][l2]},
@@ -582,7 +582,7 @@ void Derivs(S*   const x[3],
 // given y(x,y,z) in y[0], y[i] are filled with dy/dx_i of a cubic spline
 // with natural boundary at x_i,max and dy/dx_i=0 at x_i,min
 {
-    register int i,j,k, nn=max(n[0],n[1]);
+     int i,j,k, nn=max(n[0],n[1]);
     T zero=0., *z=new T[nn], *z1=new T[nn];
 
 // dy/dx0

@@ -49,8 +49,8 @@
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _Units_set_
-#define _Units_set_ 1
+#ifndef Units_GalPot_
+#define Units_GalPot_ 1
 
 #include "Pi.h"
 #include <string>

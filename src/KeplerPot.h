@@ -11,8 +11,8 @@ Gives the Kepler (point mass) potential.
 *                                                                              *
 *******************************************************************************/
 
-#ifndef KeplerPotential_def_
-#define KeplerPotential_def_ 1
+#ifndef KeplerPotential_GalPot_
+#define KeplerPotential_GalPot_ 1
 
 #include <iostream>
 #include <cmath>

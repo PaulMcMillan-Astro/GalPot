@@ -11,8 +11,8 @@
 *                                                                              *
 *******************************************************************************/
 
-#ifndef _PJMutils_
-#define _PJMutils_ 1
+#ifndef PJMutils_GalPot_
+#define PJMutils_GalPot_ 1
 #include <fstream>
 #include <sstream>
 #include <string>
