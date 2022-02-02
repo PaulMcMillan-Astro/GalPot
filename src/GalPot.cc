@@ -777,8 +777,8 @@ void Multipole::setup(const double ri, const double ra,
   //
   //nemo_dprintf(5,"Multipole::setup(): 3\n");
   if(LR) {
-    tg3 = 2./(3.-gamma);
-    g3h = 0.5*(3.-gamma);
+    tg3 = 2./(4.-gamma); // correction thanks to Bill Chen
+    g3h = 0.5*(4.-gamma); // correction thanks to Bill Chen
     LegendrePeven(P2l,0.);
     for(k=0; k<K[0]; k++)
       lLc[k] = 0.5 * ( 2*logr[k] + log(dPhl[k]*P2l) );
