@@ -19,7 +19,7 @@ If you use this code, please cite whoever determined the potential (preferably [
 
 ## MCMC chains from McMillan (2017)
 
-The MCMC chains used to explore the probability distribution of the model parameters for the main results given in McMillan (2017) are available [via Zenodo](https://doi.org/10.5281/zenodo.6219842). The notebook ReadAndSelectMCMCOutput.ipynb gives an example of reading the chan and sampling a model from it.
+The MCMC chain used to explore the probability distribution of the model parameters for the main results given in McMillan (2017) are available [via Zenodo](https://doi.org/10.5281/zenodo.6219842). The notebook ReadAndSelectMCMCOutput.ipynb gives an example of reading the chain and sampling a model from it.
 
 # Examples and documentation
 
