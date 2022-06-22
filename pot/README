@@ -12,4 +12,6 @@ PJM16_best.Tpot is the best fitting potential (from the main models) from McMill
 
 PJM17_best.Tpot is the same as PJM16_best.Tpot (see reasoning above).
 
-The potentials in the subdirectory variants/ are also from McMillan (2017), and are the best fitting potentials from any of the alternative MCMC runs for which results are given in Table 6. I have not copied all of them so they are also called PJM17*
+The potentials in the subdirectory variants/ are mostly from McMillan (2017) and are the best fitting potentials from any of the alternative MCMC runs for which results are given in Table 6. I have not copied all of them so they are all still called PJM16*
+
+I have added the file variants/PJM16_Rescale2021.Tpot to this directory, which is the potential used by Gaia Collaboration, Recio-Blanco et al (2022). It is rescaled to have a different v0 and R0 as demonstrated in the notebook GalPotRescaler.ipynb.

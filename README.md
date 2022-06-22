@@ -9,7 +9,7 @@ There is a Python wrapper for the gravitational potential and orbit integration 
 
 It should all compile (including the library required for the Python wrapper) if you run make.
 
-The potentials provided in pot/ are primarily from McMillan (2017), but also from Piffl et al (2014), McMillan (2011) and Dehnen & Binney (1998). See pot/README for details. Note that the naming convention for the McMillan (2017) potentials is slightly muddled because the paper and code were originally made available in 2016 (not 2017).
+The potentials provided in pot/ are primarily from McMillan (2017), but also from Gaia Collaboration, Recio-Blanco et al (2022), Piffl et al (2014), McMillan (2011) and Dehnen & Binney (1998). See pot/README for details. Note that the naming convention for the McMillan (2017) potentials is slightly muddled because the paper and code were originally made available in 2016 (not 2017).
 
 It is under the GNU General Public Licence (GPL).
 
@@ -33,7 +33,7 @@ Documentation.pdf provides an explanation of the input files used.
 
 Running any of the executables without any arguments should provide a description of how it is used.
 
-GalPotPythonExample.ipynb demonstrates the Python wrapper. 
+GalPotPythonExample.ipynb demonstrates the Python wrapper. GalPotRescaler.ipynb is an example of rescaling the potential for new distances to from the Sun to the Galactic centre and/or circular velocities at the Sun's position.
 
 
 ### Notes: 
