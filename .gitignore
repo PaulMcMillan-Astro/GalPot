@@ -6,3 +6,8 @@ Untitled*
 __pycache__/
 McMillan2017MilkyWayMCMCOutput.csv
 .DS_Store
+*Cartesian*
+*csv
+*mp4
+*.gif
+*.pyc

@@ -191,8 +191,10 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
   if(!setupDone) setup(XV_ini);
 
   if(Energy>0.) {
-    setupDone=false;
-    return -1; // Unbound - failure.
+    cerr << "WARNING: Orbit unbound. Orbit statistics will be incorrect\n";
+    // setupDone=false;
+    // return -1; // Unbound - failure.
+    // Change as of 2026. Maybe you want the unbound orbit, so we can let it run anyway
   }
 
   if(type=="NoOutput") tnext=Tmax;
@@ -272,6 +274,13 @@ int OrbitIntegratorWithStats::runGeneric(const string type,
   Minr = sqrt(Minr);
   MeanR /= t;
   PseudoEccentricity = (Maxr-Minr)/(Maxr+Minr);
+
+  if(Energy>0.) {
+    Maxr = 1./0.;
+    MeanR= 1./0.;
+    PseudoEccentricity = 1.;
+  }
+
   run_complete = true;
   setupDone=false;
 

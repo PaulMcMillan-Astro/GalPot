@@ -71,6 +71,7 @@ int main(int argc,char *argv[])
 	<< " kpc km/s\n"
        	<< "Mean Cylindrical radius: "<< OI.MeanR << '\n' << std::flush;
  } else {
+	// This line should never be reached (change 2026)
    cout << "Input unbound in potential. Energy "
 	<< OI.Energy/(Units::kms*Units::kms) << " km^2/s^2\n"
 	<< std::flush;

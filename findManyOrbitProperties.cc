@@ -38,6 +38,7 @@ int main(int argc,char *argv[])
     cerr << "input_file must contain columns: R z v_R v_z v_phi\n";
     cerr << "   (distance in kpc, velocity in km/s)\n";
     cerr << " output is in kpc (distances), km^2/s^2 (energy), kpc km/s (angular momentum)\n";
+    cerr << " Warning: If energy is negative, other properties will be incorrect";
     return 1;
   }
 

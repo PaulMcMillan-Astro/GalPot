@@ -142,6 +142,7 @@ int main(int argc,char *argv[])
 	  AngMom.push_back(OI.Lz/(Units::kpc*Units::kms));
     Ecc.push_back(OI.PseudoEccentricity);
 	} else {
+    // This line should never be reached (change 2026)
 	  BadPoints++;
 	  // Orbit unbound. Put in some sensible values
 	  MinR.push_back(XV[0]/Units::kpc);
@@ -159,7 +160,7 @@ int main(int argc,char *argv[])
       // Output median and pm 1sigma equivalent percentiles
 
       if(BadPoints>=DangerPoint) {
-	std::cerr << "WARNING: Output unreliable\t"
+	    std::cerr << "WARNING: Output unreliable\t"
 		  << "Too many unbound orbits for star with coordinates "
 		  << EquatorialCoords << "\n";
       }
