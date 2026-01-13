@@ -3,9 +3,9 @@
 *  findManyOrbitProperties.cc                                                  *
 *                                                                              *
 *  C++ code written by Paul McMillan, 2007-                                    *
-*  Lund Observatory, Lund University.                                          *
-*  address: Box 43, SE-221 00 Lund, Sweden                                     *
-*  e-mail:  paul@astro.lu.se                                                   *
+*  School of Physics & Astronomy, University of Leicester                                          *
+*  address: University Road, Leicester                                     *
+*  e-mail:  paul.mcmillan@le.ac.uk                                                   *
 *                                                                              *
 *******************************************************************************/
 
@@ -86,7 +86,8 @@ int main(int argc,char *argv[])
 	       << OI.Energy/(Units::kms*Units::kms)<< ' '
 	       << OI.Lz/(Units::kms*Units::kpc) << '\n' << std::flush;
       } else {
-	cerr << "Failure for line: " << line
+        // This line should never be reached (change 2026)
+	      cerr << "Failure for line: " << line
 	     << "\nEnergy=" << OI.Energy/(Units::kms*Units::kms) << '\n';
       }
     }

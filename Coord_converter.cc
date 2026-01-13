@@ -7,7 +7,7 @@
 *                                                                              *
 *  C++ code written by Paul McMillan 2011-,                                    *
 *                      Walter Dehnen, 1995-96,                                 *
-* e-mail:  paul@astro.lu.se                                                    *
+* e-mail:  paul.mcmillan@le.ac.uk                                                    *
 * github:  https://github.com/PaulMcMillan-Astro/GalPot                        *
 *                                                                              *
 *******************************************************************************/

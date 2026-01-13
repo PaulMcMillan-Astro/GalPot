@@ -3,9 +3,9 @@
 *  findManyOrbitPropertiesfromRAVEMultiGaussian.cc                             *
 *                                                                              *
 *  C++ code written by Paul McMillan, 2007-                                    *
-*  Lund Observatory, Lund University.                                          *
-*  address: Box 43, SE-221 00 Lund, Sweden                                     *
-*  e-mail:  paul@astro.lu.se                                                   *
+*  School of Physics & Astronomy, University of Leicester                                          *
+*  address: University Road, Leicester                                     *
+*  e-mail:  paul.mcmillan@le.ac.uk                                                   *
 *                                                                              *
 *******************************************************************************/
 
@@ -164,6 +164,7 @@ int main(int argc,char *argv[])
 	  Energy.push_back(OI.Energy/(Units::kms*Units::kms));
 	  AngMom.push_back(OI.Lz/(Units::kpc*Units::kms));
 	} else {
+    // This line should never be reached (change 2026)
 	  BadPoints++;
 	  // Orbit unbound. Put in some sensible values
 	  MinR.push_back(XV[0]/Units::kpc);

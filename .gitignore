@@ -11,3 +11,9 @@ McMillan2017MilkyWayMCMCOutput.csv
 *mp4
 *.gif
 *.pyc
+*.png
+examples/Output*
+Documentation.*
+!Documentation.tex
+!Documentation.pdf
+MCMC_MW.pot

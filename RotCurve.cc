@@ -4,9 +4,9 @@
 *                                                                              *
 *  C++ code written by Walter Dehnen, 1995-96,                                 *
 *                      Paul McMillan, 2007-,                                   *
-*  Lund Observatory, Lund University.                                          *
-*  address: Box 43, SE-221 00 Lund, Sweden                                     *
-*  e-mail:  paul@astro.lu.se                                                   *
+*  School of Physics & Astronomy, University of Leicester                                          *
+*  address: University Road, Leicester                                     *
+*  e-mail:  paul.mcmillan@le.ac.uk                                                   *
 *                                                                              *
 *******************************************************************************/
 

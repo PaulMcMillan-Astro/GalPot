@@ -3,9 +3,9 @@
 *  findOrbitMultiPot.cc                                                                *
 *                                                                              *
 *  C++ code written by Paul McMillan, 2017-                                    *
-*  Lund Observatory, Lund University.                                          *
-*  address: Box 43, SE-221 00 Lund, Sweden                                     *
-*  e-mail:  paul@astro.lu.se                                                   *
+*  School of Physics & Astronomy, University of Leicester                                          *
+*  address: University Road, Leicester                                     *
+*  e-mail:  paul.mcmillan@le.ac.uk                                                   *
 *                                                                              *
 *******************************************************************************/
 
@@ -112,6 +112,7 @@ int main(int argc,char *argv[])
 	 << OrbOut[i][5] / Units::kms  << '\n' << std::flush;
    }
  } else {
+  // This line should never be reached (change 2026)
    cout << "Input unbound in potential. Energy "
 	<< OI.Energy/(Units::kms*Units::kms) << " km^2/s^2\n"
 	<< std::flush;

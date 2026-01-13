@@ -3,9 +3,9 @@
 *  findManyOrbitPropertiesfromGalactic.cc                                      *
 *                                                                              *
 *  C++ code written by Paul McMillan, 2007-                                    *
-*  Lund Observatory, Lund University.                                          *
-*  address: Box 43, SE-221 00 Lund, Sweden                                     *
-*  e-mail:  paul@astro.lu.se                                                   *
+*  School of Physics & Astronomy, University of Leicester                                          *
+*  address: University Road, Leicester                                     *
+*  e-mail:  paul.mcmillan@le.ac.uk                                                   *
 *                                                                              *
 *******************************************************************************/
 

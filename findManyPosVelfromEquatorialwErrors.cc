@@ -3,9 +3,9 @@
 *  findManyOrbitPropertiesfromEquatorialwErrors.cc                             *
 *                                                                              *
 *  C++ code written by Paul McMillan, 2007-                                    *
-*  Lund Observatory, Lund University.                                          *
-*  address: Box 43, SE-221 00 Lund, Sweden                                     *
-*  e-mail:  paul@astro.lu.se                                                   *
+*  School of Physics & Astronomy, University of Leicester                                          *
+*  address: University Road, Leicester                                     *
+*  e-mail:  paul.mcmillan@le.ac.uk                                                   *
 *                                                                              *
 *******************************************************************************/
 
@@ -149,6 +149,7 @@ int main(int argc,char *argv[])
       // Output median and pm 1sigma equivalent percentiles
 
       if(BadPoints>=DangerPoint) {
+      // This line should never be reached (change 2026)
 	    std::cerr << "WARNING: Output unreliable\t"
 		          << "Too many unbound orbits for star with coordinates "
 		          << EquatorialCoords << "\n";

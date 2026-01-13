@@ -4,7 +4,7 @@
 *                                                                              *
 * C++ code written by Paul McMillan, 2016                                      *
 *          loosely based on code from Walter Dehnen 1994-1996                  *
-* e-mail: paul@astro.lu.se                                                     *
+* e-mail: paul.mcmillan@le.ac.uk                                                     *
 * github: https://github.com/PaulMcMillan-Astro                                *
 *                                                                              *
 *******************************************************************************/
